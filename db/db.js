@@ -18,9 +18,9 @@ async function connect() {
     }
     await mongoose.disconnect();
   }
-  return (db = await mongoose.connect(uri));
   console.log("new connection");
-  connection.isConnected = db.connections[0].readyState;
+  connection.isConnected = mongoose.connections[0].readyState;
+  return (db = await mongoose.connect(uri));
 }
 
 async function disconnect() {

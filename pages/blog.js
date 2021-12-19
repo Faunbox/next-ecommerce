@@ -1,15 +1,16 @@
-import { useSession } from "next-auth/react";
+import { useAuth } from "../context/auth.context";
 
 const Blog = ({ posts }) => {
-  const { data: session } = useSession();
+  const { userSession } = useAuth();
+
   return (
     <>
-      {session ? (
+      {userSession.role !== "user" ? (
         <button>
           <a href="blog/dodaj">dodaj post</a>
         </button>
       ) : null}
-      {session ? (
+      {userSession ? (
         posts.map((post) => <div key={post.id + post.name}>{post.email}</div>)
       ) : (
         <div>Zaloguj się żeby zobaczyć posty</div>
@@ -19,9 +20,8 @@ const Blog = ({ posts }) => {
 };
 
 export async function getStaticProps() {
-  const res = await fetch(
-    "https://jsonplaceholder.typicode.com/posts/1/comments"
-  );
+  const url = `${process.env.NEXTAUTH_URL}/api/users`;
+  const res = await fetch(url);
   const posts = await res.json();
 
   return {

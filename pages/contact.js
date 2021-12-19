@@ -8,15 +8,13 @@ const Contact = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [text, setText] = useState("");
-  const [serverResponse, setServerResponse] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, name, text);
     //check
     if (!sendEmail) return alert("Checkbox is required!");
 
-    await fetch(apiEndpoint, {
+    const req = await fetch(apiEndpoint, {
       body: JSON.stringify({
         email,
         name,
@@ -26,8 +24,9 @@ const Contact = () => {
         "Content-Type": "application/json",
       },
       method: "POST",
-    }).catch((err) => console.error(err.message));
-    alert("Email has been send!");
+    }).catch((err) => console.error("błąd", err.message));
+    const serverResponse = await req.json().message;
+    alert(await serverResponse);
   };
 
   return (

@@ -19,4 +19,22 @@ export default NextAuth({
     }),
   ],
   secret: process.env.SECRET,
+  session: {
+    strategy: "database",
+  },
+  events: {
+    async createUser({ user }) {
+      try {
+        const mail = user.email;
+
+        (await clientPromise)
+          .db("test")
+          .collection("users")
+          .updateOne({ email: mail }, { $set: { role: "user" } });
+        console.log("Dodano role");
+      } catch {
+        console.log("cos poszlo nie tak");
+      }
+    },
+  },
 });

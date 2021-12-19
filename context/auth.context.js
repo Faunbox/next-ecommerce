@@ -1,3 +1,4 @@
+import { useSession } from "../lib/next-auth-react-query";
 import { useState, useContext, createContext, useEffect } from "react";
 
 const AuthContext = createContext();
@@ -7,13 +8,28 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const [role, setRole] = useState("");
+  const [session, loading] = useSession({
+    required: true,
+    redirectTo: "http://localhost:3000",
+    queryConfig: {
+      staleTime: 60 * 1000 * 60 * 3,
+      refetchInterval: 60 * 1000 * 5,
+    },
+  });
+  const [userSession, setUserSession] = useState({});
+
+  const checkSession = async () => {
+    const user = await session;
+    user ? setUserSession(await user.user) : setUserSession(null);
+    return userSession;
+  };
 
   useEffect(() => {
-    console.log("Połączono z context api");
-  }, []);
+    const userSession = checkSession();
+    return userSession;
+  }, [session, loading]);
 
-  const value = {};
+  const value = { userSession };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
