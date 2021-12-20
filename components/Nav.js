@@ -1,20 +1,17 @@
 import Link from "next/link";
-import { useSession } from "../lib/next-auth-react-query";
 import { Nav, Navbar, Container, Button } from "react-bootstrap";
 import { signIn, signOut } from "next-auth/react";
 import { useAuth } from "../context/auth.context";
+import { useCard } from "../context/card.context";
 
 const Navigation = () => {
-  // const [session, loading] = useSession({
-  //   required: true,
-  //   redirectTo: "http://localhost:3000",
-  //   queryConfig: {
-  //     staleTime: 60 * 1000 * 60 * 3,
-  //     refetchInterval: 60 * 1000 * 5,
-  //   },
-  // });
-
+  const { state } = useCard();
   const { userSession } = useAuth();
+
+  const { cart } = state;
+
+  console.log(cart.cartItems);
+
   return (
     <Navbar bg="primary" expand="sm">
       <Container>
@@ -36,15 +33,18 @@ const Navigation = () => {
             </Link>
           </Nav>
           <Nav>
+            <Link href="/koszyk" passHref>
+              <Button>Koszyk: {cart.cartItems.length}</Button>
+            </Link>
+          </Nav>
+          <Nav>
             {userSession ? (
               <Link href={`/user/${userSession.email}`} passHref>
                 <Button as="div">
                   {userSession.name ? userSession.name : userSession.email}
                 </Button>
               </Link>
-            ) : (
-              <p>brak sesji</p>
-            )}
+            ) : null}
             {!userSession ? (
               <Button onClick={() => signIn()}>Log in</Button>
             ) : (
