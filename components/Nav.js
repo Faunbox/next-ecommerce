@@ -10,8 +10,6 @@ const Navigation = () => {
 
   const { cart } = state;
 
-  console.log(cart.cartItems);
-
   return (
     <Navbar bg="primary" expand="sm">
       <Container>

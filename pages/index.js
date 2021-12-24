@@ -21,10 +21,16 @@ export default function Home({ products }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   const url = `${process.env.NEXTAUTH_URL}/api/products`;
   const res = await fetch(url);
   const products = await res.json();
+
+  if(!products) {
+    return {
+      notFound: true
+    }
+  }
 
   return {
     props: {

@@ -1,0 +1,74 @@
+import { signIn } from "next-auth/react";
+import { Button } from "react-bootstrap";
+import { useCard, ACTION } from "../../context/card.context";
+import { useAuth } from "../../context/auth.context";
+
+const ProductScreen = ({ product }) => {
+  const { dispatch, state } = useCard();
+  const { userSession } = useAuth();
+
+  const addToCart = async () => {
+    //check is user logged in
+    if (!userSession) {
+      return signIn();
+    }
+
+    const data = await fetch(`/api/products/${product.slug}`);
+    const selectedProduct = await data.json();
+
+    const existItem = state.cart?.cartItems.find(
+      (item) => item._id === selectedProduct._id
+    );
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    if (selectedProduct.countInStock < quantity) {
+      alert("Brak na stanie!");
+      return;
+    }
+    dispatch({
+      type: ACTION.ADD_TO_CART,
+      payload: { ...selectedProduct, quantity },
+    });
+  };
+
+  if (!product) {
+    return (
+      <>
+        <div>Produkt nie został znaleziony</div>{" "}
+        <Button variant="secondary" onClick={() => router.back()}>
+          Wróć
+        </Button>
+      </>
+    );
+  }
+
+  return (
+    <div>
+      <Button variant="secondary" onClick={() => router.back()}>
+        Wróć
+      </Button>
+      <h1>{product.name}</h1>
+      <p>{product.decription}</p>
+      <p>{product._id}</p>
+      <Button variant="danger" onClick={() => addToCart(product)}>
+        Dodaj do koszyka
+      </Button>
+    </div>
+  );
+};
+
+export default ProductScreen;
+
+export async function getServerSideProps(context) {
+  const { query } = context;
+  const slug = query.slug;
+
+  const url = `http://localhost:3000/api/products/${slug}`;
+  const res = await fetch(url);
+  const product = await res.json();
+
+  return {
+    props: {
+      product,
+    },
+  };
+}

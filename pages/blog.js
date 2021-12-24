@@ -5,7 +5,7 @@ const Blog = ({ posts }) => {
 
   return (
     <>
-      {userSession.role !== "user" ? (
+      {userSession?.role === "user" ? (
         <button>
           <a href="blog/dodaj">dodaj post</a>
         </button>
