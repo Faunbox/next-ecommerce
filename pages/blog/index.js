@@ -1,17 +1,20 @@
-import { useAuth } from "../context/auth.context";
+import Link from "next/link";
+import { useAuth } from "../../context/auth.context";
 
 const Blog = ({ posts }) => {
   const { userSession } = useAuth();
 
   return (
     <>
-      {userSession?.role === "user" ? (
+      {userSession?.role === "admin" ? (
         <button>
-          <a href="blog/dodaj">dodaj post</a>
+          <Link href="blog/dodaj">dodaj post</Link>
         </button>
       ) : null}
       {userSession ? (
-        posts.map((post) => <div key={post.id + post.name}>{post.email}</div>)
+        posts.map((post) => (
+          <div key={post?._id}>{`${post?.header}, ${post?.body}`}</div>
+        ))
       ) : (
         <div>Zaloguj się żeby zobaczyć posty</div>
       )}
@@ -20,8 +23,8 @@ const Blog = ({ posts }) => {
 };
 
 export async function getStaticProps() {
-  const url = `${process.env.NEXTAUTH_URL}/api/users`;
-  const res = await fetch(url);
+  const url = `${process.env.NEXTAUTH_URL}/api/posts`;
+  const res = await fetch(url, { method: "GET" });
   const posts = await res.json();
 
   return {

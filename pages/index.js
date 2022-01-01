@@ -1,7 +1,11 @@
 import Head from "next/head";
+import Link from "next/link";
+import { Button, Container, Row } from "react-bootstrap";
 import Product from "../components/Product";
+import { useAuth } from "../context/auth.context";
 
 export default function Home({ products }) {
+  const { userSession } = useAuth();
   return (
     <>
       <Head>
@@ -9,14 +13,19 @@ export default function Home({ products }) {
         <meta name="description" content="blog" />
       </Head>
 
-      <main>
-        <h1>Produkty</h1>
-        <section>
+      <h1>Produkty</h1>
+      {userSession?.role === "admin" ? (
+        <Link href={"/produkty/dodaj"} passHref>
+          <Button>Dodaj produkt</Button>
+        </Link>
+      ) : null}
+      <section>
+        <Container as={Row}>
           {products.map((product) => (
             <Product key={product._id} product={product} />
           ))}
-        </section>
-      </main>
+        </Container>
+      </section>
     </>
   );
 }
@@ -25,12 +34,6 @@ export async function getServerSideProps() {
   const url = `${process.env.NEXTAUTH_URL}/api/products`;
   const res = await fetch(url);
   const products = await res.json();
-
-  if(!products) {
-    return {
-      notFound: true
-    }
-  }
 
   return {
     props: {

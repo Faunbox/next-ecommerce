@@ -1,5 +1,7 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useCard, ACTION } from "../context/card.context";
+import { Button, Container } from "react-bootstrap";
 
 const Card = () => {
   const { state, dispatch } = useCard();
@@ -21,18 +23,15 @@ const Card = () => {
   };
 
   return (
-    <>
-      {cartItems.length !== 0 && (
-        <h1>Wartość koszyka: {cartItems.price * cartItems.quantity}</h1>
-      )}
-      {cartItems.length !== 0 && (
-        <Link href={"/zamowienie"} passHref>
-          <button>Kup przedmioty</button>
-        </Link>
-      )}
+    <Container>
       {cartItems.length !== 0 ? (
+        ((
+          <Link href={"/zamowienie"} passHref>
+            <Button>Kup przedmioty</Button>
+          </Link>
+        ),
         cartItems.map((item) => (
-          <div key={item.slug} suppressHydrationWarning>
+          <Container key={item._id}>
             <p>{item.name}</p>
             <p>{item.decription}</p>
             <p>{item.price}</p>
@@ -47,13 +46,13 @@ const Card = () => {
               <option>3</option>
             </select>
             <button onClick={() => deleteItem(item)}>usuń</button>
-          </div>
-        ))
+          </Container>
+        )))
       ) : (
         <p>Koszyk jest pusty!</p>
       )}
-    </>
+    </Container>
   );
 };
 
-export default Card;
+export default dynamic(() => Promise.resolve(Card), { ssr: false });

@@ -3,12 +3,18 @@ import { Nav, Navbar, Container, Button } from "react-bootstrap";
 import { signIn, signOut } from "next-auth/react";
 import { useAuth } from "../context/auth.context";
 import { useCard } from "../context/card.context";
+import { useEffect, useState } from "react";
 
 const Navigation = () => {
   const { state } = useCard();
   const { userSession } = useAuth();
+  const [cartLenght, setCarLenght] = useState("");
 
   const { cart } = state;
+
+  useEffect(() => {
+    return setCarLenght(cart.cartItems.length);
+  }, [cart]);
 
   return (
     <Navbar bg="primary" expand="sm">
@@ -31,14 +37,16 @@ const Navigation = () => {
             </Link>
           </Nav>
           <Nav>
-            <Link href="/koszyk" passHref>
-              <Button>Koszyk: {cart.cartItems.length}</Button>
-            </Link>
+            {userSession && (
+              <Link href="/koszyk" passHref>
+                <Button>Koszyk: {cartLenght}</Button>
+              </Link>
+            )}
           </Nav>
           <Nav>
             {userSession ? (
               <Link href={`/user/${userSession.email}`} passHref>
-                <Button as="div">
+                <Button>
                   {userSession.name ? userSession.name : userSession.email}
                 </Button>
               </Link>

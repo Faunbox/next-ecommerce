@@ -29,7 +29,7 @@ const User = ({ user, users }) => {
   const sendUserNameToDatabase = async () => {
     setChangedUserName(userName);
     await fetch("/api/users/change-name", {
-      method: "POST",
+      method: "PATCH",
       body: JSON.stringify({ name: userName, email: userSession.email }),
     })
       .then((data) => checkIsStatusOk(data))
@@ -45,8 +45,8 @@ const User = ({ user, users }) => {
         {
           <ul>
             <li>
-              {userSession.email === user.email ||
-              userSession.role === "admin" ? (
+              {userSession?.email === user.email ||
+              userSession?.role === "admin" ? (
                 <p>tak</p>
               ) : (
                 <p>nie</p>
@@ -93,11 +93,12 @@ const User = ({ user, users }) => {
             <li>{user.id}</li>
             <li>{user.role}</li>
             {user?.image ? <li>jest obrazek</li> : <li>brak obrazka</li>}
+            {!user?.image && <input type="file"></input>}
           </ul>
         }
       </Container>
       <Container>
-        {userSession.role !== "user" ? (
+        {userSession?.role !== "user" ? (
           users.map((user) => <p key={user.email}>{user.email}</p>)
         ) : (
           <p>Brak uzytkownikow</p>

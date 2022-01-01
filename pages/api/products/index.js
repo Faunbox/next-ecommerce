@@ -2,6 +2,7 @@ import db from "../../../db/db";
 import Product from "../../../models/Product";
 
 const getAllProducts = async (req, res) => {
+  console.log(req.method);
   await db.connect();
   const products = await Product.find({});
   db.disconnect();

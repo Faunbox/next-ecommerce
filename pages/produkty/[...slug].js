@@ -2,21 +2,24 @@ import { signIn } from "next-auth/react";
 import { Button } from "react-bootstrap";
 import { useCard, ACTION } from "../../context/card.context";
 import { useAuth } from "../../context/auth.context";
+import { useRouter } from "next/router";
 
 const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
   const { userSession } = useAuth();
+  const router = useRouter();
 
   const addToCart = async () => {
     //check is user logged in
     if (!userSession) {
+      alert("Aby dodawać przedmioty do koszyka, zaloguj się");
       return signIn();
     }
 
     const data = await fetch(`/api/products/${product.slug}`);
     const selectedProduct = await data.json();
 
-    const existItem = state.cart?.cartItems.find(
+    const existItem = state.cart.cartItems.find(
       (item) => item._id === selectedProduct._id
     );
     const quantity = existItem ? existItem.quantity + 1 : 1;
