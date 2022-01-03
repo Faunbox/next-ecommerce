@@ -24,12 +24,12 @@ const Card = () => {
 
   return (
     <Container>
+      {cartItems.length !== 0 && (
+        <Link href={"/zamowienie"} passHref>
+          <Button>Kup przedmioty</Button>
+        </Link>
+      )}
       {cartItems.length !== 0 ? (
-        ((
-          <Link href={"/zamowienie"} passHref>
-            <Button>Kup przedmioty</Button>
-          </Link>
-        ),
         cartItems.map((item) => (
           <Container key={item._id}>
             <p>{item.name}</p>
@@ -47,7 +47,7 @@ const Card = () => {
             </select>
             <button onClick={() => deleteItem(item)}>usuń</button>
           </Container>
-        )))
+        ))
       ) : (
         <p>Koszyk jest pusty!</p>
       )}
@@ -55,4 +55,4 @@ const Card = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(Card), { ssr: false });
+export default dynamic(async () => Card, { ssr: false });

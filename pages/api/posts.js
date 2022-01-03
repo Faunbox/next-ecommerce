@@ -1,29 +1,24 @@
-import db from "../../../db/db";
-import Post from "../../../models/Post";
+import Post from "../../models/Post";
 
 export default async function Posts(req, res) {
   async function getAllPosts() {
-    await db.connect();
     const posts = await Post.find({});
-    await db.disconnect();
     res.status(200).json(posts);
   }
 
   async function addPost() {
+    db.connect()
     const { header, categorys, body } = req.body;
-    await db.connect();
     const post = new Post({ header, categorys, body });
     post.save();
-    db.disconnect();
     console.log(post);
-    res.status(200).json({ message: post });
+    res.status(200).json({ message: "Post został dodany" });
   }
 
   async function deletePost() {
     const { id } = req.body;
-    await db.connect();
     const post = await Post.findOneAndDelete({ _id: id });
-    db.disconnect();
+    console.log(post);
     post
       ? res.status(200).json({ message: "Usunięto post" })
       : res.status(400).json({ message: "Nie znaleziono postu" });
@@ -32,31 +27,30 @@ export default async function Posts(req, res) {
   switch (req.method) {
     case "GET": {
       try {
+        console.log("Metoda GET w posts");
         return await getAllPosts();
       } catch (error) {
         return res
           .status(400)
           .json({ message: `Błąd podczas pobierania postów -> `, error });
       }
-      break
+      break;
     }
     case "POST": {
       try {
-        console.log("Metoda POST");
+        console.log("Metoda POST w posts");
         addPost(req.body);
       } catch (error) {
         return res
           .status(400)
           .json({ message: "Błąd podczas dodawania postu -> ", error });
       }
-      break
+      break;
     }
     case "DELETE": {
       try {
-        console.log("Metoda DELETE");
-
+        console.log("Metoda DELETE w posts");
         deletePost(req.body.id);
-        return res.status(200).json({ message: "Prawidłowo usunięto post" });
       } catch (error) {
         return res
           .status(400)

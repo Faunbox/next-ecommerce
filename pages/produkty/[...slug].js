@@ -33,6 +33,19 @@ const ProductScreen = ({ product }) => {
     });
   };
 
+  const deleteProduct = async (id) => {
+    await fetch("/api/products", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id,
+      }),
+    }).then((res) => alert(res.json().message));
+    router.push("/")
+  };
+
   if (!product) {
     return (
       <>
@@ -52,9 +65,14 @@ const ProductScreen = ({ product }) => {
       <h1>{product.name}</h1>
       <p>{product.decription}</p>
       <p>{product._id}</p>
-      <Button variant="danger" onClick={() => addToCart(product)}>
+      <Button variant="success" onClick={() => addToCart(product)}>
         Dodaj do koszyka
       </Button>
+      {userSession.role === "admin" && (
+        <Button variant="danger" onClick={() => deleteProduct(product._id)}>
+          Usuń produkt
+        </Button>
+      )}
     </div>
   );
 };

@@ -5,22 +5,20 @@ import { useAuth } from "../../context/auth.context";
 import { useEffect, useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import contactStyles from "../../styles/Contact.module.scss";
-import { useRouter } from "next/router";
 
 const Shipping = () => {
   const apiEndpoint = "./api/mail/order";
+  const { state } = useCard();
   const { userSession } = useAuth();
   // const [serverResponse, setServerResponse] = useState("");
   const [dataFromCookie, setDataFromCookie] = useState("");
   const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
 
   const shippingData = {
     name,
-    surname,
     street,
     city,
     postalCode,
@@ -28,7 +26,6 @@ const Shipping = () => {
 
   const changeInputValues = (data) => {
     setName(data.name);
-    setSurname(data.surname);
     setStreet(data.street);
     setCity(data.city);
     setPostalCode(data.postalCode);
@@ -41,11 +38,11 @@ const Shipping = () => {
         id,
         email: userSession.email,
         name,
-        surname,
         street,
         city,
         postalCode,
         time: new Date(),
+        zamowienie: state.cart.cartItems,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +51,6 @@ const Shipping = () => {
     })
       .then((res) => res.status === 200 && alert("ok"))
       .catch((err) => console.error("błąd", err.message));
-    console.log(time);
   };
 
   const handleSubmit = async () => {
@@ -87,32 +83,22 @@ const Shipping = () => {
         <aside>
           <Form>
             <Form.Group className="mb-3" controlId="name">
-              <Form.Label>Imie</Form.Label>
+              <Form.Label>Imie i nazwisko</Form.Label>
               <Form.Control
                 type="text"
                 autoComplete="name"
                 name="name"
-                placeholder="Andrzej"
+                placeholder="Andrzej Nowak"
                 // value={dataFromCookie ? name : ""}
                 onChange={(e) => setName(e.target.value)}
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="surname">
-              <Form.Label>Nazwisko</Form.Label>
-              <Form.Control
-                type="text"
-                autoComplete="surname"
-                name="Nazwisko"
-                // value={dataFromCookie ? surname : ""}
-                placeholder="Nowak"
-                onChange={(e) => setSurname(e.target.value)}
-              />
-            </Form.Group>
 
-            <Form.Group className="mb-3" controlId="name">
+            <Form.Group className="mb-3" controlId="street">
               <Form.Label>Ulica</Form.Label>
               <Form.Control
                 type="text"
+                autoComplete="street-address"
                 // value={dataFromCookie ? street : ""}
                 placeholder="Komorowicka 336/61"
                 onChange={(e) => setStreet(e.target.value)}
@@ -122,6 +108,7 @@ const Shipping = () => {
               <Form.Label>Miasto</Form.Label>
               <Form.Control
                 type="text"
+                autoComplete=""
                 // value={dataFromCookie ? city : ""}
                 placeholder="Warszawa"
                 onChange={(e) => setCity(e.target.value)}
@@ -132,6 +119,7 @@ const Shipping = () => {
               <Form.Control
                 type="text"
                 name="postalCode"
+                // autoComplete="country"
                 // value={dataFromCookie ? postalCode : ""}
                 placeholder="43-300"
                 onChange={(e) => setPostalCode(e.target.value)}

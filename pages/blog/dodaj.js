@@ -1,31 +1,35 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
-import { Button, Container, Form, Row } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 
 const AddPost = () => {
   const [header, setHeader] = useState("");
   const [categorys, setCategorys] = useState("");
   //   const [image, setImage] = useState("");
   const [body, setBody] = useState("");
+  const router = useRouter();
 
   const addPostHandler = async () => {
-    let response;
     await fetch("/api/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        header: header,
-        categorys: categorys,
-        body: body,
+        header,
+        categorys,
+        body,
       }),
     })
-      .then((data) => (response = data.message))
+      .then((data) => data.json())
+      .then((response) => alert(response.message))
       .catch(
         (err) => new Error({ message: "Błąd podczas dodawania posta" }, err)
       )
-      .finally(alert(response));
+      .finally(() => router.push("/blog"));
   };
+
+  
 
   return (
     <Container>
