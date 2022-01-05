@@ -10,10 +10,12 @@ const AddProduct = () => {
   const [countInStock, setInStock] = useState("");
   const [decription, setDecription] = useState("");
   const [slug, setSlug] = useState("");
+  const [imageToUpload, setImageToUpload] = useState("");
+
   const router = useRouter();
-  // const [img, setImg] = useState("");
 
   const addProductToShop = async () => {
+    const image = await sendImageToCloudinary();
     await fetch("/api/products", {
       method: "POST",
       headers: {
@@ -22,6 +24,7 @@ const AddProduct = () => {
       body: JSON.stringify({
         name,
         category,
+        image,
         price,
         brand,
         countInStock,
@@ -32,6 +35,33 @@ const AddProduct = () => {
       .then((res) => alert(res.json().message))
       .catch((err) => new Error("Błąd podczas dodawania produktu", err))
       .finally(() => router.push("/"));
+  };
+
+  const getCloudinarySignature = async () => {
+    const response = await fetch("/api/products/cloud");
+    const data = await response.json();
+    const { signature, timestamp, api } = data;
+    return { signature, timestamp, api };
+  };
+
+  const sendImageToCloudinary = async () => {
+    const { signature, timestamp, api } = await getCloudinarySignature();
+    const formData = new FormData();
+    formData.append("file", imageToUpload[0]);
+    formData.append("signature", signature);
+    formData.append("timestamp", timestamp);
+    formData.append("api_key", api);
+
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/faunbox/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    const imageData = await response.json();
+
+    return imageData.secure_url;
   };
 
   return (
@@ -97,10 +127,14 @@ const AddProduct = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
-        {/* <Form.Group controlId="formFile" className="mb-3">
+        <Form.Group controlId="formFile" className="mb-3">
           <Form.Label>Zdjęcie</Form.Label>
-          <Form.Control type="file" onChange={(e) => setImg(e.target.value)} />
-        </Form.Group> */}
+          <Form.Control
+            type="file"
+            accept=".jpg,.png"
+            onChange={(e) => setImageToUpload(e.target.files)}
+          />
+        </Form.Group>
         <Button variant="primary" onClick={() => addProductToShop()}>
           Wyślij
         </Button>

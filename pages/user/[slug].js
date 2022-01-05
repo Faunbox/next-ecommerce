@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef } from "react";
 import { useAuth } from "../../context/auth.context";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
+import Image from "next/image";
 
 const User = ({ user, users }) => {
   const { userSession } = useAuth();
@@ -12,7 +13,8 @@ const User = ({ user, users }) => {
   const [userName, setUserName] = useState("");
   const [changedUserName, setChangedUserName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
-  const [responseStatus, setResponseStatus] = useState("");
+  const [image, setImage] = useState("");
+  const [userImage, setUserImage] = useState("");
 
   const changeUserName = () => {
     setUserName(inputRef.current.value);
@@ -20,17 +22,36 @@ const User = ({ user, users }) => {
 
   const checkIsStatusOk = async (data) => {
     if (await data.ok) {
-      setResponseStatus(await data.json().message);
-      console.log("Zmiana statusu", responseStatus);
+      console.log("Zmiana statusu", await data.json().message);
     }
     return new Error("Status is not OK.");
+  };
+
+  const sendImageToCloudinary = async () => {
+    const formData = new FormData();
+    formData.append("file", image[0]);
+    formData.append("upload_preset", "avatars");
+
+    const data = await fetch(
+      "https://api.cloudinary.com/v1_1/faunbox/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    // setUserImage(await data.json().secure_url);
+    await data.json().then((res) => setUserImage(res.secure_url));
   };
 
   const sendUserNameToDatabase = async () => {
     setChangedUserName(userName);
     await fetch("/api/users/change-name", {
       method: "PATCH",
-      body: JSON.stringify({ name: userName, email: userSession.email }),
+      body: JSON.stringify({
+        name: userName,
+        email: userSession.email,
+        image: userImage,
+      }),
     })
       .then((data) => checkIsStatusOk(data))
       .catch(
@@ -44,14 +65,6 @@ const User = ({ user, users }) => {
       <Container>
         {
           <ul>
-            <li>
-              {userSession?.email === user.email ||
-              userSession?.role === "admin" ? (
-                <p>tak</p>
-              ) : (
-                <p>nie</p>
-              )}
-            </li>
             <li>{user.email}</li>
             <li>
               {!user.name ? (
@@ -60,7 +73,6 @@ const User = ({ user, users }) => {
                 </button>
               ) : (
                 <>
-                  <p>{responseStatus}</p>
                   <p>{isNameChanged ? changedUserName : user.name}</p>
                   <button
                     onClick={() => {
@@ -90,19 +102,53 @@ const User = ({ user, users }) => {
                 </button>
               </>
             ) : null}
-            <li>{user.id}</li>
-            <li>{user.role}</li>
-            {user?.image ? <li>jest obrazek</li> : <li>brak obrazka</li>}
-            {!user?.image && <input type="file"></input>}
+
+            {!user?.image ? (
+              <>
+                <label>
+                  Dodaj obrazek
+                  <input
+                    type="file"
+                    accept=".jpg,.png"
+                    onChange={(e) => {
+                      setImage(e.target.files);
+                    }}
+                  ></input>
+                </label>
+                <Button onClick={() => sendImageToCloudinary()}>Dodaj</Button>
+              </>
+            ) : (
+              <>
+                <label>
+                  Zmień obrazek
+                  <input
+                    type="file"
+                    accept=".jpg,.png"
+                    onChange={(e) => {
+                      setImage(e.target.files);
+                    }}
+                  ></input>
+                </label>
+                <Button onClick={() => sendImageToCloudinary()}>Dodaj</Button>
+              </>
+            )}
+            {user?.image ? (
+              <Image
+                src={user?.image}
+                alt={`Image avatar`}
+                width={100}
+                height={100}
+              />
+            ) : (
+              <li>brak obrazka</li>
+            )}
           </ul>
         }
       </Container>
       <Container>
-        {userSession?.role !== "user" ? (
-          users.map((user) => <p key={user.email}>{user.email}</p>)
-        ) : (
-          <p>Brak uzytkownikow</p>
-        )}
+        {userSession?.role !== "user"
+          ? users.map((user) => <p key={user.email}>{user.email}</p>)
+          : null}
       </Container>
     </>
   );

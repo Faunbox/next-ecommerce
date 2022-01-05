@@ -12,11 +12,20 @@ const Products = async (req, res) => {
   };
 
   const addProduct = async () => {
-    const { name, category, price, brand, countInStock, decription, slug } =
-      req.body;
+    const {
+      name,
+      category,
+      image,
+      price,
+      brand,
+      countInStock,
+      decription,
+      slug,
+    } = req.body;
     const product = new Product({
       name,
       category,
+      image,
       price,
       brand,
       countInStock,
@@ -42,7 +51,6 @@ const Products = async (req, res) => {
   switch (req.method) {
     case "GET": {
       try {
-        console.log("Metoda GET w products");
         getAllProducts();
       } catch (error) {
         res

@@ -68,7 +68,7 @@ const ProductScreen = ({ product }) => {
       <Button variant="success" onClick={() => addToCart(product)}>
         Dodaj do koszyka
       </Button>
-      {userSession.role === "admin" && (
+      {userSession?.role === "admin" && (
         <Button variant="danger" onClick={() => deleteProduct(product._id)}>
           Usuń produkt
         </Button>

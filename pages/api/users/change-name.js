@@ -2,13 +2,13 @@ import clientPromise from "../../../db/mongodb";
 
 export default async function changeUserName(req, res) {
   const body = JSON.parse(req.body);
-  const { email, name } = body;
-  console.log(email, name);
+  const { email, name, image } = body;
+  console.log(email, name, image);
   try {
     (await clientPromise)
       .db("test")
       .collection("users")
-      .updateOne({ email: email }, { $set: { name: name } });
+      .updateOne({ email: email }, { $set: { name: name, image: image } });
   } catch (error) {
     res.status(404).json({ message: "błąd podczas zmiany nicku" });
   } finally {
