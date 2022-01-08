@@ -2,47 +2,25 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Button, Container, Form, Row } from "react-bootstrap";
 
+//getting signature for authorized image upload
+export const getCloudinarySignature = async () => {
+  const response = await fetch("/api/products/cloud");
+  const data = await response.json();
+  const { signature, timestamp, api } = data;
+  return { signature, timestamp, api };
+};
+
 const AddProduct = () => {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [brand, setProducent] = useState("");
   const [countInStock, setInStock] = useState("");
-  const [decription, setDecription] = useState("");
+  const [description, setDescription] = useState("");
   const [slug, setSlug] = useState("");
   const [imageToUpload, setImageToUpload] = useState("");
 
   const router = useRouter();
-
-  const addProductToShop = async () => {
-    const image = await sendImageToCloudinary();
-    await fetch("/api/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        category,
-        image,
-        price,
-        brand,
-        countInStock,
-        decription,
-        slug,
-      }),
-    })
-      .then((res) => alert(res.json().message))
-      .catch((err) => new Error("Błąd podczas dodawania produktu", err))
-      .finally(() => router.push("/"));
-  };
-
-  const getCloudinarySignature = async () => {
-    const response = await fetch("/api/products/cloud");
-    const data = await response.json();
-    const { signature, timestamp, api } = data;
-    return { signature, timestamp, api };
-  };
 
   const sendImageToCloudinary = async () => {
     const { signature, timestamp, api } = await getCloudinarySignature();
@@ -61,7 +39,32 @@ const AddProduct = () => {
     );
     const imageData = await response.json();
 
-    return imageData.secure_url;
+    return { url: imageData.secure_url, imageID: imageData.public_id };
+  };
+
+  const addProductToShop = async () => {
+    const { url, imageID } = await sendImageToCloudinary();
+    await fetch("/api/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        category,
+        url,
+        imageID,
+        price,
+        brand,
+        countInStock,
+        description,
+        slug,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => alert(data.message))
+      .catch((err) => new Error("Błąd podczas dodawania produktu", err))
+      .finally(() => router.push("/"));
   };
 
   return (
@@ -114,7 +117,7 @@ const AddProduct = () => {
           <Form.Control
             type="text"
             placeholder="Szuper szprej, polecam"
-            onChange={(e) => setDecription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">

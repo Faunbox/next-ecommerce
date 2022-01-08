@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import { useCard, ACTION } from "../../context/card.context";
 import { useAuth } from "../../context/auth.context";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
@@ -33,7 +34,7 @@ const ProductScreen = ({ product }) => {
     });
   };
 
-  const deleteProduct = async (id) => {
+  const deleteProduct = async (id, priceID, productID) => {
     await fetch("/api/products", {
       method: "DELETE",
       headers: {
@@ -41,9 +42,12 @@ const ProductScreen = ({ product }) => {
       },
       body: JSON.stringify({
         id,
+        priceID,
+        productID,
+        imageID: product.image.imageID,
       }),
     }).then((res) => alert(res.json().message));
-    router.push("/")
+    router.push("/");
   };
 
   if (!product) {
@@ -63,13 +67,28 @@ const ProductScreen = ({ product }) => {
         Wróć
       </Button>
       <h1>{product.name}</h1>
-      <p>{product.decription}</p>
-      <p>{product._id}</p>
+      <p>{product.description}</p>
+      <Image
+        src={product?.image.url}
+        alt={product.name}
+        width={300}
+        height={300}
+      />
+      <br />
       <Button variant="success" onClick={() => addToCart(product)}>
         Dodaj do koszyka
       </Button>
       {userSession?.role === "admin" && (
-        <Button variant="danger" onClick={() => deleteProduct(product._id)}>
+        <Button
+          variant="danger"
+          onClick={() =>
+            deleteProduct(
+              product._id,
+              product.stripe.priceID,
+              product.stripe.productID
+            )
+          }
+        >
           Usuń produkt
         </Button>
       )}

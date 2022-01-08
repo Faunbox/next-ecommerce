@@ -2,6 +2,8 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useCard, ACTION } from "../context/card.context";
 import { Button, Container } from "react-bootstrap";
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET);
 
 const Card = () => {
   const { state, dispatch } = useCard();
@@ -22,12 +24,23 @@ const Card = () => {
     dispatch({ type: ACTION.REMOVE_FROM_CART, payload: item });
   };
 
+  const goToCheckout = async (products) => {
+    const response = await fetch("/api/checkout", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ products }),
+    });
+    const { id } = await response.json();
+    const stripe = await stripePromise;
+    const { error } = await stripe.redirectToCheckout({ sessionId: id });
+  };
+
   return (
     <Container>
       {cartItems.length !== 0 && (
-        <Link href={"/zamowienie"} passHref>
-          <Button>Kup przedmioty</Button>
-        </Link>
+        <Button onClick={() => goToCheckout(cartItems)}>Kup przedmioty</Button>
       )}
       {cartItems.length !== 0 ? (
         cartItems.map((item) => (

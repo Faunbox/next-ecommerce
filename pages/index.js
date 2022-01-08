@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 import Head from "next/head";
 import Link from "next/link";
 import { Button, Container, Row } from "react-bootstrap";
@@ -11,6 +12,7 @@ export default function Home({ products }) {
       <Head>
         <title>Strona główna</title>
         <meta name="description" content="blog" />
+        <script src="https://js.stripe.com/v3"></script>
       </Head>
 
       <h1>Produkty</h1>
