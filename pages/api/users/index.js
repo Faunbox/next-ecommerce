@@ -4,7 +4,10 @@ import clientPromise from "../../../db/mongodb";
 const getUsers = async (req, res) => {
   let users;
   try {
-    let query = (await clientPromise).db("test").collection("users").find({});
+    let query = (await clientPromise)
+      .db(process.env.DB_NAME)
+      .collection("users")
+      .find({});
     users = await query.toArray();
   } finally {
     users

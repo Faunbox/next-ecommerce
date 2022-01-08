@@ -45,7 +45,7 @@ const User = ({ user, users }) => {
 
   const sendUserNameToDatabase = async () => {
     setChangedUserName(userName);
-    await fetch("/api/users/change-name", {
+    await fetch("./api/users/change-name", {
       method: "PATCH",
       body: JSON.stringify({
         name: userName,

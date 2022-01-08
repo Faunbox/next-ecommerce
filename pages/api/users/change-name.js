@@ -6,7 +6,7 @@ export default async function changeUserName(req, res) {
   console.log(email, name, image);
   try {
     (await clientPromise)
-      .db("test")
+      .db(process.env.DB_NAME)
       .collection("users")
       .updateOne({ email: email }, { $set: { name: name, image: image } });
   } catch (error) {

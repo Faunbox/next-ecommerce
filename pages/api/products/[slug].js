@@ -6,7 +6,7 @@ const getProduct = async (req, res) => {
   let product;
   try {
     let query = (await clientPromise)
-      .db("test")
+      .db(process.env.DB_NAME)
       .collection("products")
       .findOne({ slug: slug });
     product = await query;

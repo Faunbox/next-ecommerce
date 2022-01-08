@@ -1,5 +1,4 @@
 import clientPromise from "../../../db/mongodb";
-import mongoose from "mongoose";
 
 const getUsers = async (req, res) => {
   const { email } = req.query;
@@ -7,7 +6,7 @@ const getUsers = async (req, res) => {
   let user;
   try {
     let query = (await clientPromise)
-      .db("test")
+      .db(process.env.DB_NAME)
       .collection("users")
       .findOne({ email: email });
     user = await query;

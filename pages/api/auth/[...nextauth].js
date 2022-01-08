@@ -27,11 +27,13 @@ export default NextAuth({
       try {
         const mail = user.email;
 
-        (await clientPromise)
-          .db("test")
+        const role = (await clientPromise)
+          .db(process.env.DB_NAME)
           .collection("users")
           .updateOne({ email: mail }, { $set: { role: "user" } });
-        console.log("Dodano role");
+        const data = await role;
+        console.log("Dodano role do uzytkownika");
+        console.log(data);
       } catch {
         console.log("cos poszlo nie tak");
       }
