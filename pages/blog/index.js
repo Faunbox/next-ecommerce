@@ -6,6 +6,7 @@ import { getAllPosts } from "../api/posts";
 const Blog = ({ posts }) => {
   const { userSession } = useAuth();
   const router = useRouter();
+  console.log(posts);
 
   const deletePost = async (postID) => {
     await fetch("/api/posts", {
@@ -40,28 +41,25 @@ const Blog = ({ posts }) => {
           <Link href="blog/dodaj">dodaj post</Link>
         </button>
       ) : null}
-      {userSession ? (
-        posts.map((post) => (
-          <div key={post?._id}>
-            <div>{`${post?.header}, ${post?.body}`}</div>
-            {userSession?.role === "admin" && (
-              <>
-                <button onClick={() => deletePost(post?._id)}>Usuń</button>
-                <button onClick={() => deletePost(post)}>Edytuj</button>
-              </>
-            )}
-          </div>
-        ))
-      ) : (
-        <div>Zaloguj się żeby zobaczyć posty</div>
-      )}
+      {posts.map((post) => (
+        <div key={post?._id}>
+          <div>{`${post?.header}, ${post?.body}`}</div>
+          {userSession?.role === "admin" && (
+            <>
+              <button onClick={() => deletePost(post?._id)}>Usuń</button>
+              <button onClick={() => deletePost(post)}>Edytuj</button>
+            </>
+          )}
+        </div>
+      ))}
     </>
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const res = JSON.stringify(await getAllPosts());
   const posts = JSON.parse(res);
+  console.log(posts);
 
   return {
     props: {
