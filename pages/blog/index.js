@@ -55,7 +55,7 @@ const Blog = ({ posts }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const res = JSON.stringify(await getAllPosts());
   const posts = JSON.parse(res);
   console.log(posts);
