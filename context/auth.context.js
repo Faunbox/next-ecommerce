@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const userSession = checkSession();
     return userSession;
-  }, [session, loading]);
+  }, [loading]);
 
   const value = { userSession };
 
