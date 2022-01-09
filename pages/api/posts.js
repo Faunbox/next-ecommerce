@@ -2,12 +2,13 @@ import db from "../../db/db";
 import Post from "../../models/Post";
 
 export const getAllPosts = async () => {
+  await db.connect();
   const posts = await Post.find({});
+  await db.disconnect();
   return posts;
 };
 
 export default async function Posts(req, res) {
-
   async function addPost() {
     await db.connect();
     const { header, categorys, body } = req.body;
@@ -33,7 +34,6 @@ export default async function Posts(req, res) {
       try {
         posts = await getAllPosts();
         res.status(200).json(posts);
-
       } catch (error) {
         return res
           .status(400)
