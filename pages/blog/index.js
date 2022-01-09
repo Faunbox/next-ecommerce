@@ -47,7 +47,6 @@ const Blog = ({ posts }) => {
           {userSession?.role === "admin" && (
             <>
               <button onClick={() => deletePost(post?._id)}>Usuń</button>
-              <button onClick={() => deletePost(post)}>Edytuj</button>
             </>
           )}
         </div>
