@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef } from "react";
 import { useAuth } from "../../context/auth.context";
+import { getAllUsers } from "../api/users/index";
+import { getSingleUser } from "../api/users/[email]";
 import { Button, Container } from "react-bootstrap";
 import Image from "next/image";
 
-const User = ({ user, users }) => {
+const User = ({ user }) => {
   const { userSession } = useAuth();
 
   const inputRef = useRef(null);
@@ -145,19 +147,12 @@ const User = ({ user, users }) => {
           </ul>
         }
       </Container>
-      <Container>
-        {userSession?.role !== "user"
-          ? users.map((user) => <p key={user.email}>{user.email}</p>)
-          : null}
-      </Container>
     </>
   );
 };
 
 export async function getStaticPaths() {
-  const url = `${process.env.NEXTAUTH_URL}/api/users`;
-  const res = await fetch(url);
-  const users = await res.json();
+  const users = await getAllUsers();
 
   const paths = users.map((user) => ({
     params: { slug: user.email },
@@ -170,19 +165,11 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const { slug } = params;
-
-  const url = `http://localhost:3000/api/users/${slug}`;
-  const res = await fetch(url);
-  const user = await res.json();
-
-  const usersUrl = "http://localhost:3000/api/users";
-  const usersRes = await fetch(usersUrl);
-  const users = await usersRes.json();
+  const user = JSON.stringify(await getSingleUser(slug));
 
   return {
     props: {
-      user: user,
-      users: users,
+      user: JSON.parse(user),
     },
   };
 }

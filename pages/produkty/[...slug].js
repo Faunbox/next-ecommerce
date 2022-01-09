@@ -1,4 +1,5 @@
 import { signIn } from "next-auth/react";
+import { getOneProduct } from "../api/products/[slug]";
 import { Button } from "react-bootstrap";
 import { useCard, ACTION } from "../../context/card.context";
 import { useAuth } from "../../context/auth.context";
@@ -102,9 +103,8 @@ export async function getServerSideProps(context) {
   const { query } = context;
   const slug = query.slug;
 
-  const url = `http://localhost:3000/api/products/${slug}`;
-  const res = await fetch(url);
-  const product = await res.json();
+  const data = JSON.stringify(await getOneProduct(slug));
+  const product = JSON.parse(data);
 
   return {
     props: {

@@ -9,7 +9,7 @@ export default async (req, res) => {
     adjustable_quantity: {
       enabled: true,
       minimum: 1,
-      maximum: 10,
+      maximum: item.countInStock,
     },
     quantity: item.quantity,
   }));

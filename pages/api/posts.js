@@ -1,16 +1,19 @@
+import db from "../../db/db";
 import Post from "../../models/Post";
 
+export const getAllPosts = async () => {
+  const posts = await Post.find({});
+  return posts;
+};
+
 export default async function Posts(req, res) {
-  async function getAllPosts() {
-    const posts = await Post.find({});
-    res.status(200).json(posts);
-  }
 
   async function addPost() {
-    db.connect()
+    await db.connect();
     const { header, categorys, body } = req.body;
     const post = new Post({ header, categorys, body });
-    post.save();
+    await post.save();
+    await db.disconnect();
     console.log(post);
     res.status(200).json({ message: "Post został dodany" });
   }
@@ -26,9 +29,11 @@ export default async function Posts(req, res) {
 
   switch (req.method) {
     case "GET": {
+      let posts;
       try {
-        console.log("Metoda GET w posts");
-        return await getAllPosts();
+        posts = await getAllPosts();
+        res.status(200).json(posts);
+
       } catch (error) {
         return res
           .status(400)

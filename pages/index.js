@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button, Container, Row } from "react-bootstrap";
 import Product from "../components/Product";
 import { useAuth } from "../context/auth.context";
+import { getAllProducts } from "./api/products/index";
 
 export default function Home({ products }) {
   const { userSession } = useAuth();
@@ -33,9 +34,8 @@ export default function Home({ products }) {
 }
 
 export async function getServerSideProps() {
-  const url = `${process.env.NEXTAUTH_URL}/api/products`;
-  const res = await fetch(url);
-  const products = await res.json();
+  const data = JSON.stringify(await getAllProducts());
+  const products = JSON.parse(data);
 
   return {
     props: {

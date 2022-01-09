@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAuth } from "../../context/auth.context";
+import { getAllPosts } from "../api/posts";
 
 const Blog = ({ posts }) => {
   const { userSession } = useAuth();
@@ -23,14 +24,14 @@ const Blog = ({ posts }) => {
       .finally(() => router.reload());
   };
 
-  const editPost = async (post) => {
-    await fetch('/api/posts', {
-      method: "PATCH",
-      body: {
-        post
-      }
-    })
-  }
+  // const editPost = async (post) => {
+  //   await fetch("/api/posts", {
+  //     method: "PATCH",
+  //     body: {
+  //       post,
+  //     },
+  //   });
+  // };
 
   return (
     <>
@@ -59,9 +60,8 @@ const Blog = ({ posts }) => {
 };
 
 export async function getStaticProps() {
-  const url = `${process.env.NEXTAUTH_URL}/api/posts`;
-  const res = await fetch(url, { method: "GET" });
-  const posts = await res.json();
+  const res = JSON.stringify(await getAllPosts());
+  const posts = JSON.parse(res);
 
   return {
     props: {

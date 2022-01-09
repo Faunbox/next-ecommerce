@@ -2,7 +2,13 @@ import db from "../../../db/db";
 import Product from "../../../models/Product";
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const cloudinary = require("cloudinary").v2;
-import { getCloudinarySignature } from "../../produkty/dodaj";
+
+export const getAllProducts = async () => {
+  await db.connect();
+  const products = await Product.find({});
+  await db.disconnect();
+  return products;
+}
 
 const Products = async (req, res) => {
   //descructure request body
@@ -24,10 +30,9 @@ const Products = async (req, res) => {
     api_secret: process.env.CLOUDINARY_SECRET,
   });
 
-  const getAllProducts = async () => {
-    db.connect();
-    const products = await Product.find({});
-    db.disconnect();
+
+  const sendAllProducts = async () => {
+    const products = await getAllProducts();
     products
       ? res.status(200).json(products)
       : res.status(404).json({ message: "brak produktów" });
@@ -59,6 +64,7 @@ const Products = async (req, res) => {
   const addProduct = async () => {
     //getting product and price from stripe
     const { priceID, productID } = await addProductToStripe();
+
     const product = new Product({
       name,
       category,
@@ -70,11 +76,11 @@ const Products = async (req, res) => {
       slug,
       stripe: { priceID, productID },
     });
+
     //adding product to db
     await db.connect();
     await product.save();
     await db.disconnect();
-    console.log("product", product);
     res.status(200).json({ message: "Produkt został dodany" });
   };
 
@@ -96,8 +102,7 @@ const Products = async (req, res) => {
 
     //delete item from db
     await db.connect();
-    const deletedProduct = await Product.deleteOne({ _id: id });
-    console.log(deletedProduct);
+    await Product.deleteOne({ _id: id });
     await db.disconnect();
     res.status(200).json({ message: "Produkt został usunięty" });
   };
@@ -105,7 +110,7 @@ const Products = async (req, res) => {
   switch (req.method) {
     case "GET": {
       try {
-        getAllProducts();
+        sendAllProducts();
       } catch (error) {
         res
           .status(404)
