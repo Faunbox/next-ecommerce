@@ -9,8 +9,6 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [session, loading] = useSession({
-    required: true,
-    redirectTo: "http://localhost:3000",
     queryConfig: {
       staleTime: 60 * 1000 * 60 * 3,
       refetchInterval: 60 * 1000 * 5,
@@ -27,7 +25,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const userSession = checkSession();
     return userSession;
-  }, []);
+  }, [session, loading]);
 
   const value = { userSession };
 

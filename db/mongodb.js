@@ -9,10 +9,6 @@ const options = {
 export let client;
 let clientPromise;
 
-if (!process.env.DATABASE_URI) {
-  throw new Error("Please add your Mongo URI to .env.local");
-}
-
 client = new MongoClient(uri, options, () => console.log("Połączono"));
 clientPromise = client.connect();
 

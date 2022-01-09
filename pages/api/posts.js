@@ -15,14 +15,12 @@ export default async function Posts(req, res) {
     const post = new Post({ header, categorys, body });
     await post.save();
     await db.disconnect();
-    console.log(post);
     res.status(200).json({ message: "Post został dodany" });
   }
 
   async function deletePost() {
     const { id } = req.body;
     const post = await Post.findOneAndDelete({ _id: id });
-    console.log(post);
     post
       ? res.status(200).json({ message: "Usunięto post" })
       : res.status(400).json({ message: "Nie znaleziono postu" });
@@ -43,7 +41,6 @@ export default async function Posts(req, res) {
     }
     case "POST": {
       try {
-        console.log("Metoda POST w posts");
         addPost(req.body);
       } catch (error) {
         return res
@@ -54,7 +51,6 @@ export default async function Posts(req, res) {
     }
     case "DELETE": {
       try {
-        console.log("Metoda DELETE w posts");
         deletePost(req.body.id);
       } catch (error) {
         return res

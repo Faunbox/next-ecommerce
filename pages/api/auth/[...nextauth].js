@@ -32,10 +32,9 @@ export default NextAuth({
           .collection("users")
           .updateOne({ email: mail }, { $set: { role: "user" } });
         const data = await role;
-        console.log("Dodano role do uzytkownika");
-        console.log(data);
-      } catch {
-        console.log("cos poszlo nie tak");
+        console.log("Dodano role do uzytkownika", data);
+      } catch (error) {
+        console.log("cos poszlo nie tak", error);
       }
     },
   },

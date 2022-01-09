@@ -33,7 +33,7 @@ export default function Home({ products }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const data = JSON.stringify(await getAllProducts());
   const products = JSON.parse(data);
 
