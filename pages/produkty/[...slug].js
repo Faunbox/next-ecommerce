@@ -11,11 +11,11 @@ const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
   const { userSession } = useAuth();
   const router = useRouter();
-  const [session, status] = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     console.log("prodakt skrin", session, status);
-  }, []);
+  }, [status]);
   const addToCart = async () => {
     //check is user logged in
     if (!userSession) {
