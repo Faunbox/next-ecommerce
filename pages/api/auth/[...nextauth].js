@@ -23,8 +23,9 @@ export default NextAuth({
     strategy: "database",
   },
   callbacks: {
-    async signIn({ user }) {
-      return user;
+    async session({ session, user, token }) {
+      session.role = user.role;
+      return session;
     },
   },
   events: {
