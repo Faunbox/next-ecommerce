@@ -13,8 +13,12 @@ const Navigation = () => {
   const { cart } = state;
 
   useEffect(() => {
+    console.log(userSession);
     return setCarLenght(cart.cartItems.length);
   }, [cart]);
+  useEffect(() => {
+    console.log(userSession);
+  }, []);
 
   return (
     <Navbar bg="primary" expand="sm">

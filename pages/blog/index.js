@@ -6,7 +6,6 @@ import { getAllPosts } from "../api/posts";
 const Blog = ({ posts }) => {
   const { userSession } = useAuth();
   const router = useRouter();
-  console.log(posts);
 
   const deletePost = async (postID) => {
     await fetch("/api/posts", {
