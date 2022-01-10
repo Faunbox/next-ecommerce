@@ -23,9 +23,8 @@ export default NextAuth({
     strategy: "database",
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      console.log(user);
-      return true
+    async signIn({ user }) {
+      return user;
     },
   },
   events: {
