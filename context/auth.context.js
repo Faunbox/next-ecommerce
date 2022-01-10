@@ -1,4 +1,5 @@
 import { useSession } from "../lib/next-auth-react-query";
+import { useSession as sessionAuth } from "next-auth/react";
 import { useState, useContext, createContext, useEffect } from "react";
 
 const AuthContext = createContext();
@@ -17,15 +18,21 @@ export function AuthProvider({ children }) {
     },
   });
   const [userSession, setUserSession] = useState({});
+  const [sesja, setSesja] = useState({});
 
   const checkSession = async () => {
     const user = await session;
+    const uzytkownik = sessionAuth();
     user ? setUserSession(await user.user) : setUserSession(null);
+    console.log("user", user);
+    console.log("uzytkownik", uzytkownik);
     return userSession;
   };
 
   useEffect(() => {
     const userSession = checkSession();
+    const sesja = sessionAuth();
+    console.log("sesja", sesja);
     return userSession;
   }, [loading]);
 

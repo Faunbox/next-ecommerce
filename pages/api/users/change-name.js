@@ -3,7 +3,6 @@ import clientPromise from "../../../db/mongodb";
 export default async function changeUserName(req, res) {
   const body = JSON.parse(req.body);
   const { email, name, image } = body;
-  console.log(email, name, image);
   try {
     (await clientPromise)
       .db(process.env.DB_NAME)
