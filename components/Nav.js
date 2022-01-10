@@ -17,7 +17,7 @@ const Navigation = () => {
     return setCarLenght(cart.cartItems.length);
   }, [cart]);
   useEffect(() => {
-    console.log(userSession);
+    console.log("userSession", userSession);
   }, []);
 
   return (
