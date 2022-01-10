@@ -1,16 +1,21 @@
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { getOneProduct } from "../api/products/[slug]";
 import { Button } from "react-bootstrap";
 import { useCard, ACTION } from "../../context/card.context";
 import { useAuth } from "../../context/auth.context";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { useEffect } from "react";
 
 const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
   const { userSession } = useAuth();
   const router = useRouter();
+  const [session, status] = useSession();
 
+  useEffect(() => {
+    console.log("prodakt skrin", session, status);
+  }, []);
   const addToCart = async () => {
     //check is user logged in
     if (!userSession) {

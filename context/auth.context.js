@@ -18,14 +18,10 @@ export function AuthProvider({ children }) {
     },
   });
   const [userSession, setUserSession] = useState({});
-  const [sesja, setSesja] = useState({});
 
   const checkSession = async () => {
     const user = await session;
-    const uzytkownik = sessionAuth();
     user ? setUserSession(await user.user) : setUserSession(null);
-    console.log("user", user);
-    console.log("uzytkownik", uzytkownik);
     return userSession;
   };
 
@@ -34,7 +30,7 @@ export function AuthProvider({ children }) {
     const sesja = sessionAuth();
     console.log("sesja", sesja);
     return userSession;
-  }, [loading]);
+  }, [session]);
 
   const value = { userSession };
 
