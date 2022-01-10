@@ -9,7 +9,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [session, loading] = useSession({
-    required: false,
+    required: true,
     redirectTo: process.env.VERCEL_URL,
     queryConfig: {
       staleTime: 60 * 1000 * 60 * 3,
@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const userSession = checkSession();
     return userSession;
-  }, [loading, session]);
+  }, [loading]);
 
   const value = { userSession };
 
