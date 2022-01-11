@@ -9,7 +9,7 @@ import { getAllProducts } from "./api/products/index";
 
 export default function Home({ products }) {
   const { userSession } = useAuth();
-  const [fetchedProducts, setFetchedProducts] = useState();
+  const [fetchedProducts, setFetchedProducts] = useState(products);
 
   const setFetchedDataToState = async () => {
     const data = await fetch("/api/products", {
@@ -41,13 +41,9 @@ export default function Home({ products }) {
       ) : null}
       <section>
         <Container as={Row}>
-          {fetchedProducts
-            ? fetchedProducts.map((product) => (
-                <Product key={product._id} product={product} />
-              ))
-            : products.map((product) => (
-                <Product key={product._id} product={product} />
-              ))}
+          {fetchedProducts.map((product) => (
+            <Product key={product._id} product={product} />
+          ))}
         </Container>
       </section>
     </>
