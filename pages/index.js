@@ -9,21 +9,6 @@ import { getAllProducts } from "./api/products/index";
 
 export default function Home({ products }) {
   const { userSession } = useAuth();
-  // const [fetchedProducts, setFetchedProducts] = useState(products);
-
-  // const setFetchedDataToState = async () => {
-  //   const data = await fetch("/api/products", {
-  //     method: "GET",
-  //   });
-  //   const res = await data.json();
-  //   res.ok === products && setFetchedProducts(res);
-  //   console.log("data", res);
-  // };
-
-  // useEffect(() => {
-  //   setFetchedDataToState();
-  //   return setFetchedDataToState;
-  // }, []);
 
   return (
     <>

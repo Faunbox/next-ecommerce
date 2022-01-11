@@ -19,6 +19,7 @@ const AddProduct = () => {
   const [description, setDescription] = useState("");
   const [slug, setSlug] = useState("");
   const [imageToUpload, setImageToUpload] = useState("");
+  const [dataFetching, setDataFetching] = useState(false);
 
   const router = useRouter();
 
@@ -43,6 +44,7 @@ const AddProduct = () => {
   };
 
   const addProductToShop = async () => {
+    setDataFetching(true);
     const { url, imageID } = await sendImageToCloudinary();
     await fetch("/api/products", {
       method: "POST",
@@ -63,6 +65,7 @@ const AddProduct = () => {
     })
       .then((res) => res.json())
       .then((data) => alert(data.message))
+      .then(() => setDataFetching(false))
       .catch((err) => new Error("Błąd podczas dodawania produktu", err))
       .finally(() => router.push("/"));
   };
@@ -138,6 +141,8 @@ const AddProduct = () => {
             onChange={(e) => setImageToUpload(e.target.files)}
           />
         </Form.Group>
+        {/* TODO: zrobic upload screen */}
+        {dataFetching && <div>Dodawanie...</div>}
         <Button variant="primary" onClick={() => addProductToShop()}>
           Wyślij
         </Button>

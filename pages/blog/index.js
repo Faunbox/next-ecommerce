@@ -17,6 +17,7 @@ const Blog = ({ posts }) => {
         id: postID,
       }),
     })
+      .then((data) => data.json())
       .then((res) => alert(res.json().message))
       .catch(
         (err) => new Error({ message: "Błąd podczas usuwania posta" }, err)
@@ -62,6 +63,7 @@ export async function getStaticProps() {
     props: {
       posts: posts,
     },
+    revalidate: 1,
   };
 }
 
