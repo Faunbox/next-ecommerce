@@ -9,21 +9,21 @@ import { getAllProducts } from "./api/products/index";
 
 export default function Home({ products }) {
   const { userSession } = useAuth();
-  const [fetchedProducts, setFetchedProducts] = useState(products);
+  // const [fetchedProducts, setFetchedProducts] = useState(products);
 
-  const setFetchedDataToState = async () => {
-    const data = await fetch("/api/products", {
-      method: "GET",
-    });
-    const res = await data.json();
-    res.ok === products && setFetchedProducts(res);
-    console.log("data", res);
-  };
+  // const setFetchedDataToState = async () => {
+  //   const data = await fetch("/api/products", {
+  //     method: "GET",
+  //   });
+  //   const res = await data.json();
+  //   res.ok === products && setFetchedProducts(res);
+  //   console.log("data", res);
+  // };
 
-  useEffect(() => {
-    setFetchedDataToState();
-    return setFetchedDataToState;
-  }, []);
+  // useEffect(() => {
+  //   setFetchedDataToState();
+  //   return setFetchedDataToState;
+  // }, []);
 
   return (
     <>
@@ -41,7 +41,7 @@ export default function Home({ products }) {
       ) : null}
       <section>
         <Container as={Row}>
-          {fetchedProducts.map((product) => (
+          {products.map((product) => (
             <Product key={product._id} product={product} />
           ))}
         </Container>
@@ -58,5 +58,6 @@ export async function getStaticProps() {
     props: {
       products,
     },
+    revalidate: 1,
   };
 }
