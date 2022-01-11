@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-sync-scripts */
 import Head from "next/head";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
 import Product from "../components/Product";
 import { useAuth } from "../context/auth.context";
@@ -8,6 +9,22 @@ import { getAllProducts } from "./api/products/index";
 
 export default function Home({ products }) {
   const { userSession } = useAuth();
+  const [fetchedProducts, setFetchedProducts] = useState();
+
+  const setFetchedDataToState = async () => {
+    const data = await fetch("/api/products", {
+      method: "GET",
+    });
+    const res = await data.json();
+    res.ok === products && setFetchedProducts(res);
+    console.log("data", res);
+  };
+
+  useEffect(() => {
+    setFetchedDataToState();
+    return setFetchedDataToState;
+  }, []);
+
   return (
     <>
       <Head>
@@ -24,9 +41,13 @@ export default function Home({ products }) {
       ) : null}
       <section>
         <Container as={Row}>
-          {products.map((product) => (
-            <Product key={product._id} product={product} />
-          ))}
+          {fetchedProducts
+            ? fetchedProducts.map((product) => (
+                <Product key={product._id} product={product} />
+              ))
+            : products.map((product) => (
+                <Product key={product._id} product={product} />
+              ))}
         </Container>
       </section>
     </>
