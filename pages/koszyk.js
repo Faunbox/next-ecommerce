@@ -34,7 +34,7 @@ const Card = () => {
     });
     const { id } = await response.json();
     const stripe = await stripePromise;
-    const { error } = await stripe.redirectToCheckout({ sessionId: id });
+    await stripe.redirectToCheckout({ sessionId: id });
   };
 
   return (

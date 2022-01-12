@@ -4,6 +4,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const cloudinary = require("cloudinary").v2;
 
 export const getAllProducts = async () => {
+  console.log(process.env.NODE_ENV);
   await db.connect();
   const products = await Product.find({});
   await db.disconnect();
@@ -32,9 +33,8 @@ const Products = async (req, res) => {
 
   const sendAllProducts = async () => {
     const products = await getAllProducts();
-    const node = process.env.NODE_ENV;
     products
-      ? res.status(200).json(products, node)
+      ? res.status(200).json(products)
       : res.status(404).json({ message: "brak produktów" });
   };
 
