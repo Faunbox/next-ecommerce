@@ -24,6 +24,7 @@ export default function sendContactForm(req, res) {
             .status(404)
             .json({ message: "Wystpil blad podczas wysyladnia maila!" })
         : res.status(200).json({ message: "Wysłano maila!" });
+      err ? console.log("Błąd") : console.log("Smiga");
     }
   );
 }

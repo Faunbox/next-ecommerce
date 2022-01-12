@@ -25,8 +25,8 @@ const Contact = () => {
       },
       method: "POST",
     }).catch((err) => console.error("błąd", err.message));
-    const serverResponse = await req.json().message;
-    alert(await serverResponse);
+    const response = await req.json();
+    alert(response.message);
   };
 
   return (
