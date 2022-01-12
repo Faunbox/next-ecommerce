@@ -8,7 +8,7 @@ export const getAllProducts = async () => {
   const products = await Product.find({});
   await db.disconnect();
   return products;
-}
+};
 
 const Products = async (req, res) => {
   //descructure request body
@@ -30,11 +30,11 @@ const Products = async (req, res) => {
     api_secret: process.env.CLOUDINARY_SECRET,
   });
 
-
   const sendAllProducts = async () => {
     const products = await getAllProducts();
+    const node = process.env.NODE_ENV;
     products
-      ? res.status(200).json(products)
+      ? res.status(200).json(products, node)
       : res.status(404).json({ message: "brak produktów" });
   };
 
