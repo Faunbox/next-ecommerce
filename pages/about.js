@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 
 const About = () => {
+
+const env = process.env.NODE_ENV
+
   const stripeData = async () => {
     const req = await fetch("./api/stripe-webhook");
     const data = await req.json();
@@ -12,7 +15,7 @@ const About = () => {
     return stripeData();
   }, []);
 
-  return <div>About</div>;
+  return <div>About, env: {env}</div>;
 };
 
 export default About;
