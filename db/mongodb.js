@@ -10,6 +10,8 @@ export let client;
 let clientPromise;
 
 client = new MongoClient(uri, options, () => console.log("Połączono"));
+console.log("client length", client.length);
+console.log("MongoClient", MongoClient.length);
 clientPromise = client.connect();
 
 // Export a module-scoped MongoClient promise. By doing this in a
