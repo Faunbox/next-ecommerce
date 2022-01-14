@@ -19,7 +19,7 @@ const handler = async (req, res) => {
       signature,
       endpointSecret
     );
-    console.log("event w srodku try", event);
+    console.log("event w srodku try", event.object);
     res.status(200).json(event);
     return;
   } catch (error) {
