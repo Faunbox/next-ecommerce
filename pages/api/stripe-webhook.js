@@ -19,10 +19,19 @@ const handler = async (req, res) => {
       signature,
       endpointSecret
     );
-    console.log("event w srodku try data", event.data);
-    console.log("event w srodku try obj", event.object);
-    console.log("event w srodku try req", event.request);
     console.log("event w srodku try data obj", event.data.object);
+    const listItems = stripe.checkout.sessions.listLineItems(
+      event.data.object.id,
+      function (err, lineItems) {
+        if (err)
+          return res.status(400).json({
+            message: "Błąd podczas pobierania listy przedmiotów",
+            err,
+          });
+        console.log("lista przedmiotów: ", lineItems);
+      }
+    );
+    console.log("listItems", listItems);
     res.status(200).json(event);
     return;
   } catch (error) {
