@@ -13,17 +13,15 @@ const handler = async (req, res) => {
 
   let event;
   //   if (req.method === "POST") {
-  console.log("signature", signature);
-  console.log("endpoint", endpointSecret);
-  console.log("req", req);
   try {
     event = stripe.webhooks.constructEvent(
       reqBuffer,
       signature,
       endpointSecret
     );
-    console.log("event w srodku try", { event });
-    return res.status(200).json(event);
+    console.log("event w srodku try", event);
+    res.status(200).json(event);
+    return;
   } catch (error) {
     console.log(error);
     res.status(400).send(`Webhook error: ${error.message}`);
