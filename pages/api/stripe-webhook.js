@@ -19,7 +19,10 @@ const handler = async (req, res) => {
       signature,
       endpointSecret
     );
-    console.log("event w srodku try", event.object);
+    console.log("event w srodku try data", event.data);
+    console.log("event w srodku try obj", event.object);
+    console.log("event w srodku try req", event.request);
+    console.log("event w srodku try data obj", event.data.object);
     res.status(200).json(event);
     return;
   } catch (error) {
