@@ -11,7 +11,7 @@ let clientPromise;
 
 client = new MongoClient(uri, options, () => console.log("Połączono"));
 if (MongoClient.length <= 0) {
-  clientPromise = client.connect();
+  return (clientPromise = client.connect());
 } else {
   console.warn("Uzyj starego połączenia");
 }
