@@ -12,9 +12,6 @@ const ProductScreen = ({ product }) => {
   const { userSession } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    console.log(userSession);
-  }, [userSession]);
   const addToCart = async () => {
     //check is user logged in
     if (!userSession) {

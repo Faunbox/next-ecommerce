@@ -20,7 +20,7 @@ const handler = async (req, res) => {
       endpointSecret
     );
     console.log("event w srodku try data obj", event.data.object);
-    const listItems = stripe.checkout.sessions.listLineItems(
+    const listItems = await stripe.checkout.sessions.listLineItems(
       event.data.object.id,
       function (err, lineItems) {
         if (err)
