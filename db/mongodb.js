@@ -10,11 +10,8 @@ export let client;
 let clientPromise;
 
 client = new MongoClient(uri, options, () => console.log("Połączono"));
-if (MongoClient.length <= 0) {
-  return (clientPromise = client.connect());
-} else {
-  console.warn("Uzyj starego połączenia");
-}
+console.log("MongoClient", MongoClient.length);
+clientPromise = client.connect();
 
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
