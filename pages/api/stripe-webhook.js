@@ -22,16 +22,17 @@ const handler = async (req, res) => {
     console.log("event w srodku try data obj", event.data.object);
     const listItems = await stripe.checkout.sessions.listLineItems(
       event.data.object.id,
-      function (err, lineItems) {
+      function (err, listItems) {
         if (err)
           return res.status(400).json({
             message: "Błąd podczas pobierania listy przedmiotów",
             err,
           });
-        console.log("lista przedmiotów: ", lineItems);
+        console.log("lista przedmiotów: ", listItems);
       }
     );
-    console.log("listItems", listItems);
+    const items = await listItems;
+    console.log("listItems", items);
     res.status(200).json(event);
     return;
   } catch (error) {
