@@ -32,7 +32,7 @@ const handler = async (req, res) => {
       }
     );
     const items = await listItems;
-    console.log("listItems", items);
+    console.log("listItems", items.data);
     res.status(200).json(event);
     return;
   } catch (error) {
