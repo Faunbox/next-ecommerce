@@ -12,15 +12,15 @@ const handler = async (req, res) => {
   const reqBuffer = await buffer(req);
 
   let event;
-  //   if (req.method === "POST") {
+  let pucharsedItems;
+  
   try {
     event = stripe.webhooks.constructEvent(
       reqBuffer,
       signature,
       endpointSecret
     );
-    console.log("event w srodku try data obj", event.data.object);
-    const listItems = await stripe.checkout.sessions.listLineItems(
+    await stripe.checkout.sessions.listLineItems(
       event.data.object.id,
       function (err, listItems) {
         if (err)
@@ -28,23 +28,16 @@ const handler = async (req, res) => {
             message: "Błąd podczas pobierania listy przedmiotów",
             err,
           });
-        console.log("lista przedmiotów: ", listItems);
+        pucharsedItems = listItems;
       }
     );
-    const items = await listItems;
-    console.log("listItems", items.data);
-    res.status(200).json(event);
+    res.status(200).json({ session: event, items: pucharsedItems });
     return;
   } catch (error) {
     console.log(error);
-    res.status(400).send(`Webhook error: ${error.message}`);
+    res.status(400).json({ message: `Webhook error: ${error.message}` });
     return;
   }
-  //   } else {
-  //     res.status(405).end("Method not allowed");
-  //   }
-
-  //   console.log("event za blokiem try/catch", { event });
 };
 
 export default handler;

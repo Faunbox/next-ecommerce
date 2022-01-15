@@ -23,7 +23,7 @@ export default async (req, res) => {
       allowed_countries: ["PL"],
     },
     payment_method_types: ["card", "p24"],
-    success_url: `${YOUR_DOMAIN}/about`,
+    success_url: `${YOUR_DOMAIN}/podsumowanie`,
     cancel_url: `${YOUR_DOMAIN}/cancel`,
   });
 
