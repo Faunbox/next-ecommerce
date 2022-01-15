@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
 
 const FinishingOrder = () => {
