@@ -13,7 +13,7 @@ const handler = async (req, res) => {
 
   let event;
   let pucharsedItems;
-  
+
   try {
     event = stripe.webhooks.constructEvent(
       reqBuffer,
@@ -24,18 +24,18 @@ const handler = async (req, res) => {
       event.data.object.id,
       function (err, listItems) {
         if (err)
-          return res.status(400).json({
+          return res.status(400).send({
             message: "Błąd podczas pobierania listy przedmiotów",
             err,
           });
         pucharsedItems = listItems;
       }
     );
-    res.status(200).json({ session: event, items: pucharsedItems });
+    res.status(200).send({ session: event, items: pucharsedItems });
     return;
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: `Webhook error: ${error.message}` });
+    res.status(400).send({ message: `Webhook error: ${error.message}` });
     return;
   }
 };
