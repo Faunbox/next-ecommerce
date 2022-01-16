@@ -27,5 +27,7 @@ export default async (req, res) => {
     cancel_url: `${YOUR_DOMAIN}/cancel`,
   });
 
+  
+
   res.status(200).json(session);
 };

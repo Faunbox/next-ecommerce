@@ -10,15 +10,23 @@ export function useCard() {
 export const ACTION = {
   ADD_TO_CART: "ADD_TO_CART",
   REMOVE_FROM_CART: "REMOVE_FROM_CARD",
+  SET_STRIPE_SESSION_ID: "SET_STRIPE_SESSION_ID",
+  SET_STRIPE_PUCHARSED_ITEMS: "SET_STRIPE_PUCHARSED_ITEMS",
 };
 const getCartItemsCookie = Cookies.get("cartItems");
 const setCartItemsCookie = (cartItems) => {
   return Cookies.set("cartItems", JSON.stringify(cartItems));
 };
 
+//TODO: Zapisac w plikach cookie id sesji
+
 const initialState = {
   cart: {
     cartItems: getCartItemsCookie ? JSON.parse(getCartItemsCookie) : [],
+  },
+  checkout: {
+    id: "",
+    pucharsedItems: {},
   },
 };
 
@@ -42,6 +50,24 @@ const reducer = (state, action) => {
       );
       setCartItemsCookie(cartItems);
       return { ...state, cart: { ...state.cart.cartItems, cartItems } };
+    }
+    case "SET_STRIPE_SESSION_ID": {
+      const sessionId = action.payload;
+      console.log(
+        "set stripe session id -> state",
+        state,
+        "session id",
+        sessionId
+      );
+      return { ...state, checkout: { ...(state.checkout.id = sessionId) } };
+    }
+    case "SET_STRIPE_PUCHARSED_ITEMS": {
+      const pucharsedItems = action.payload;
+      console.log("pucharsed items", pucharsedItems);
+      return {
+        ...state,
+        checkout: { ...(state.checkout = pucharsedItems) },
+      };
     }
     default:
       return state;

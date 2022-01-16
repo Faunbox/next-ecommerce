@@ -18,15 +18,15 @@
     "micro": "^9.3.4",
     "mongodb": "^4.3.0",
     "mongoose": "^6.1.6",
-    "next": "^12.0.7",
+    "next": "^12.0.8",
     "next-auth": "^4.1.0",
     "nodemailer": "^6.7.2",
     "react": "17.0.2",
-    "react-bootstrap": "^2.1.0",
+    "react-bootstrap": "^2.1.1",
     "react-dom": "17.0.2",
-    "react-query": "^3.34.7",
-    "sass": "^1.47.0",
-    "stripe": "^8.195.0"
+    "react-query": "^3.34.8",
+    "sass": "^1.48.0",
+    "stripe": "^8.197.0"
   },
   "devDependencies": {
     "eslint": "7.32.0",

@@ -20,7 +20,7 @@ const handler = async (req, res) => {
       signature,
       endpointSecret
     );
-    await stripe.checkout.sessions.listLineItems(
+    pucharsedItems = await stripe.checkout.sessions.listLineItems(
       event.data.object.id,
       function (err, listItems) {
         if (err)
@@ -34,7 +34,6 @@ const handler = async (req, res) => {
     res.status(200).send({ session: event, items: pucharsedItems });
     return;
   } catch (error) {
-    console.log(error);
     res.status(400).send({ message: `Webhook error: ${error.message}` });
     return;
   }

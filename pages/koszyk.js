@@ -33,6 +33,7 @@ const Card = () => {
       body: JSON.stringify({ products }),
     });
     const { id } = await response.json();
+    dispatch({ type: ACTION.SET_STRIPE_SESSION_ID, payload: id });
     const stripe = await stripePromise;
     await stripe.redirectToCheckout({ sessionId: id });
   };
