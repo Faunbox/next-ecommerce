@@ -15,17 +15,25 @@ export const ACTION = {
 };
 const getCartItemsCookie = Cookies.get("cartItems");
 const setCartItemsCookie = (cartItems) => {
-  return Cookies.set("cartItems", JSON.stringify(cartItems));
+  return Cookies.set("cartItems", JSON.stringify(cartItems), {
+    sameSite: "strict",
+    expires: 14,
+  });
 };
-
-//TODO: Zapisac w plikach cookie id sesji
+const getSessionId = Cookies.get("sessionId");
+const setSessionIdCookie = (id) => {
+  return Cookies.set("sessionId", JSON.stringify(id), {
+    sameSite: "strict",
+    expires: 1,
+  });
+};
 
 const initialState = {
   cart: {
     cartItems: getCartItemsCookie ? JSON.parse(getCartItemsCookie) : [],
   },
   checkout: {
-    id: "",
+    id: getSessionId ? JSON.parse(getSessionId) : "",
     pucharsedItems: {},
   },
 };
@@ -53,20 +61,14 @@ const reducer = (state, action) => {
     }
     case "SET_STRIPE_SESSION_ID": {
       const sessionId = action.payload;
-      console.log(
-        "set stripe session id -> state",
-        state,
-        "session id",
-        sessionId
-      );
+      setSessionIdCookie(sessionId);
       return { ...state, checkout: { ...(state.checkout.id = sessionId) } };
     }
     case "SET_STRIPE_PUCHARSED_ITEMS": {
       const pucharsedItems = action.payload;
-      console.log("pucharsed items", pucharsedItems);
       return {
         ...state,
-        checkout: { ...(state.checkout = pucharsedItems) },
+        checkout: { ...(state.checkout.pucharsedItems = pucharsedItems) },
       };
     }
     default:

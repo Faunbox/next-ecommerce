@@ -1,14 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCard, ACTION } from "../../context/card.context";
 
 const FinishingOrder = () => {
   const { state, dispatch } = useCard();
+  const [session, setSession] = useState();
 
   const getInfoAboutPayment = async () => {
-    console.log(state.checkout);
     const session = await fetch("/api/details", {
       method: "POST",
-      body: state.checkout.id,
+      body: JSON.stringify(state.checkout.id),
     });
     const sessionData = await session.json();
     console.log("sessionData", sessionData);
@@ -16,14 +16,27 @@ const FinishingOrder = () => {
       type: ACTION.SET_STRIPE_PUCHARSED_ITEMS,
       payload: sessionData.items,
     });
-    console.log("podsumowanie state", state.checkout);
+    setSession(JSON.stringify(sessionData.sessionDetails.shipping.address));
   };
 
   useEffect(() => {
-    return getInfoAboutPayment();
-  });
+    getInfoAboutPayment();
+  }, []);
 
-  return <p>gitara</p>;
+  return (
+    <>
+      <div>
+        <h1>Twoje dane do wysyłki</h1>
+        {session}
+      </div>
+      <div>
+        <h1>Twoje zakupy</h1>
+        {/* {state.checkout.pucharsedItems.map((item) => {
+          <div key={item.id}>{item.name}</div>;
+        })} */}
+      </div>
+    </>
+  );
 };
 
 export default FinishingOrder;

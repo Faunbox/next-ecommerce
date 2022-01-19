@@ -1,27 +1,26 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 
 export default async function handler(req, res) {
-  const id = req.body.id;
+  const id = req.body;
 
   let sessionDetails;
   let items;
 
   try {
-    sessionDetails = await stripe.checkout.session.retrieve(id);
-    console.log("session details", sessionDetails);
+    const sessionId = JSON.parse(id);
+    const cokolwiek = await stripe.checkout.sessions.retrieve(sessionId);
 
-    const pucharsedItems = await stripe.checkout.sessions.listLineItems(
-      id,
+    sessionDetails = await cokolwiek;
+
+    await stripe.checkout.sessions.listLineItems(
+      sessionId,
       function (err, listItems) {
         if (err)
           return new Error("Błąd podczas pobierania listy przedmiotów", err);
-
-        console.log("listItems w funkcji pucharsed items", listItems);
+        items = listItems.data;
+        res.status(200).json({ sessionDetails, items });
       }
     );
-    items = pucharsedItems;
-    console.log("items", items);
-    res.status(200).json(sessionDetails, items);
   } catch (err) {
     res
       .status(400)
