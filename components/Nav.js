@@ -2,11 +2,11 @@ import Link from "next/link";
 import { Nav, Navbar, Container, Button } from "react-bootstrap";
 import { signIn, signOut } from "next-auth/react";
 import { useAuth } from "../context/auth.context";
-import { useCard } from "../context/card.context";
+import { useCard, ACTION } from "../context/card.context";
 import { useEffect, useState } from "react";
 
 const Navigation = () => {
-  const { state } = useCard();
+  const { state, dispatch } = useCard();
   const { userSession } = useAuth();
   const [cartLenght, setCarLenght] = useState("");
 

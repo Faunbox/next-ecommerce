@@ -4,6 +4,7 @@ const uri = process.env.DATABASE_URI;
 const options = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
+  
 };
 
 export let client;

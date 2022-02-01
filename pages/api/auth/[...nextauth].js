@@ -25,6 +25,7 @@ export default NextAuth({
   callbacks: {
     async session({ session, user, token }) {
       session.user.role = user.role;
+      session.user.stripeID = user.stripeID;
       return session;
     },
   },
@@ -36,7 +37,7 @@ export default NextAuth({
         const role = (await clientPromise)
           .db(process.env.DB_NAME)
           .collection("users")
-          .updateOne({ email: mail }, { $set: { role: "user" } });
+          .updateOne({ email: mail }, { $set: { role: "user", stripeID: "" } });
         const data = await role;
         console.log("Dodano role do uzytkownika", data);
       } catch (error) {

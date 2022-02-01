@@ -4,7 +4,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const cloudinary = require("cloudinary").v2;
 
 export const getAllProducts = async () => {
-  console.log(process.env.NODE_ENV);
   await db.connect();
   const products = await Product.find({});
   await db.disconnect();

@@ -70,6 +70,7 @@ const ProductScreen = ({ product }) => {
       </Button>
       <h1>{product.name}</h1>
       <p>{product.description}</p>
+      <p>{product.countInStock}</p>
       <Image
         src={product?.image.url}
         alt={product.name}
@@ -99,6 +100,8 @@ const ProductScreen = ({ product }) => {
 };
 
 export default ProductScreen;
+
+
 
 export async function getServerSideProps(context) {
   const { query } = context;

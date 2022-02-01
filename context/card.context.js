@@ -12,6 +12,7 @@ export const ACTION = {
   REMOVE_FROM_CART: "REMOVE_FROM_CARD",
   SET_STRIPE_SESSION_ID: "SET_STRIPE_SESSION_ID",
   SET_STRIPE_PUCHARSED_ITEMS: "SET_STRIPE_PUCHARSED_ITEMS",
+  CLEAR_CARD_ITEMS: "CLEAR_CARD_ITEMS",
 };
 const getCartItemsCookie = Cookies.get("cartItems");
 const setCartItemsCookie = (cartItems) => {
@@ -22,7 +23,7 @@ const setCartItemsCookie = (cartItems) => {
 };
 const getSessionId = Cookies.get("sessionId");
 const setSessionIdCookie = (id) => {
-  return Cookies.set("sessionId", JSON.stringify(id), {
+  return Cookies.set("sessionId", id, {
     sameSite: "strict",
     expires: 1,
   });
@@ -33,8 +34,8 @@ const initialState = {
     cartItems: getCartItemsCookie ? JSON.parse(getCartItemsCookie) : [],
   },
   checkout: {
-    id: getSessionId ? JSON.parse(getSessionId) : "",
-    pucharsedItems: {},
+    id: getSessionId ? getSessionId : "",
+    pucharsedItems: null,
   },
 };
 
@@ -59,16 +60,20 @@ const reducer = (state, action) => {
       setCartItemsCookie(cartItems);
       return { ...state, cart: { ...state.cart.cartItems, cartItems } };
     }
+    case "CLEAR_CARD_ITEMS": {
+      Cookies.set("cartItems", []);
+      return { ...state, cart: { cartItems: [] } };
+    }
     case "SET_STRIPE_SESSION_ID": {
       const sessionId = action.payload;
       setSessionIdCookie(sessionId);
-      return { ...state, checkout: { ...(state.checkout.id = sessionId) } };
+      return { ...state, checkout: { ...state.checkout, id: sessionId } };
     }
     case "SET_STRIPE_PUCHARSED_ITEMS": {
       const pucharsedItems = action.payload;
       return {
         ...state,
-        checkout: { ...(state.checkout.pucharsedItems = pucharsedItems) },
+        checkout: { ...state.checkout, pucharsedItems: pucharsedItems },
       };
     }
     default:

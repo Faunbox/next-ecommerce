@@ -15,8 +15,10 @@ const User = ({ user }) => {
   const [userName, setUserName] = useState("");
   const [changedUserName, setChangedUserName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
+  const [showPucharseHistory, setShowPucharseHistory] = useState(false);
   const [image, setImage] = useState("");
   const [userImage, setUserImage] = useState("");
+  const [paymentHistory, setPaymentHistory] = useState([]);
 
   const changeUserName = () => {
     setUserName(inputRef.current.value);
@@ -60,6 +62,16 @@ const User = ({ user }) => {
         (err) => new Error({ message: "Błąd podczas zmiany nazwy konta" }, err)
       )
       .finally(setShowInput(false), setIsNameChanged(true));
+  };
+
+  const getUserPaymentHistory = async () => {
+    const paymentHistory = await fetch("/api//users/[email]", {
+      method: "POST",
+      body: user.stripeID,
+    }).then((res) => res.json());
+    const history = await paymentHistory.paymentHistory;
+    setPaymentHistory(history);
+    console.log(paymentHistory);
   };
 
   return (
@@ -146,6 +158,17 @@ const User = ({ user }) => {
             )}
           </ul>
         }
+      </Container>
+      <Container>
+        <Button
+          onClick={() => {
+            setShowPucharseHistory(!showPucharseHistory);
+            getUserPaymentHistory();
+          }}
+        >
+          Pokaż historie zakupów
+        </Button>
+        {showPucharseHistory && <div>Historia</div>}
       </Container>
     </>
   );
