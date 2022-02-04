@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState, convertToRaw } from "draft-js";
+import { useEffect, useState } from "react";
+import draftToHtml from "draftjs-to-html";
 
-function Editor() {
-  let [loaded, setLoaded] = useState(false);
-
+const TextEditor = () => {
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const [loading, setloading] = useState(false);
   useEffect(() => {
-    setLoaded(true);
-  }, []); 
-  if (loaded) {
-    return (
-      <CKEditor
-        editor={ClassicEditor}
-        data="<p>Treść Twojego postu</p>"
-        onReady={(editor) => {
-          console.log("Editor is ready to use!", editor);
-        }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          console.log({ event, editor, data });
-        }}
-      />
-    );
-  } else {
-    return <h2> Editor is loading </h2>;
-  }
-}
+    console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
+  }, [editorState]);
+  return (
+    <Editor
+      editorState={editorState}
+      onEditorStateChange={setEditorState}
+      placeholder={"Treść posta"}
+      toolbar={{
+        image: {
+          uploadEnabled: true,
+          previewImage: true,
+          uploadCallback: async () => await console.log("tak"),
+        },
+      }}
+    />
+  );
+};
 
-export default Editor;
+export default TextEditor;

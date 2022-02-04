@@ -2,16 +2,16 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Button, Container, Form } from "react-bootstrap";
-
-const Editor = dynamic(() => import("../../components/TextEditor"), {
-  ssr: false,
-});
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const AddPost = () => {
   const [header, setHeader] = useState("");
   const [categorys, setCategorys] = useState("");
   const [body, setBody] = useState("");
   const router = useRouter();
+
+  const Editor = dynamic(() => import("../../components/TextEditor"), { ssr: false });
+
 
   const addPostHandler = async () => {
     await fetch("/api/posts", {
@@ -63,7 +63,9 @@ const AddPost = () => {
         </Form.Group> */}
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Post</Form.Label>
-          <Editor />
+          <Editor
+          
+          />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
