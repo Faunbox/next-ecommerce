@@ -71,6 +71,7 @@ export async function getServerSideProps(context) {
   const retrivedSession = await session.shipping;
   const sessionDetails = retrivedSession;
 
+
   //get user from db and check stripe customer ID
   const user = (await clientPromise)
     .db(process.env.DB_NAME)

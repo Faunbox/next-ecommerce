@@ -1,11 +1,15 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Button, Container, Form } from "react-bootstrap";
+
+const Editor = dynamic(() => import("../../components/TextEditor"), {
+  ssr: false,
+});
 
 const AddPost = () => {
   const [header, setHeader] = useState("");
   const [categorys, setCategorys] = useState("");
-  //   const [image, setImage] = useState("");
   const [body, setBody] = useState("");
   const router = useRouter();
 
@@ -28,8 +32,6 @@ const AddPost = () => {
       )
       .finally(() => router.push("/blog"));
   };
-
-  
 
   return (
     <Container>
@@ -61,11 +63,7 @@ const AddPost = () => {
         </Form.Group> */}
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Post</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Szuper szprej, polecam"
-            onChange={(e) => setBody(e.target.value)}
-          />
+          <Editor />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
@@ -77,5 +75,4 @@ const AddPost = () => {
     </Container>
   );
 };
-
 export default AddPost;

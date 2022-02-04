@@ -16,10 +16,12 @@ export default async function handler(req, res) {
   const changeItemsQuanityInDb = async (pucharsedItems) => {
     await db.connect();
     pucharsedItems.forEach(async (item) => {
-      await Product.findOneAndUpdate(
+      console.log("item", item);
+      const taa = await Product.updateOne(
         { "stripe.productID": item.id },
         { $inc: { countInStock: -item.quantity } }
       );
+      console.log("taa", taa);
     });
     await db.disconnect();
   };
@@ -34,6 +36,22 @@ export default async function handler(req, res) {
       endpointSecret
     );
 
+    const customer = await stripe.customers.retrieve(
+      event.data.object.customer
+    );
+
+    const metadata = customer.metadata;
+    console.log("metadata", metadata.sessions);
+    console.log("event.data", event.data.object.id);
+    const newMeta = [metadata.sessions, event.data.object.id];
+    console.log("new Meta", newMeta);
+    const tak = await stripe.customers.update(event.data.object.customer, {
+      metadata: { sessions: newMeta },
+    });
+
+    console.log("tak", tak);
+    console.log("customer", await customer.metadata);
+
     const stripeItems = await stripe.checkout.sessions.listLineItems(
       event.data.object.id
     );
@@ -41,14 +59,6 @@ export default async function handler(req, res) {
       id: item.price.product,
       quantity: item.quantity,
     }));
-
-    const paymentIntent = await stripe.paymentIntents.create({
-      metadata: {
-        items: items,
-      },
-    });
-
-    console.log(paymentIntent);
 
     await changeItemsQuanityInDb(items);
 
