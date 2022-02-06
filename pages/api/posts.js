@@ -20,7 +20,9 @@ export default async function Posts(req, res) {
 
   async function deletePost() {
     const { id } = req.body;
+    await db.connect();
     const post = await Post.findOneAndDelete({ _id: id });
+    await db.disconnect();
     post
       ? res.status(200).json({ message: "Usunięto post" })
       : res.status(400).json({ message: "Nie znaleziono postu" });

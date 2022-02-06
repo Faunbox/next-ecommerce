@@ -3,17 +3,19 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { Button, Container, Form } from "react-bootstrap";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import Cookies from "js-cookie";
 
 const AddPost = () => {
   const [header, setHeader] = useState("");
   const [categorys, setCategorys] = useState("");
-  const [body, setBody] = useState("");
   const router = useRouter();
 
-  const Editor = dynamic(() => import("../../components/TextEditor"), { ssr: false });
-
+  const Editor = dynamic(() => import("../../components/TextEditor"), {
+    ssr: false,
+  });
 
   const addPostHandler = async () => {
+    const body = Cookies.get("blog_post");
     await fetch("/api/posts", {
       method: "POST",
       headers: {
@@ -27,6 +29,7 @@ const AddPost = () => {
     })
       .then((data) => data.json())
       .then((response) => alert(response.message))
+      .then(Cookies.remove("blog_post"))
       .catch(
         (err) => new Error({ message: "Błąd podczas dodawania posta" }, err)
       )
@@ -63,9 +66,7 @@ const AddPost = () => {
         </Form.Group> */}
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Post</Form.Label>
-          <Editor
-          
-          />
+          <Editor />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>

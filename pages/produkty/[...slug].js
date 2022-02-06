@@ -5,7 +5,6 @@ import { useCard, ACTION } from "../../context/card.context";
 import { useAuth } from "../../context/auth.context";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useEffect } from "react";
 
 const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
@@ -19,9 +18,11 @@ const ProductScreen = ({ product }) => {
       return signIn();
     }
 
+    //get product info from db
     const data = await fetch(`/api/products/${product.slug}`);
     const selectedProduct = await data.json();
 
+    //checking of same product in card and add 1 to quantity
     const existItem = state.cart.cartItems.find(
       (item) => item._id === selectedProduct._id
     );
@@ -42,17 +43,22 @@ const ProductScreen = ({ product }) => {
       headers: {
         "Content-Type": "application/json",
       },
+      //sending id to find product in db, priceID and productID to delete price and product in stripe, imageID to delete image in cloudinary
       body: JSON.stringify({
         id,
         priceID,
         productID,
         imageID: product.image.imageID,
       }),
-    }).then((res) => alert(res.json().message));
+    })
+      .then((res) => res.json())
+      .then((message) => alert(message.message));
     router.push("/");
   };
 
+
   if (!product) {
+    //render notFound page
     return (
       <>
         <div>Produkt nie został znaleziony</div>{" "}
@@ -100,8 +106,6 @@ const ProductScreen = ({ product }) => {
 };
 
 export default ProductScreen;
-
-
 
 export async function getServerSideProps(context) {
   const { query } = context;

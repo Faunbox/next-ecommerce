@@ -1,4 +1,3 @@
-
 /* eslint-disable import/no-anonymous-default-export */
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const YOUR_DOMAIN = process.env.NEXTAUTH_URL;
@@ -42,7 +41,7 @@ export default async (req, res) => {
         payment_method_types: ["card", "p24"],
         customer_email: email,
         success_url: `${YOUR_DOMAIN}/zamowienie/{CHECKOUT_SESSION_ID}`,
-        cancel_url: `${YOUR_DOMAIN}/zamowienie/{CHECKOUT_SESSION_ID}`,
+        cancel_url: `${YOUR_DOMAIN}`,
       });
 
   res.status(200).json(session);

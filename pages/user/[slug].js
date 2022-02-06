@@ -43,7 +43,6 @@ const User = ({ user }) => {
         body: formData,
       }
     );
-    // setUserImage(await data.json().secure_url);
     await data.json().then((res) => setUserImage(res.secure_url));
   };
 

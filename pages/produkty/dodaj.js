@@ -138,7 +138,9 @@ const AddProduct = () => {
           <Form.Control
             type="file"
             accept=".jpg,.png"
-            onChange={(e) => setImageToUpload(e.target.files)}
+            onChange={(e) => {
+              setImageToUpload(e.target.files);
+            }}
           />
         </Form.Group>
         {/* TODO: zrobic upload screen */}

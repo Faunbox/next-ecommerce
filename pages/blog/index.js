@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAuth } from "../../context/auth.context";
 import { getAllPosts } from "../api/posts";
+import parse from "html-react-parser";
 
 const Blog = ({ posts }) => {
   const { userSession } = useAuth();
@@ -25,25 +26,16 @@ const Blog = ({ posts }) => {
       .finally(() => router.reload());
   };
 
-  // const editPost = async (post) => {
-  //   await fetch("/api/posts", {
-  //     method: "PATCH",
-  //     body: {
-  //       post,
-  //     },
-  //   });
-  // };
-
   return (
     <>
       {userSession?.role === "admin" ? (
         <button>
-          <Link href="blog/dodaj">dodaj post</Link>
+          <Link href="blog/dodaj">Dodaj post</Link>
         </button>
       ) : null}
       {posts.map((post) => (
         <div key={post?._id}>
-          <div>{`${post?.header}, ${post?.body}`}</div>
+          {parse(post.body)}
           {userSession?.role === "admin" && (
             <>
               <button onClick={() => deletePost(post?._id)}>Usuń</button>
