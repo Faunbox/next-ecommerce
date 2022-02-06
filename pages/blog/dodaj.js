@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Button, Container, Form } from "react-bootstrap";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -10,9 +10,11 @@ const AddPost = () => {
   const [categorys, setCategorys] = useState("");
   const router = useRouter();
 
-  const Editor = dynamic(() => import("../../components/TextEditor"), {
-    ssr: false,
-  });
+  const Editor = useMemo(() => {
+    return dynamic(() => import("../../components/TextEditor"), {
+      ssr: false,
+    });
+  }, []);
 
   const addPostHandler = async () => {
     const body = Cookies.get("blog_post");

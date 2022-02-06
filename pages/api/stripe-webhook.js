@@ -41,16 +41,15 @@ export default async function handler(req, res) {
     );
 
     const metadata = customer.metadata;
-    console.log("metadata", metadata.sessions);
-    console.log("event.data", event.data.object.id);
-    const newMeta = [metadata.sessions, event.data.object.id];
-    console.log("new Meta", newMeta);
-    const tak = await stripe.customers.update(event.data.object.customer, {
-      metadata: { sessions: newMeta },
-    });
+    console.log("metadata długość", metadata);
+    // console.log("event.data", event.data.object.id);
+    // const newMeta = [metadata.sessions, event.data.object.id];
+    // const tak = await stripe.customers.update(event.data.object.customer, {
+    //   metadata: { length: event.data.object.id },
+    // });
 
-    console.log("tak", tak);
-    console.log("customer", await customer.metadata);
+    // console.log("tak", tak);
+    // console.log("customer", await customer.metadata);
 
     const stripeItems = await stripe.checkout.sessions.listLineItems(
       event.data.object.id
@@ -60,7 +59,14 @@ export default async function handler(req, res) {
       quantity: item.quantity,
     }));
 
-    await changeItemsQuanityInDb(items);
+    await db.connect();
+    items.map(async (item) => {
+      await Product.updateOne(
+        { "stripe.productID": item.id },
+        { $inc: { countInStock: -item.quantity } }
+      );
+    });
+    await db.disconnect();
 
     res.status(200).send({ listItems });
     return;
