@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { buffer } from "micro";
 import db from "../../db/db";
 import Product from "../../models/Product";
+import clientPromise from "../../db/mongodb";
 
 export const config = { api: { bodyParser: false } };
 
@@ -36,28 +37,28 @@ export default async function handler(req, res) {
       endpointSecret
     );
 
-    const customer = await stripe.customers.retrieve(
-      event.data.object.customer
-    );
+    const customerId = event.data.object.customer;
+    const checkoutId = event.data.object.id;
 
-    const metadata = customer.metadata;
-    console.log("metadata długość", metadata);
-    // console.log("event.data", event.data.object.id);
-    // const newMeta = [metadata.sessions, event.data.object.id];
-    // const tak = await stripe.customers.update(event.data.object.customer, {
-    //   metadata: { length: event.data.object.id },
+    const customer = await stripe.customers.retrieve(customerId);
+    // await stripe.customers.update(event.data.object.customer, {
+    //   metadata: {},
+    // });
+    // const metadata = customer.metadata;
+    // const metadataLength = [metadata].length;
+    // await stripe.customers.update(event.data.object.customer, {
+    //   metadata: { metadataLength: event.data.object.id },
     // });
 
-    // console.log("tak", tak);
-    // console.log("customer", await customer.metadata);
-
     const stripeItems = await stripe.checkout.sessions.listLineItems(
-      event.data.object.id
+      checkoutId
     );
-    items = await stripeItems.data.map((item) => ({
+    items = stripeItems.data.map((item) => ({
       id: item.price.product,
       quantity: item.quantity,
     }));
+
+    const email = customer.email;
 
     await db.connect();
     items.map(async (item) => {
@@ -66,6 +67,11 @@ export default async function handler(req, res) {
         { $inc: { countInStock: -item.quantity } }
       );
     });
+    console.log("zmieniono wartosci");
+    // (await clientPromiseise)
+    //   .db(process.env.DB_NAME)
+    //   .collection("users")
+    //   .updateOne({ email: email }, { $addToSet: { history: checkoutId } });
     await db.disconnect();
 
     res.status(200).send({ listItems });

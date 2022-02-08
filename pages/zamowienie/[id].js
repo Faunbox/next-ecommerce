@@ -64,13 +64,13 @@ export async function getServerSideProps(context) {
 
   //get info about stripe session
   const session = await stripe.checkout.sessions.retrieve(id);
+  console.log("session", session);
   const customerId = await session.customer;
   const customerEmail = await session.customer_details.email;
 
   //send info about shipping to frond-end
   const retrivedSession = await session.shipping;
   const sessionDetails = retrivedSession;
-
 
   //get user from db and check stripe customer ID
   const user = (await clientPromise)
