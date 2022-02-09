@@ -4,15 +4,11 @@ const uri = process.env.DATABASE_URI;
 const options = {
   useUnifiedTopology: true,
   useNewUrlParser: true,
-  
 };
 
-export let client;
-let clientPromise;
-
-client = new MongoClient(uri, options, () => console.log("Połączono"));
-clientPromise = client.connect();
+export const client = new MongoClient(uri, options);
+const clientPromise = client.connect();
+export default clientPromise;
 
 // Export a module-scoped MongoClient promise. By doing this in a
 // separate module, the client can be shared across functions.
-export default clientPromise;

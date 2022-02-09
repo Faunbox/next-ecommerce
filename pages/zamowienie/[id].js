@@ -5,15 +5,17 @@ import clientPromise from "../../db/mongodb";
 const FinishingOrder = ({ sessionDetails, items }) => {
   const { dispatch } = useCard();
   const { address, name } = sessionDetails;
-  const postalCode =
-    address.postal_code.slice(0, 2) + "-" + address.postal_code.slice(2, 5);
+  const stripePostalCode = address.postal_code;
+  const postalCode = !stripePostalCode.includes("-")
+    ? stripePostalCode.slice(0, 2) + "-" + stripePostalCode.slice(2, 5)
+    : stripePostalCode;
 
   const clearCardItems = () => {
     dispatch({
       type: ACTION.SET_STRIPE_PUCHARSED_ITEMS,
       payload: items,
     });
-    dispatch({ type: ACTION.CLEAR_CARD_ITEMS });
+    // dispatch({ type: ACTION.CLEAR_CARD_ITEMS });
   };
 
   useEffect(() => {
@@ -64,7 +66,6 @@ export async function getServerSideProps(context) {
 
   //get info about stripe session
   const session = await stripe.checkout.sessions.retrieve(id);
-  console.log("session", session);
   const customerId = await session.customer;
   const customerEmail = await session.customer_details.email;
 

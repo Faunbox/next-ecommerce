@@ -64,12 +64,12 @@ const User = ({ user }) => {
   };
 
   const getUserPaymentHistory = async () => {
-    const paymentHistory = await fetch("/api//users/[email]", {
+    const paymentHistory = await fetch("/api/users/[email]", {
       method: "POST",
-      body: user.stripeID,
+      body: user.email,
     }).then((res) => res.json());
-    const history = await paymentHistory.paymentHistory;
-    setPaymentHistory(history);
+    const history = await paymentHistory;
+    setPaymentHistory(await history);
     console.log(paymentHistory);
   };
 

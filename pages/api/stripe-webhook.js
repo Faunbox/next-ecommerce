@@ -1,8 +1,8 @@
 import Stripe from "stripe";
 import { buffer } from "micro";
 import db from "../../db/db";
-import Product from "../../models/Product";
 import clientPromise from "../../db/mongodb";
+import Product from "../../models/Product";
 
 export const config = { api: { bodyParser: false } };
 
@@ -14,19 +14,6 @@ export default async function handler(req, res) {
   const signature = req.headers["stripe-signature"];
   const reqBuffer = await buffer(req);
 
-  const changeItemsQuanityInDb = async (pucharsedItems) => {
-    await db.connect();
-    pucharsedItems.forEach(async (item) => {
-      console.log("item", item);
-      const taa = await Product.updateOne(
-        { "stripe.productID": item.id },
-        { $inc: { countInStock: -item.quantity } }
-      );
-      console.log("taa", taa);
-    });
-    await db.disconnect();
-  };
-
   let event;
   let items;
 
@@ -37,19 +24,15 @@ export default async function handler(req, res) {
       endpointSecret
     );
 
+    //get customerId and checkoutId from event object
     const customerId = event.data.object.customer;
     const checkoutId = event.data.object.id;
 
+    //get customer object and get email address
     const customer = await stripe.customers.retrieve(customerId);
-    // await stripe.customers.update(event.data.object.customer, {
-    //   metadata: {},
-    // });
-    // const metadata = customer.metadata;
-    // const metadataLength = [metadata].length;
-    // await stripe.customers.update(event.data.object.customer, {
-    //   metadata: { metadataLength: event.data.object.id },
-    // });
+    const email = customer.email;
 
+    //list all pucharsed items from checkout session and map to get id and quantity
     const stripeItems = await stripe.checkout.sessions.listLineItems(
       checkoutId
     );
@@ -58,8 +41,7 @@ export default async function handler(req, res) {
       quantity: item.quantity,
     }));
 
-    const email = customer.email;
-
+    //update item quantity
     await db.connect();
     items.map(async (item) => {
       await Product.updateOne(
@@ -67,13 +49,16 @@ export default async function handler(req, res) {
         { $inc: { countInStock: -item.quantity } }
       );
     });
-    console.log("zmieniono wartosci");
-    // (await clientPromiseise)
-    //   .db(process.env.DB_NAME)
-    //   .collection("users")
-    //   .updateOne({ email: email }, { $addToSet: { history: checkoutId } });
-    await db.disconnect();
 
+    //add checkoutId to user db
+    (await clientPromise)
+      .db(process.env.DB_NAME)
+      .collection("users")
+      .updateOne(
+        { email: email },
+        { $addToSet: { StripeHistory: checkoutId } }
+      );
+    await db.disconnect();
     res.status(200).send({ listItems });
     return;
   } catch (error) {

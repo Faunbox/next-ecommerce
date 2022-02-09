@@ -25,14 +25,14 @@ export default async function getUser(req, res) {
     return;
   }
   if (req.method === "POST") {
-    const stripe = require("stripe")(process.env.STRIPE_SECRET);
-    const customerID = req.body;
-
+    const email = req.body;
     try {
-      const paymentIntents = await stripe.paymentIntents.list({
-        customer: customerID,
-      });
-      res.status(200).json(paymentIntents.data);
+      const history = (await clientPromise)
+        .db(process.env.DB_NAME)
+        .collection("users")
+        .findOne({ email: email });
+      console.log(await history);
+      res.status(200).json(history);
     } catch (err) {
       res.status(400).json({
         paymentHistory: "Błąd podczas pobierania histori zamówień",

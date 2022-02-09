@@ -20,6 +20,7 @@ async function connect() {
   }
   console.log("new connection");
   connection.isConnected = mongoose.connections[0].readyState;
+  console.log(mongoose.connections[0].readyState);
   return (db = await mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
