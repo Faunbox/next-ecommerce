@@ -15,7 +15,7 @@ const FinishingOrder = ({ sessionDetails, items }) => {
       type: ACTION.SET_STRIPE_PUCHARSED_ITEMS,
       payload: items,
     });
-    // dispatch({ type: ACTION.CLEAR_CARD_ITEMS });
+    dispatch({ type: ACTION.CLEAR_CARD_ITEMS });
   };
 
   useEffect(() => {

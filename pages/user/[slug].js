@@ -162,12 +162,13 @@ const User = ({ user }) => {
         <Button
           onClick={() => {
             setShowPucharseHistory(!showPucharseHistory);
-            getUserPaymentHistory();
+            !showPucharseHistory ? getUserPaymentHistory() : null;
           }}
         >
           Pokaż historie zakupów
         </Button>
-        {showPucharseHistory && <div>Historia</div>}
+        {showPucharseHistory &&
+          paymentHistory.map((checkout) => <p key={checkout}>{checkout}</p>)}
       </Container>
     </>
   );

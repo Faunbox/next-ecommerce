@@ -1,4 +1,5 @@
 import clientPromise from "../../../db/mongodb";
+import Stripe from "stripe";
 
 export const getSingleUser = async (email) => {
   const query = (await clientPromise)
@@ -12,6 +13,7 @@ export default async function getUser(req, res) {
   const { email } = req.query;
 
   let user;
+  let pucharsedItemsList = [];
   if (req.method === "GET") {
     try {
       user = await getSingleUser(email);
@@ -26,16 +28,39 @@ export default async function getUser(req, res) {
   }
   if (req.method === "POST") {
     const email = req.body;
+    const stripe = new Stripe(process.env.STRIPE_SECRET, {
+      apiVersion: "2020-08-27",
+    });
     try {
       const history = (await clientPromise)
         .db(process.env.DB_NAME)
         .collection("users")
         .findOne({ email: email });
-      console.log(await history);
-      res.status(200).json(history);
+      const { StripeHistory } = await history;
+
+      for (const checkoutId of StripeHistory) {
+        await stripe.checkout.sessions.listLineItems(
+          checkoutId,
+          function (err, lineItems) {
+            if (err) {
+              throw new Error(
+                "Błąd podczas pobierania list przedmiotów ze Stripe"
+              );
+            }
+            pucharsedItemsList.push(lineItems.data);
+          }
+        );
+      }
+
+      console.log(pucharsedItemsList);
+
+      // if (!StripeHistory) {
+      //   return res.status(200).json("Brak historii");
+      // }
+      res.status(200).json(StripeHistory);
     } catch (err) {
       res.status(400).json({
-        paymentHistory: "Błąd podczas pobierania histori zamówień",
+        message: "Błąd podczas pobierania histori zamówień",
         error: err,
       });
     }
