@@ -20,7 +20,6 @@ async function connect() {
   }
   console.log("new connection");
   connection.isConnected = mongoose.connections[0].readyState;
-  console.log(mongoose.connections[0].readyState);
   return (db = await mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -31,6 +30,7 @@ async function disconnect() {
   if (connection.isConnected) {
     // if (process.env.NODE_ENV === "production") {
     await mongoose.disconnect();
+    console.log("disconnected");
     connection.isConnected = false;
   } else {
     console.log("not disconnected");

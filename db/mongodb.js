@@ -6,7 +6,9 @@ const options = {
   useNewUrlParser: true,
 };
 
-export const client = new MongoClient(uri, options);
+export const client = new MongoClient(uri, options, () =>
+  console.log("połączono")
+);
 const clientPromise = client.connect();
 export default clientPromise;
 

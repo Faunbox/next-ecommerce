@@ -68,9 +68,18 @@ const User = ({ user }) => {
       method: "POST",
       body: user.email,
     }).then((res) => res.json());
-    const history = await paymentHistory;
-    setPaymentHistory(await history);
-    console.log(paymentHistory);
+    const res = await paymentHistory;
+    res.length !== 0
+      ? setPaymentHistory(res)
+      : setPaymentHistory(<p>Brak historii zamówień</p>);
+
+    // paymentHistory.map((checkout) => <p key={checkout.id}>{checkout.id}</p>);
+
+    // await paymentHistory.forEach((item) => {
+    //   for (const lineItem of item) {
+    //     setPaymentHistory((prevState) => [...prevState, lineItem]);
+    //   }
+    // });
   };
 
   return (
@@ -167,8 +176,7 @@ const User = ({ user }) => {
         >
           Pokaż historie zakupów
         </Button>
-        {showPucharseHistory &&
-          paymentHistory.map((checkout) => <p key={checkout}>{checkout}</p>)}
+        {showPucharseHistory && paymentHistory}
       </Container>
     </>
   );
