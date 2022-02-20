@@ -19,6 +19,7 @@ const User = ({ user }) => {
   const [image, setImage] = useState("");
   const [userImage, setUserImage] = useState("");
   const [paymentHistory, setPaymentHistory] = useState([]);
+  const [history, setHistory] = useState([]);
 
   const changeUserName = () => {
     setUserName(inputRef.current.value);
@@ -69,17 +70,7 @@ const User = ({ user }) => {
       body: user.email,
     }).then((res) => res.json());
     const res = await paymentHistory;
-    res.length !== 0
-      ? setPaymentHistory(res)
-      : setPaymentHistory(<p>Brak historii zamówień</p>);
-
-    // paymentHistory.map((checkout) => <p key={checkout.id}>{checkout.id}</p>);
-
-    // await paymentHistory.forEach((item) => {
-    //   for (const lineItem of item) {
-    //     setPaymentHistory((prevState) => [...prevState, lineItem]);
-    //   }
-    // });
+    res.length === 0 ? setPaymentHistory(null) : setPaymentHistory(res);
   };
 
   return (
@@ -176,7 +167,30 @@ const User = ({ user }) => {
         >
           Pokaż historie zakupów
         </Button>
-        {showPucharseHistory && paymentHistory}
+        {showPucharseHistory &&
+          (paymentHistory ? (
+            paymentHistory.map((item) => {
+              const date = item.date;
+              const items = item.items;
+
+              {
+                <div>date</div>;
+
+                for (const item of items) {
+                  return (
+                    <div key={date}>
+                      <p>Nazwa: {item.name}</p>
+                      <p>Opis: {item.description}</p>
+                      <p>Cena: {(item.price / 100) * item.quantity}zł</p>
+                      <p>Ilośc: {item.quantity}</p>
+                    </div>
+                  );
+                }
+              }
+            })
+          ) : (
+            <p>Brak historii zamówień</p>
+          ))}
       </Container>
     </>
   );

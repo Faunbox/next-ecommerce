@@ -37,7 +37,10 @@ export default NextAuth({
         const role = (await clientPromise)
           .db(process.env.DB_NAME)
           .collection("users")
-          .updateOne({ email: mail }, { $set: { role: "user", stripeID: "" } });
+          .updateOne(
+            { email: mail },
+            { $set: { role: "user", stripeID: "", StripeHistory: [] } }
+          );
         const data = await role;
         console.log("Dodano role do uzytkownika", data);
       } catch (error) {

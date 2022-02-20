@@ -1,5 +1,7 @@
 import clientPromise from "../../../db/mongodb";
 import Stripe from "stripe";
+import db from "../../../db/db";
+import Product from "../../../models/Product";
 
 export const getSingleUser = async (email) => {
   const query = (await clientPromise)
@@ -16,6 +18,8 @@ export default async function getUser(req, res) {
   if (req.method === "GET") {
     try {
       user = await getSingleUser(email);
+    } catch (err) {
+      res.status(400).send(err);
     } finally {
       user
         ? res.status(200).json(user)
@@ -26,56 +30,56 @@ export default async function getUser(req, res) {
     return;
   }
   if (req.method === "POST") {
+    let pucharsedItemsList;
     const email = req.body;
-    const stripe = new Stripe(process.env.STRIPE_SECRET, {
-      apiVersion: "2020-08-27",
-    });
     try {
-      let pucharsedItemsList = [];
-
       //get all checkoutId from db
-      const history = (await clientPromise)
+      const user = (await clientPromise)
         .db(process.env.DB_NAME)
         .collection("users")
         .findOne({ email: email });
-      const { StripeHistory } = await history;
+      const { StripeHistory } = await user;
+      if (!StripeHistory) return res.status(200).json([]);
 
-      if (!StripeHistory) return res.status(200).json(pucharsedItemsList);
-
-      for (const checkoutId of StripeHistory) {
-        await stripe.checkout.sessions.listLineItems(
-          checkoutId,
-          function (err, lineItems) {
-            if (err) {
-              throw new Error(
-                "Błąd podczas pobierania list przedmiotów ze Stripe",
-                err
-              );
+      await db.connect();
+      const getItemName = async (items) => {
+        for (const item of items) {
+          const res = await Product.findOne({ "stripe.productID": item.id });
+          const { name, description } = res;
+          return { name, description };
+        }
+      };
+      const asyncArr = await Promise.all(
+        StripeHistory.map(async (item) => {
+          const { items } = item;
+          try {
+            const tak = await getItemName(items);
+            const { name, description } = tak;
+            if (items.length === 1) {
+              Object.assign(items[0], { name, description });
+              return item;
+            } else {
+              items.forEach((tak) => {
+                Object.assign(tak, { name, description });
+                return item;
+              });
             }
-            pucharsedItemsList.push(lineItems.data);
+          } catch (err) {
+            res
+              .status(400)
+              .send("Błąd podczas pobierania nazw przedmiotów z db");
           }
-        );
-        pucharsedItemsList.forEach(async (item) => {
-          console.log(item);
-          // const quantity = item.quantity;
-          // const priceObj = item.price;
-          // const { unit_amount, product } = priceObj;
-          // const stripeProduct = await stripe.products.retrieve(product);
-          // const { name, images } = stripeProduct;
-          // console.log(
-          //   "PRODUKT: ",
-          //   name,
-          //   images,
-          //   (unit_amount * quantity) / 100
-          // );
-        });
-      }
-      return res.status(200).json(pucharsedItemsList);
+        })
+      );
+      await db.disconnect();
+      pucharsedItemsList = asyncArr;
     } catch (err) {
       res.status(400).json({
         message: "Błąd podczas pobierania histori zamówień",
         error: err,
       });
+    } finally {
+      return res.status(200).json(pucharsedItemsList);
     }
   }
 }
