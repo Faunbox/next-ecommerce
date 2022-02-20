@@ -12,10 +12,10 @@ export default async function handler(req, res) {
   });
 
   ///////// CLI secret \\\\\\\\\\
-  const endpointSecret =
-    "whsec_6c78325e23d4e8b89744b38bdb66a92056eb5c65dcf108e31582bcb48e0f1108";
+  // const endpointSecret =
+  //   "whsec_6c78325e23d4e8b89744b38bdb66a92056eb5c65dcf108e31582bcb48e0f1108";
 
-  // const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const signature = req.headers["stripe-signature"];
   const reqBuffer = await buffer(req);
 
@@ -27,16 +27,16 @@ export default async function handler(req, res) {
   if (event.type === "checkout.session.completed") {
     try {
       // get customerId and checkoutId from event object
-      // const customerId = event.data.object.customer;
-      // const checkoutId = event.data.object.id;
+      const customerId = event.data.object.customer;
+      const checkoutId = event.data.object.id;
 
       // console.log(customerId, checkoutId);
 
       //////////////////////////////////////
       //stripe cli
-      const customerId = "cus_L48tK9LGVIdTC1";
-      const checkoutId =
-        "cs_test_b1pRqP2x4QAewgRSKBi5HVkY11VUaImeg4izUADN5bodaDfkIEwLLUsXk4";
+      // const customerId = "cus_L48tK9LGVIdTC1";
+      // const checkoutId =
+      //   "cs_test_b1pRqP2x4QAewgRSKBi5HVkY11VUaImeg4izUADN5bodaDfkIEwLLUsXk4";
       /////////////////////////////////////
 
       //get customer object and get email address
