@@ -53,16 +53,17 @@ export default async function getUser(req, res) {
         StripeHistory.map(async (item) => {
           const { items } = item;
           try {
-            const tak = await getItemName(items);
-            const { name, description } = tak;
+            const pucharsedItems = await getItemName(items);
+            const { name, description } = pucharsedItems;
             if (items.length === 1) {
               Object.assign(items[0], { name, description });
+              console.log("item 1", item);
               return item;
             } else {
-              items.forEach((tak) => {
+              items.map((tak) => {
                 Object.assign(tak, { name, description });
-                return item;
               });
+              return item;
             }
           } catch (err) {
             res
@@ -71,15 +72,15 @@ export default async function getUser(req, res) {
           }
         })
       );
-      await db.disconnect();
       pucharsedItemsList = asyncArr;
+      await db.disconnect();
     } catch (err) {
       res.status(400).json({
         message: "Błąd podczas pobierania histori zamówień",
         error: err,
       });
     } finally {
-      return res.status(200).json(pucharsedItemsList);
+      return res.status(200).send(pucharsedItemsList);
     }
   }
 }

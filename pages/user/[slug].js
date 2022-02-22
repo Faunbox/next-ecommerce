@@ -70,7 +70,7 @@ const User = ({ user }) => {
       body: user.email,
     }).then((res) => res.json());
     const res = await paymentHistory;
-    res.length === 0 ? setPaymentHistory(null) : setPaymentHistory(res);
+    res.length === 0 ? setPaymentHistory(false) : setPaymentHistory(res);
   };
 
   return (
