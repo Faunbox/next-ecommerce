@@ -1,5 +1,4 @@
 import clientPromise from "../../../db/mongodb";
-import Stripe from "stripe";
 import db from "../../../db/db";
 import Product from "../../../models/Product";
 
@@ -45,6 +44,9 @@ export default async function getUser(req, res) {
       const getItemName = async (items) => {
         for (const item of items) {
           const res = await Product.findOne({ "stripe.productID": item.id });
+
+          ////////////Dopisac obrazek
+
           const { name, description } = res;
           return { name, description };
         }
@@ -57,7 +59,6 @@ export default async function getUser(req, res) {
             const { name, description } = pucharsedItems;
             if (items.length === 1) {
               Object.assign(items[0], { name, description });
-              console.log("item 1", item);
               return item;
             } else {
               items.map((tak) => {

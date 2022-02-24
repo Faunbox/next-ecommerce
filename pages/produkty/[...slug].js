@@ -56,7 +56,6 @@ const ProductScreen = ({ product }) => {
     router.push("/");
   };
 
-
   if (!product) {
     //render notFound page
     return (
@@ -88,18 +87,21 @@ const ProductScreen = ({ product }) => {
         Dodaj do koszyka
       </Button>
       {userSession?.role === "admin" && (
-        <Button
-          variant="danger"
-          onClick={() =>
-            deleteProduct(
-              product._id,
-              product.stripe.priceID,
-              product.stripe.productID
-            )
-          }
-        >
-          Usuń produkt
-        </Button>
+        <>
+          <Button
+            variant="danger"
+            onClick={() =>
+              deleteProduct(
+                product._id,
+                product.stripe.priceID,
+                product.stripe.productID
+              )
+            }
+          >
+            Usuń produkt
+          </Button>
+          <Button onClick={() => alert("Uwaga, DZIAŁA!")}>Edycja</Button>
+        </>
       )}
     </div>
   );

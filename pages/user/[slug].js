@@ -4,6 +4,7 @@ import { useAuth } from "../../context/auth.context";
 import { getAllUsers } from "../api/users/index";
 import { getSingleUser } from "../api/users/[email]";
 import { Button, Container } from "react-bootstrap";
+import HistoryItemList from "../../components/HistoryItem";
 import Image from "next/image";
 
 const User = ({ user }) => {
@@ -65,12 +66,15 @@ const User = ({ user }) => {
   };
 
   const getUserPaymentHistory = async () => {
+    setHistory(false);
+
     const paymentHistory = await fetch("/api/users/[email]", {
       method: "POST",
       body: user.email,
     }).then((res) => res.json());
     const res = await paymentHistory;
     res.length === 0 ? setPaymentHistory(false) : setPaymentHistory(res);
+    setHistory(true);
   };
 
   return (
@@ -168,26 +172,8 @@ const User = ({ user }) => {
           Pokaż historie zakupów
         </Button>
         {showPucharseHistory &&
-          (paymentHistory ? (
-            paymentHistory.map((item) => {
-              const date = item.date;
-              const items = item.items;
-
-              {
-                <div>date</div>;
-
-                for (const item of items) {
-                  return (
-                    <div key={date}>
-                      <p>Nazwa: {item.name}</p>
-                      <p>Opis: {item.description}</p>
-                      <p>Cena: {(item.price / 100) * item.quantity}zł</p>
-                      <p>Ilośc: {item.quantity}</p>
-                    </div>
-                  );
-                }
-              }
-            })
+          (history ? (
+            <HistoryItemList items={paymentHistory} />
           ) : (
             <p>Brak historii zamówień</p>
           ))}

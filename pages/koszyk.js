@@ -52,22 +52,24 @@ const Card = () => {
       )}
       {cartItems.length !== 0 ? (
         cartItems.map((item) => (
-          <Container key={item._id}>
-            <p>{item.name}</p>
-            <p>{item.decription}</p>
-            <p>{item.price}</p>
-            <p>{item.quantity}</p>
-            <select
-              name="ilość"
-              onChange={(e) => changeQuantity(item, e.target.value)}
-              defaultValue={item.quantity}
-            >
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </select>
-            <button onClick={() => deleteItem(item)}>usuń</button>
-          </Container>
+          <>
+            <Container key={item._id}>
+              <p>{item.name}</p>
+              <p>{item.decription}</p>
+              <p>{item.price}</p>
+              <p>{item.quantity}</p>
+              <select
+                name="ilość"
+                onChange={(e) => changeQuantity(item, e.target.value)}
+                defaultValue={item.quantity}
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+              <button onClick={() => deleteItem(item)}>usuń</button>
+            </Container>
+          </>
         ))
       ) : (
         <p>Koszyk jest pusty!</p>
