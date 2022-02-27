@@ -61,8 +61,14 @@ export default async function Posts(req, res) {
       }
       break;
     }
-    // case "PATCH": {
-    //   return editPost(req.body);
-    // }
+    case "PATCH": {
+      try {
+        console.log("uzupelnij pole");
+
+      } catch(error) {
+        return res.status(400).json({message: "Błąd podczas edycji postu -> ", error})
+      }
+      break
+    }
   }
 }

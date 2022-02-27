@@ -26,6 +26,14 @@ const Blog = ({ posts }) => {
       .finally(() => router.reload());
   };
 
+  const editPost = async (postId) => {
+    await fetch("/api/posts", {
+      method: "PATCH",
+      headers: {"Content-Type": "application/json"},
+      body: postId
+    })
+  }
+
   return (
     <>
       {userSession?.role === "admin" ? (
@@ -39,6 +47,7 @@ const Blog = ({ posts }) => {
           {userSession?.role === "admin" && (
             <>
               <button onClick={() => deletePost(post?._id)}>Usuń</button>
+              <button onClick={() => editPost(post?._id)}>Edytuj</button>
             </>
           )}
         </div>

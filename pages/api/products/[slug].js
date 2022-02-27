@@ -1,11 +1,11 @@
-import clientPromise from "../../../db/mongodb";
+import db from "../../../db/db";
+import Product from "../../../models/Product";
 
 export const getOneProduct = async (slug) => {
   const product = slug.toString();
-  const query = (await clientPromise)
-    .db(process.env.DB_NAME)
-    .collection("products")
-    .findOne({ slug: product });
+  await db.connect();
+  const query = await Product.findOne({ slug: product });
+  await db.disconnect();
   return query;
 };
 

@@ -5,6 +5,7 @@ import { useCard, ACTION } from "../../context/card.context";
 import { useAuth } from "../../context/auth.context";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Link from "next/link";
 
 const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
@@ -100,7 +101,9 @@ const ProductScreen = ({ product }) => {
           >
             Usuń produkt
           </Button>
-          <Button onClick={() => alert("Uwaga, DZIAŁA!")}>Edycja</Button>
+          <Button as={Link} href={`/produkty/edycja/${product.slug}`}>
+            Edycja
+          </Button>
         </>
       )}
     </div>

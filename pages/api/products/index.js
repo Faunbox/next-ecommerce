@@ -21,7 +21,10 @@ const Products = async (req, res) => {
     brand,
     countInStock,
     description,
+    oldImageID,
+    productID,
     slug,
+    id,
   } = req.body;
 
   cloudinary.config({
@@ -80,7 +83,6 @@ const Products = async (req, res) => {
     await db.connect();
     await product.save();
     await db.disconnect();
-    res.status(200).json({ message: "Produkt został dodany" });
   };
 
   const deleteProduct = async () => {
@@ -103,7 +105,30 @@ const Products = async (req, res) => {
     await db.connect();
     await Product.deleteOne({ _id: id });
     await db.disconnect();
-    res.status(200).json({ message: "Produkt został usunięty" });
+  };
+
+  const editProduct = async () => {
+    if (oldImageID) {
+      cloudinary.uploader.destroy(oldImageID, function (error, result) {
+        !error ? console.log("result", result) : console.error(error);
+      });
+      await stripe.products.update(productID, { images: [url] });
+    }
+    await db.connect();
+    const item = await Product.findOneAndUpdate(
+      { _id: id },
+      {
+        description: description,
+        slug: slug,
+        name: name,
+        category: category,
+        image: { url, imageID },
+        price,
+        brand,
+        countInStock,
+      }
+    );
+    await db.disconnect();
   };
 
   switch (req.method) {
@@ -112,7 +137,7 @@ const Products = async (req, res) => {
         sendAllProducts();
       } catch (error) {
         res
-          .status(404)
+          .status(400)
           .json({ message: "Błąd podczas pobierania produktów", error });
       }
       break;
@@ -121,9 +146,10 @@ const Products = async (req, res) => {
       try {
         console.log("Metoda POST w products");
         addProduct();
+        return res.status(200).json({ message: "Produkt został dodany" });
       } catch (error) {
-        res
-          .status(404)
+        return res
+          .status(400)
           .json({ message: "Błąd podczas dodawania produktu", error });
       }
       break;
@@ -132,10 +158,23 @@ const Products = async (req, res) => {
       try {
         console.log("Metoda DELETE w products");
         deleteProduct();
+        return res.status(200).json({ message: "Produkt został usunięty" });
       } catch (error) {
-        res
-          .status(404)
+        return res
+          .status(400)
           .json({ message: "Wystąpił błąd podczas usuwania produktu" });
+      }
+      break;
+    }
+    case "PATCH": {
+      try {
+        console.log("Metoda PATCH w products");
+        editProduct();
+        return res.status(200).json({ message: "Produkt został zmieniony" });
+      } catch (error) {
+        return res
+          .status(400)
+          .json({ message: "Wystąpił błąd podczas edycji produktu" });
       }
     }
   }
