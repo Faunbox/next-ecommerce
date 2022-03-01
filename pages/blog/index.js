@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "../../context/auth.context";
 import { getAllPosts } from "../api/posts";
 import parse from "html-react-parser";
+import { Button } from "react-bootstrap";
 
 const Blog = ({ posts }) => {
   const { userSession } = useAuth();
@@ -26,14 +27,6 @@ const Blog = ({ posts }) => {
       .finally(() => router.reload());
   };
 
-  const editPost = async (postId) => {
-    await fetch("/api/posts", {
-      method: "PATCH",
-      headers: {"Content-Type": "application/json"},
-      body: postId
-    })
-  }
-
   return (
     <>
       {userSession?.role === "admin" ? (
@@ -47,7 +40,9 @@ const Blog = ({ posts }) => {
           {userSession?.role === "admin" && (
             <>
               <button onClick={() => deletePost(post?._id)}>Usuń</button>
-              <button onClick={() => editPost(post?._id)}>Edytuj</button>
+              <Button as={Link} href={`blog/edycja/${post._id}`}>
+                Edytuj
+              </Button>
             </>
           )}
         </div>
