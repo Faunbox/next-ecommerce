@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-sync-scripts */
 import Head from "next/head";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
-import { Button, Container, Row, Pagination } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Container, Row, Pagination, PageItem } from "react-bootstrap";
 import Product from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { paginatedProducts } from "../pages/api/products/pagination";
@@ -10,7 +10,7 @@ import { paginatedProducts } from "../pages/api/products/pagination";
 export default function Home({ paginatedItems, array }) {
   const { userSession } = useAuth();
   const [items, setItems] = useState(paginatedItems);
-  const [actualPage, setActualPage] = useState();
+  const [actualPage, setActualPage] = useState(1);
 
   const fetchMoreItems = async (page) => {
     try {
@@ -76,12 +76,13 @@ export default function Home({ paginatedItems, array }) {
           <Pagination.Prev onClick={() => prevPage()} />
           {array.map((tak) => {
             return (
-              <Pagination.Item
+              <PageItem
                 key={tak + 1}
-                onClick={() => fetchMoreItems(tak + 1)}
+                active={actualPage === tak + 1 ? true : false}
+                onClick={(e) => fetchMoreItems(tak + 1, e.currentTarget)}
               >
                 {tak + 1}
-              </Pagination.Item>
+              </PageItem>
             );
           })}
           <Pagination.Next onClick={() => nextPage()} />
