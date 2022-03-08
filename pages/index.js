@@ -10,6 +10,7 @@ import { paginatedProducts } from "../pages/api/products/pagination";
 export default function Home({ paginatedItems, array }) {
   const { userSession } = useAuth();
   const [items, setItems] = useState(paginatedItems);
+  const [actualPage, setActualPage] = useState();
 
   const fetchMoreItems = async (page) => {
     try {
@@ -19,11 +20,33 @@ export default function Home({ paginatedItems, array }) {
       });
       const resp = await data.json();
       setItems(resp.paginatedItems);
+      setActualPage(page);
     } catch (error) {
       console.error("Błąd podczas pobierania przedmiotów -> ", error);
-    } finally {
-      console.log(items);
     }
+  };
+
+  const prevPage = async () => {
+    const prevPage = actualPage - 1;
+    if (prevPage < 1) return;
+    await fetchMoreItems(prevPage);
+  };
+
+  const nextPage = async () => {
+    const nextPage = actualPage + 1;
+    const indexOfLastItem = array.length;
+
+    if (nextPage > indexOfLastItem) return;
+    await fetchMoreItems(nextPage);
+  };
+
+  const firstPage = async () => {
+    await fetchMoreItems(1);
+  };
+
+  const lastPage = async () => {
+    const indexOfLastItem = array.length;
+    await fetchMoreItems(indexOfLastItem);
   };
 
   return (
@@ -49,8 +72,8 @@ export default function Home({ paginatedItems, array }) {
       </section>
       <Container>
         <Pagination>
-          <Pagination.First />
-          <Pagination.Prev />
+          <Pagination.First onClick={() => firstPage()} />
+          <Pagination.Prev onClick={() => prevPage()} />
           {array.map((tak) => {
             return (
               <Pagination.Item
@@ -61,8 +84,8 @@ export default function Home({ paginatedItems, array }) {
               </Pagination.Item>
             );
           })}
-          <Pagination.Next />
-          <Pagination.Last />
+          <Pagination.Next onClick={() => nextPage()} />
+          <Pagination.Last onClick={() => lastPage()} />
         </Pagination>
       </Container>
     </>
