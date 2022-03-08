@@ -4,19 +4,21 @@ import { useEffect, useState } from "react";
 import draftToHtml from "draftjs-to-html";
 import Cookies from "js-cookie";
 
-const TextEditor = () => {
+const TextEditor = ({ value }) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const [loading, setloading] = useState(false);
+  const [loading, setloading] = useState(true);
 
   const imageUpload = async (file) => {
     const formData = new FormData();
+    //set image data
     formData.append("file", file);
     formData.append("upload_preset", "blog_images");
     formData.append("max_width", 500);
     formData.append("max_height", 500);
 
+    //send to cloudinary
     const response = await fetch(
       "https://api.cloudinary.com/v1_1/faunbox/image/upload",
       {
@@ -24,6 +26,8 @@ const TextEditor = () => {
         body: formData,
       }
     );
+
+    //get url response
     const imageData = await response.json();
     const image = {
       data: { link: imageData.secure_url },
@@ -35,13 +39,15 @@ const TextEditor = () => {
     Cookies.set("blog_post", body);
   };
 
+  const getCookie = Cookies.get("blog_post");
+
   useEffect(() => {
-    setloading(true);
+    setloading(false);
   }, []);
   useEffect(() => {
     setCookie(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   }, [editorState]);
-  return loading ? (
+  return !loading ? (
     <Editor
       editorState={editorState}
       onEditorStateChange={setEditorState}

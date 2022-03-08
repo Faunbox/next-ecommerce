@@ -1,14 +1,30 @@
 /* eslint-disable @next/next/no-sync-scripts */
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Button, Container, Row } from "react-bootstrap";
+import { useCallback, useEffect, useState } from "react";
+import { Button, Container, Row, Pagination } from "react-bootstrap";
 import Product from "../components/Product";
 import { useAuth } from "../context/auth.context";
-import { getAllProducts } from "./api/products/index";
+import { paginatedProducts } from "../pages/api/products/pagination";
 
-export default function Home({ products }) {
+export default function Home({ paginatedItems, array }) {
   const { userSession } = useAuth();
+  const [items, setItems] = useState(paginatedItems);
+
+  const fetchMoreItems = async (page) => {
+    try {
+      const data = await fetch("./api/products/pagination", {
+        method: "PUT",
+        body: page,
+      });
+      const resp = await data.json();
+      setItems(resp.paginatedItems);
+    } catch (error) {
+      console.error("Błąd podczas pobierania przedmiotów -> ", error);
+    } finally {
+      console.log(items);
+    }
+  };
 
   return (
     <>
@@ -26,22 +42,43 @@ export default function Home({ products }) {
       ) : null}
       <section>
         <Container as={Row}>
-          {products.map((product) => (
+          {items.map((product) => (
             <Product key={product._id} product={product} />
           ))}
         </Container>
       </section>
+      <Container>
+        <Pagination>
+          <Pagination.First />
+          <Pagination.Prev />
+          {array.map((tak) => {
+            return (
+              <Pagination.Item
+                key={tak + 1}
+                onClick={() => fetchMoreItems(tak + 1)}
+              >
+                {tak + 1}
+              </Pagination.Item>
+            );
+          })}
+          <Pagination.Next />
+          <Pagination.Last />
+        </Pagination>
+      </Container>
     </>
   );
 }
 
 export async function getStaticProps() {
-  const data = JSON.stringify(await getAllProducts());
+  const data = JSON.stringify(await paginatedProducts(1));
   const products = JSON.parse(data);
+
+  const { paginatedItems, array } = products;
 
   return {
     props: {
-      products,
+      paginatedItems,
+      array,
     },
     revalidate: 1,
   };

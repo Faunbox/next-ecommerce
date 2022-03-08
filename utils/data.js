@@ -1,15 +1,6 @@
 const data = {
   products: [
-    {
-      name: "Nazwa",
-      category: "Kategoria",
-      image: "/images/image.jpg",
-      price: 40,
-      brand: "Producent",
-      countInStock: 30,
-      decription: "Krótki opis produktu",
-      slug: "nazwa1",
-    },
+    
     {
       name: "Nazwa2",
       category: "Kategoria2",

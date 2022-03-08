@@ -134,7 +134,8 @@ const Products = async (req, res) => {
   switch (req.method) {
     case "GET": {
       try {
-        sendAllProducts();
+        const items = sendAllProducts();
+        res.status(200).json(items);
       } catch (error) {
         res
           .status(400)

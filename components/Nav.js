@@ -29,9 +29,9 @@ const Navigation = () => {
             <Link href="/about" passHref>
               <Nav.Link>About</Nav.Link>
             </Link>
-            <Link href="/blog" passHref>
+            {/* <Link href="/blog" passHref>
               <Nav.Link>Blog</Nav.Link>
-            </Link>
+            </Link> */}
             <Link href="/contact" passHref>
               <Nav.Link>Contact</Nav.Link>
             </Link>
