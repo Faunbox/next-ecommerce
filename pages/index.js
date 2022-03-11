@@ -1,52 +1,76 @@
 /* eslint-disable @next/next/no-sync-scripts */
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 import { Button, Container, Row, Pagination, PageItem } from "react-bootstrap";
 import Product from "../components/Product";
 import { useAuth } from "../context/auth.context";
-import { paginatedProducts } from "../pages/api/products/pagination";
+import { paginatedProducts, searchItems } from "../pages/api/products/";
 
-export default function Home({ paginatedItems, array }) {
+export default function Home({ paginatedItems, array, searchedItems }) {
   const { userSession } = useAuth();
   const [items, setItems] = useState(paginatedItems);
   const [actualPage, setActualPage] = useState(1);
+  const router = useRouter();
+  const searchInputRef = useRef(null);
 
-  const fetchMoreItems = async (page) => {
+  const { page, search } = router.query;
+
+  async function fetchMoreItems(pageToFetch) {
+    const indexOfLastItem = array.length;
+    if (page >= 1 && page <= indexOfLastItem) {
+      try {
+        const data = await fetch(`./api/products/?page=${pageToFetch}`);
+        const resp = await data.json();
+        setItems(resp.paginatedItems);
+      } catch (error) {
+        console.error("Błąd podczas pobierania przedmiotów -> ", error);
+      } finally {
+        setActualPage(page);
+      }
+    }
+  }
+
+  async function fetchSearchedItem(e, query) {
+    e.preventDefault();
     try {
-      const data = await fetch("./api/products/pagination", {
-        method: "PUT",
-        body: page,
-      });
+      const data = await fetch(`./api/products/?search=${query}`);
       const resp = await data.json();
-      setItems(resp.paginatedItems);
-      setActualPage(page);
+      console.log(resp);
+      setItems(resp);
     } catch (error) {
       console.error("Błąd podczas pobierania przedmiotów -> ", error);
+    } finally {
+      setActualPage(parseInt(page));
     }
-  };
+  }
 
-  const prevPage = async () => {
+  useEffect(() => {
+    return fetchMoreItems(page);
+  }, [page]);
+
+  const prevPage = () => {
     const prevPage = actualPage - 1;
     if (prevPage < 1) return;
-    await fetchMoreItems(prevPage);
+    router.push(`?page=${prevPage}`);
   };
 
-  const nextPage = async () => {
-    const nextPage = actualPage + 1;
+  const nextPage = () => {
+    const nextPage = parseInt(actualPage) + 1;
     const indexOfLastItem = array.length;
 
     if (nextPage > indexOfLastItem) return;
-    await fetchMoreItems(nextPage);
+    router.push(`?page=${nextPage}`);
   };
 
-  const firstPage = async () => {
-    await fetchMoreItems(1);
+  const firstPage = () => {
+    router.push("?page=1");
   };
 
-  const lastPage = async () => {
+  const lastPage = () => {
     const indexOfLastItem = array.length;
-    await fetchMoreItems(indexOfLastItem);
+    router.push(`?page=${indexOfLastItem}`);
   };
 
   return (
@@ -65,45 +89,95 @@ export default function Home({ paginatedItems, array }) {
       ) : null}
       <section>
         <Container as={Row}>
-          {items.map((product) => (
-            <Product key={product._id} product={product} />
-          ))}
+          <form
+            onSubmit={(e) => {
+              fetchSearchedItem(e, searchInputRef.current.value);
+            }}
+          >
+            Wyszukaj po nazwie
+            <input ref={searchInputRef} type="text"></input>
+            <Button as={Link} href={{ query: { search: "a" } }} type="submit">
+              Szukaj
+            </Button>
+          </form>
+          {!searchedItems
+            ? items.map((product) => (
+                <Product key={product._id} product={product} />
+              ))
+            : searchedItems.map((product) => (
+                <Product key={product._id} product={product} />
+              ))}
         </Container>
       </section>
       <Container>
         <Pagination>
           <Pagination.First onClick={() => firstPage()} />
           <Pagination.Prev onClick={() => prevPage()} />
-          {array.map((tak) => {
-            return (
+          {array.map((tak, index) => {
+            return tak < 5 ? (
               <PageItem
                 key={tak + 1}
-                active={actualPage === tak + 1 ? true : false}
-                onClick={(e) => fetchMoreItems(tak + 1, e.currentTarget)}
+                active={
+                  parseInt(actualPage) === parseInt(tak + 1) ? true : false
+                }
+                onClick={(e) => router.push(`?page=${tak + 1}`)}
               >
                 {tak + 1}
               </PageItem>
+            ) : (
+              <>
+                <PageItem
+                  key={tak + 1}
+                  active={actualPage === tak + 1 ? true : false}
+                  onClick={(e) => router.push(`?page=${tak + 1}`)}
+                >
+                  {tak + 1}
+                </PageItem>
+                <Pagination.Ellipsis key={parseInt(index + tak)} />
+                <PageItem
+                  key={parseInt(tak + 1 + tak)}
+                  active={actualPage === tak + 1 ? true : false}
+                  onClick={(e) => router.push(`?page=${tak + 1}`)}
+                >
+                  {array.length}
+                </PageItem>
+              </>
             );
           })}
           <Pagination.Next onClick={() => nextPage()} />
           <Pagination.Last onClick={() => lastPage()} />
+          <input
+            type="number"
+            onChange={async (e) => {
+              e.target.value > 0 && (await fetchMoreItems(e.target.value));
+            }}
+            placeholder="Wyszukaj po numerze"
+          ></input>
         </Pagination>
       </Container>
     </>
   );
 }
 
-export async function getStaticProps() {
-  const data = JSON.stringify(await paginatedProducts(1));
+export async function getServerSideProps(context) {
+  const { page, search } = context.query;
+
+  const data = page
+    ? JSON.stringify(await paginatedProducts(page))
+    : JSON.stringify(await paginatedProducts(1));
   const products = JSON.parse(data);
+
+  const searchedItems = search
+    ? JSON.stringify(await searchItems(search))
+    : null;
 
   const { paginatedItems, array } = products;
 
   return {
     props: {
-      paginatedItems,
-      array,
+      paginatedItems: paginatedItems,
+      array: array,
+      searchedItems: JSON.parse(searchedItems),
     },
-    revalidate: 1,
   };
 }

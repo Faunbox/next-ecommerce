@@ -10,6 +10,49 @@ export const getAllProducts = async () => {
   return products;
 };
 
+export const searchItems = async (query) => {
+  let items;
+  try {
+    await db.connect();
+    items = await Product.find({ name: { $regex: `${query}` } });
+  } catch (err) {
+    console.error("Błąd -> ", err);
+  } finally {
+    await db.disconnect();
+    return items;
+  }
+};
+
+export const paginatedProducts = async (page) => {
+  const perPage = 2;
+  let pagination;
+  try {
+    if (page > 0) {
+      await db.connect();
+      const paginatedItems = await Product.find({})
+        .limit(perPage)
+        .skip((page - 1) * perPage);
+
+      const allItems = (await Product.find({})).length;
+
+      const pages = Math.ceil(allItems / perPage);
+      let array = [];
+      for (let i = 0; i < pages; i++) {
+        array.push(i);
+      }
+      pagination = {
+        paginatedItems,
+        array,
+      };
+    }
+  } catch (err) {
+    console.error("Błąd podczas pobierania strony");
+  } finally {
+    await db.disconnect();
+    return pagination;
+  }
+};
+
 const Products = async (req, res) => {
   //descructure request body
   const {
@@ -26,6 +69,8 @@ const Products = async (req, res) => {
     slug,
     id,
   } = req.body;
+
+  const { page, search } = req.query;
 
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -133,13 +178,26 @@ const Products = async (req, res) => {
 
   switch (req.method) {
     case "GET": {
-      try {
-        const items = sendAllProducts();
-        res.status(200).json(items);
-      } catch (error) {
-        res
-          .status(400)
-          .json({ message: "Błąd podczas pobierania produktów", error });
+      if (page) {
+        try {
+          const items = await paginatedProducts(page);
+          res.status(200).json(items);
+        } catch (error) {
+          res
+            .status(400)
+            .json({ message: "Błąd podczas pobierania produktów", error });
+        }
+      }
+      if (search) {
+        try {
+          const items = await searchItems(search);
+          console.log(items);
+          return res.status(200).json(items);
+        } catch (error) {
+          res
+            .status(400)
+            .json({ message: "Błąd podczas pobierania produktów", error });
+        }
       }
       break;
     }
