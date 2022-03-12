@@ -24,6 +24,19 @@ export const searchItems = async (query) => {
   }
 };
 
+export const categoryItems = async (query) => {
+  let items;
+  try {
+    await db.connect();
+    items = await Product.find({ category: query });
+  } catch (err) {
+    console.error("Błąd podczas wyszukiwania po kategorii");
+  } finally {
+    await db.disconnect();
+    return items;
+  }
+};
+
 export const paginatedProducts = async (page) => {
   const perPage = 2;
   let pagination;
@@ -71,7 +84,7 @@ const Products = async (req, res) => {
     id,
   } = req.body;
 
-  const { page, search } = req.query;
+  const { page, search, kategoria } = req.query;
 
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -182,7 +195,7 @@ const Products = async (req, res) => {
       if (page) {
         try {
           const items = await paginatedProducts(page);
-          res.status(200).json(items);
+          return res.status(200).json(items);
         } catch (error) {
           res
             .status(400)
@@ -198,6 +211,18 @@ const Products = async (req, res) => {
           res
             .status(400)
             .json({ message: "Błąd podczas pobierania produktów", error });
+        }
+      }
+      if (kategoria) {
+        try {
+          const items = await categoryItems(kategoria);
+          console.log(items);
+          return res.status(200).json(items);
+        } catch (err) {
+          return res.status(400).json({
+            message: "Błąd podczas wyszukiwania po kategoriach, ",
+            err,
+          });
         }
       }
       break;

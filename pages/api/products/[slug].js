@@ -3,10 +3,16 @@ import Product from "../../../models/Product";
 
 export const getOneProduct = async (slug) => {
   const product = slug.toString();
-  await db.connect();
-  const query = await Product.findOne({ slug: product });
-  await db.disconnect();
-  return query;
+  let query;
+  try {
+    await db.connect();
+    query = await Product.findOne({ slug: product });
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await db.disconnect();
+    return query;
+  }
 };
 
 export default async function getProduct(req, res) {

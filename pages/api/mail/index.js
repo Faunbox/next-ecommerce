@@ -4,6 +4,8 @@ import nodemailer from "nodemailer";
 export default function sendContactForm(req, res) {
   let transporter = nodemailer.createTransport({
     service: "gmail",
+    host: process.env.EMAIL_SERVER_HOST,
+    port: process.env.EMAIL_SERVER_PORT,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD,

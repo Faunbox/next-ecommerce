@@ -23,7 +23,7 @@ const Navigation = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
-            <Link href="/" passHref>
+            <Link href="/?page=1" passHref>
               <Nav.Link>Home</Nav.Link>
             </Link>
             <Link href="/about" passHref>

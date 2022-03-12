@@ -3,11 +3,17 @@ import db from "../../../db/db";
 import Product from "../../../models/Product";
 
 export const getSingleUser = async (email) => {
-  const query = (await clientPromise)
-    .db(process.env.DB_NAME)
-    .collection("users")
-    .findOne({ email: email });
-  return query;
+  let query;
+  try {
+    query = (await clientPromise)
+      .db(process.env.DB_NAME)
+      .collection("users")
+      .findOne({ email: email });
+  } catch (err) {
+    console.error(err);
+  } finally {
+    return query;
+  }
 };
 
 export default async function getUser(req, res) {

@@ -3,19 +3,37 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Button, Container, Row, Pagination, PageItem } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Row,
+  Pagination,
+  PageItem,
+  DropdownButton,
+  Dropdown,
+} from "react-bootstrap";
 import Product from "../components/Product";
 import { useAuth } from "../context/auth.context";
-import { paginatedProducts, searchItems } from "../pages/api/products/";
+import {
+  paginatedProducts,
+  searchItems,
+  getAllProducts,
+  categoryItems,
+} from "../pages/api/products/";
 
-export default function Home({ paginatedItems, array, searchedItems }) {
+export default function Home({
+  paginatedItems,
+  array,
+  searchedItems,
+  categorys,
+}) {
   const { userSession } = useAuth();
   const [items, setItems] = useState(paginatedItems);
   const [actualPage, setActualPage] = useState(1);
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
 
-  const { page, search } = router.query;
+  const { page, search, kategoria } = router.query;
 
   async function fetchMoreItems(pageToFetch) {
     const indexOfLastItem = array.length;
@@ -41,14 +59,26 @@ export default function Home({ paginatedItems, array, searchedItems }) {
       setItems(resp);
     } catch (error) {
       console.error("Błąd podczas pobierania przedmiotów -> ", error);
-    } finally {
-      setActualPage(parseInt(page));
+    }
+  }
+
+  async function getCategoriedItems(category) {
+    try {
+      const data = await fetch(`./api/products/?kategoria=${category}`);
+      const resp = await data.json();
+      console.log(resp);
+      setItems(resp);
+    } catch (error) {
+      console.error("Błąd podczas pobierania przedmiotów -> ", error);
     }
   }
 
   useEffect(() => {
     return fetchMoreItems(page);
   }, [page]);
+  useEffect(() => {
+    kategoria ? getCategoriedItems(kategoria) : null;
+  }, [kategoria]);
 
   const prevPage = () => {
     const prevPage = actualPage - 1;
@@ -87,6 +117,7 @@ export default function Home({ paginatedItems, array, searchedItems }) {
           <Button>Dodaj produkt</Button>
         </Link>
       ) : null}
+
       <section>
         <Container as={Row}>
           <form
@@ -106,6 +137,18 @@ export default function Home({ paginatedItems, array, searchedItems }) {
             >
               Szukaj
             </Button>
+            <DropdownButton id="dropdown-basic-button" title="Kategorie">
+              {categorys
+                ? categorys.map((category) => (
+                    <Dropdown.Item
+                      key={category}
+                      href={`/?kategoria=${category}`}
+                    >
+                      {category}
+                    </Dropdown.Item>
+                  ))
+                : null}
+            </DropdownButton>
           </form>
           {!searchedItems
             ? items.map((product) => (
@@ -167,8 +210,20 @@ export default function Home({ paginatedItems, array, searchedItems }) {
 }
 
 export async function getServerSideProps(context) {
-  const { page, search } = context.query;
+  const { page, search, kategoria } = context.query;
 
+  //get all categories
+  const categoryArray = [];
+  const allItems = await getAllProducts();
+
+  //check if there is no the same category
+  allItems.forEach((item) => {
+    if (categoryArray.length === 0) categoryArray.push(item.category);
+    if (!categoryArray.includes(item.category))
+      categoryArray.push(item.category);
+  });
+
+  //if no page query set page number to 1
   const data = page
     ? JSON.stringify(await paginatedProducts(page))
     : JSON.stringify(await paginatedProducts(1));
@@ -178,6 +233,10 @@ export async function getServerSideProps(context) {
     ? JSON.stringify(await searchItems(search))
     : null;
 
+  const categoryItemss = kategoria
+    ? JSON.stringify(await categoryItems(kategoria))
+    : null;
+
   const { paginatedItems, array } = products;
 
   return {
@@ -185,6 +244,8 @@ export async function getServerSideProps(context) {
       paginatedItems: paginatedItems,
       array: array,
       searchedItems: JSON.parse(searchedItems),
+      categorys: categoryArray,
+      categoryItems: JSON.parse(categoryItemss),
     },
   };
 }

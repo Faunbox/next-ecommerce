@@ -4,12 +4,14 @@ import Layout from "../components/Leyout";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { AuthProvider } from "../context/auth.context";
 import { CardProvider } from "../context/card.context";
+import { SSRProvider } from "react-bootstrap";
 
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <QueryClientProvider client={queryClient}>
+    <SSRProvider>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <CardProvider>
             <Layout>
@@ -17,7 +19,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             </Layout>
           </CardProvider>
         </AuthProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </SSRProvider>
   );
 }
 

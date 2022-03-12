@@ -12,12 +12,12 @@ export const getCloudinarySignature = async () => {
 
 const AddProduct = () => {
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState([]); //był pusty string
   const [price, setPrice] = useState("");
   const [brand, setProducent] = useState("");
   const [countInStock, setInStock] = useState("");
   const [description, setDescription] = useState("");
-  const [slug, setSlug] = useState("");
+  const [slug, setSlug] = useState(" ");
   const [imageToUpload, setImageToUpload] = useState("");
   const [dataFetching, setDataFetching] = useState(false);
 
@@ -46,6 +46,7 @@ const AddProduct = () => {
   const addProductToShop = async () => {
     setDataFetching(true);
     const { url, imageID } = await sendImageToCloudinary();
+
     await fetch("/api/products", {
       method: "POST",
       headers: {
@@ -88,7 +89,7 @@ const AddProduct = () => {
           <Form.Control
             type="text"
             placeholder="Szpreje"
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => setCategory(e.target.value)} //było samo e.target.value
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -128,7 +129,7 @@ const AddProduct = () => {
           <Form.Control
             type="text"
             placeholder="szuper-szprej"
-            onChange={(e) => setSlug(e.target.value.toLowerCase)}
+            onChange={(e) => setSlug(e.target.value.toLowerCase())}
           />
         </Form.Group>
 
