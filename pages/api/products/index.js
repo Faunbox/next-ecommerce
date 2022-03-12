@@ -19,6 +19,7 @@ export const searchItems = async (query) => {
     console.error("Błąd -> ", err);
   } finally {
     await db.disconnect();
+    console.log(items);
     return items;
   }
 };

@@ -2,7 +2,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Container, Row, Pagination, PageItem } from "react-bootstrap";
 import Product from "../components/Product";
 import { useAuth } from "../context/auth.context";
@@ -12,8 +12,8 @@ export default function Home({ paginatedItems, array, searchedItems }) {
   const { userSession } = useAuth();
   const [items, setItems] = useState(paginatedItems);
   const [actualPage, setActualPage] = useState(1);
+  const [inputValue, setInputValue] = useState("");
   const router = useRouter();
-  const searchInputRef = useRef(null);
 
   const { page, search } = router.query;
 
@@ -32,10 +32,10 @@ export default function Home({ paginatedItems, array, searchedItems }) {
     }
   }
 
-  async function fetchSearchedItem(e, query) {
+  async function fetchSearchedItem(e) {
     e.preventDefault();
     try {
-      const data = await fetch(`./api/products/?search=${query}`);
+      const data = await fetch(`./api/products/?search=${search}`);
       const resp = await data.json();
       console.log(resp);
       setItems(resp);
@@ -91,12 +91,19 @@ export default function Home({ paginatedItems, array, searchedItems }) {
         <Container as={Row}>
           <form
             onSubmit={(e) => {
-              fetchSearchedItem(e, searchInputRef.current.value);
+              fetchSearchedItem(e);
             }}
           >
             Wyszukaj po nazwie
-            <input ref={searchInputRef} type="text"></input>
-            <Button as={Link} href={{ query: { search: "a" } }} type="submit">
+            <input
+              type="text"
+              onChange={(e) => setInputValue(e.target.value)}
+            ></input>
+            <Button
+              as={Link}
+              href={{ query: { search: inputValue } }}
+              type="submit"
+            >
               Szukaj
             </Button>
           </form>

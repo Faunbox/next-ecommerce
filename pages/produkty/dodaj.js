@@ -128,7 +128,7 @@ const AddProduct = () => {
           <Form.Control
             type="text"
             placeholder="szuper-szprej"
-            onChange={(e) => setSlug(e.target.value)}
+            onChange={(e) => setSlug(e.target.value.toLowerCase)}
           />
         </Form.Group>
 
