@@ -33,8 +33,8 @@ const Contact = () => {
     <Container>
       <main className={contactStyles.contact}>
         <article>
-          <div>Potrzebujesz profesjonalnej porady?</div>
-          <div>Napisz do nas!</div>
+          <div>You need professional advice?</div>
+          <div>Contact Us!</div>
         </article>
         <aside>
           <Form onSubmit={handleSubmit}>

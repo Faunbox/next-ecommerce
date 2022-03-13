@@ -1,9 +1,11 @@
 .nav {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
-  height: 4rem;
-  background-color: rgb(5, 66, 10);
+  flex-direction: column;
+  height: auto;
+  background-color: rgba(20, 20, 20, 0.4);
+
   .ul {
     display: flex;
     text-decoration: none;

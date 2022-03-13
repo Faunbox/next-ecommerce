@@ -157,7 +157,7 @@ const Products = async (req, res) => {
 
     //Delete image from cloudinary
     cloudinary.uploader.destroy(imageID, function (error, result) {
-      console.log(result);
+      error ? console.error("Błąd podczas usuwania zdjęcia", error) : console.log(result)
     });
 
     //delete item from db
@@ -205,7 +205,6 @@ const Products = async (req, res) => {
       if (search) {
         try {
           const items = await searchItems(search);
-          console.log(items);
           return res.status(200).json(items);
         } catch (error) {
           res
@@ -216,7 +215,6 @@ const Products = async (req, res) => {
       if (kategoria) {
         try {
           const items = await categoryItems(kategoria);
-          console.log(items);
           return res.status(200).json(items);
         } catch (err) {
           return res.status(400).json({

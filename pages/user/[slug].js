@@ -86,7 +86,7 @@ const User = ({ user }) => {
             <li>
               {!user.name ? (
                 <button onClick={() => setShowInput((prevState) => !prevState)}>
-                  Ustaw nazwe konta
+                  Set username
                 </button>
               ) : (
                 <>
@@ -96,7 +96,7 @@ const User = ({ user }) => {
                       setShowInput((prevState) => !prevState);
                     }}
                   >
-                    Zmień nazwe konta
+                    Change username
                   </button>
                 </>
               )}
@@ -115,7 +115,7 @@ const User = ({ user }) => {
                     setChangedUserName(userName);
                   }}
                 >
-                  Zmien nazwe
+                  Change username
                 </button>
               </>
             ) : null}
@@ -123,7 +123,7 @@ const User = ({ user }) => {
             {!user?.image ? (
               <>
                 <label>
-                  Dodaj obrazek
+                  Add avatar image
                   <input
                     type="file"
                     accept=".jpg,.png"
@@ -132,12 +132,12 @@ const User = ({ user }) => {
                     }}
                   ></input>
                 </label>
-                <Button onClick={() => sendImageToCloudinary()}>Dodaj</Button>
+                <Button onClick={() => sendImageToCloudinary()}>Add</Button>
               </>
             ) : (
               <>
                 <label>
-                  Zmień obrazek
+                  Change avatar image
                   <input
                     type="file"
                     accept=".jpg,.png"
@@ -146,7 +146,7 @@ const User = ({ user }) => {
                     }}
                   ></input>
                 </label>
-                <Button onClick={() => sendImageToCloudinary()}>Dodaj</Button>
+                <Button onClick={() => sendImageToCloudinary()}>Change</Button>
               </>
             )}
             {user?.image ? (
@@ -157,7 +157,7 @@ const User = ({ user }) => {
                 height={100}
               />
             ) : (
-              <li>brak obrazka</li>
+              <li>There is no image!</li>
             )}
           </ul>
         }
@@ -169,13 +169,13 @@ const User = ({ user }) => {
             !showPucharseHistory ? getUserPaymentHistory() : null;
           }}
         >
-          Pokaż historie zakupów
+          Show history of my latest orders
         </Button>
         {showPucharseHistory &&
           (history ? (
             <HistoryItemList items={paymentHistory} />
           ) : (
-            <p>Brak historii zamówień</p>
+            <p>At this moment there wasnt any orders! Lets change that!</p>
           ))}
       </Container>
     </>

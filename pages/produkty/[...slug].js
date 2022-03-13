@@ -15,7 +15,7 @@ const ProductScreen = ({ product }) => {
   const addToCart = async () => {
     //check is user logged in
     if (!userSession) {
-      alert("Aby dodawać przedmioty do koszyka, zaloguj się");
+      alert("If You want to add item to card, login first!");
       return signIn();
     }
 
@@ -29,7 +29,7 @@ const ProductScreen = ({ product }) => {
     );
     const quantity = existItem ? existItem.quantity + 1 : 1;
     if (selectedProduct.countInStock < quantity) {
-      alert("Brak na stanie!");
+      alert("No item avaible!");
       return;
     }
     dispatch({
@@ -61,9 +61,9 @@ const ProductScreen = ({ product }) => {
     //render notFound page
     return (
       <>
-        <div>Produkt nie został znaleziony</div>{" "}
+        <div>We dont have this product. Sorry!</div>{" "}
         <Button variant="secondary" onClick={() => router.back()}>
-          Wróć
+          Back
         </Button>
       </>
     );
@@ -72,7 +72,7 @@ const ProductScreen = ({ product }) => {
   return (
     <div>
       <Button variant="secondary" onClick={() => router.back()}>
-        Wróć
+        Back
       </Button>
       <h1>{product.name}</h1>
       <p>{product.description}</p>
@@ -85,7 +85,7 @@ const ProductScreen = ({ product }) => {
       />
       <br />
       <Button variant="success" onClick={() => addToCart(product)}>
-        Dodaj do koszyka
+        Add to cart
       </Button>
       {userSession?.role === "admin" && (
         <>
@@ -99,10 +99,10 @@ const ProductScreen = ({ product }) => {
               )
             }
           >
-            Usuń produkt
+            Delete product
           </Button>
           <Button as={Link} href={`/produkty/edycja/${product.slug}`}>
-            Edycja
+            Edit
           </Button>
         </>
       )}

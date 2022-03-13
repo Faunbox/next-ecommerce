@@ -47,7 +47,7 @@ const Card = () => {
             goToCheckout(cartItems, userSession.email, userSession.stripeID)
           }
         >
-          Kup przedmioty
+          Checkout
         </Button>
       )}
       {cartItems.length !== 0 ? (
@@ -59,7 +59,7 @@ const Card = () => {
               <p>{item.price}</p>
               <p>{item.quantity}</p>
               <select
-                name="ilość"
+                name="quantity"
                 onChange={(e) => changeQuantity(item, e.target.value)}
                 defaultValue={item.quantity}
               >
@@ -72,7 +72,7 @@ const Card = () => {
           </>
         ))
       ) : (
-        <p>Koszyk jest pusty!</p>
+        <p>Cart is empty! Lets check our store!</p>
       )}
     </Container>
   );

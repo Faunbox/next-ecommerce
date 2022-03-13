@@ -67,7 +67,13 @@ const AddProduct = () => {
       .then((res) => res.json())
       .then((data) => alert(data.message))
       .then(() => setDataFetching(false))
-      .catch((err) => new Error("Błąd podczas dodawania produktu", err))
+      .catch(
+        (err) =>
+          new Error(
+            "There was some issue while adding item to database. Error message ->",
+            err
+          )
+      )
       .finally(() => router.push("/"));
   };
 
@@ -75,7 +81,7 @@ const AddProduct = () => {
     <Container>
       <Form as={Row}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Nazwa przedmiotu</Form.Label>
+          <Form.Label>Item name</Form.Label>
           <Form.Control
             type="text"
             placeholder="Szprej"
@@ -85,7 +91,7 @@ const AddProduct = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Kategoria</Form.Label>
+          <Form.Label>Category</Form.Label>
           <Form.Control
             type="text"
             placeholder="Szpreje"
@@ -93,7 +99,7 @@ const AddProduct = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Cena</Form.Label>
+          <Form.Label>Price</Form.Label>
           <Form.Control
             type="number"
             placeholder="400"
@@ -109,7 +115,7 @@ const AddProduct = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Ilośc na stanie</Form.Label>
+          <Form.Label>Avaible quantity</Form.Label>
           <Form.Control
             type="text"
             placeholder="50000"
@@ -117,7 +123,7 @@ const AddProduct = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Opis</Form.Label>
+          <Form.Label>Description</Form.Label>
           <Form.Control
             type="text"
             placeholder="Szuper szprej, polecam"
@@ -135,7 +141,7 @@ const AddProduct = () => {
 
         <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
         <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>Zdjęcie</Form.Label>
+          <Form.Label>Image of item</Form.Label>
           <Form.Control
             type="file"
             accept=".jpg,.png"
@@ -145,9 +151,9 @@ const AddProduct = () => {
           />
         </Form.Group>
         {/* TODO: zrobic upload screen */}
-        {dataFetching && <div>Dodawanie...</div>}
+        {dataFetching && <div>Adding to database...</div>}
         <Button variant="primary" onClick={() => addProductToShop()}>
-          Wyślij
+          Add to store
         </Button>
       </Form>
     </Container>

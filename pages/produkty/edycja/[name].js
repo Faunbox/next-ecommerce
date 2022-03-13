@@ -19,7 +19,7 @@ const AddProduct = ({ product }) => {
   const [brand, setProducent] = useState("");
   const [countInStock, setInStock] = useState("");
   const [description, setDescription] = useState("");
-  const [slug, setSlug] = useState("");
+  const [slug, setSlug] = useState(" ");
   const [image, setImage] = useState("");
   const [imageToUpload, setImageToUpload] = useState("");
   const [dataFetching, setDataFetching] = useState(false);
@@ -85,7 +85,13 @@ const AddProduct = ({ product }) => {
         .then((res) => res.json())
         .then((data) => alert(data.message))
         .then(() => setDataFetching(false))
-        .catch((err) => new Error("Błąd podczas edycji produktu", err))
+        .catch(
+          (err) =>
+            new Error(
+              "There was some issue when editing product. Error message -> ",
+              err
+            )
+        )
         .finally(router.back());
     } else {
       await fetch("/api/products", {
@@ -106,7 +112,7 @@ const AddProduct = ({ product }) => {
         .then((res) => res.json())
         .then((data) => alert(data.message))
         .then(() => setDataFetching(false))
-        .catch((err) => new Error("Błąd podczas edycji produktu", err));
+        .catch((err) => new Error("Editing wasnt correct. Try again", err));
     }
 
     // .finally(() => router.push("/"));
@@ -116,7 +122,7 @@ const AddProduct = ({ product }) => {
     <Container>
       <Form as={Row}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Nazwa przedmiotu</Form.Label>
+          <Form.Label>Product name</Form.Label>
           <Form.Control
             type="text"
             placeholder="Szprej"
@@ -127,7 +133,7 @@ const AddProduct = ({ product }) => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Kategoria</Form.Label>
+          <Form.Label>Category</Form.Label>
           <Form.Control
             type="text"
             placeholder="Szpreje"
@@ -145,7 +151,7 @@ const AddProduct = ({ product }) => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Ilośc na stanie</Form.Label>
+          <Form.Label>Avaible quantity</Form.Label>
           <Form.Control
             type="text"
             placeholder="50000"
@@ -154,7 +160,7 @@ const AddProduct = ({ product }) => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Opis</Form.Label>
+          <Form.Label>Description</Form.Label>
           <Form.Control
             type="text"
             placeholder="Szuper szprej, polecam"
@@ -167,7 +173,7 @@ const AddProduct = ({ product }) => {
           <Form.Control
             type="text"
             placeholder="szuper-szprej"
-            onChange={(e) => setSlug(e.target.value)}
+            onChange={(e) => setSlug(e.target.value.toLowerCase())}
             value={!slug ? product.slug : slug}
           />
         </Form.Group>
@@ -175,7 +181,7 @@ const AddProduct = ({ product }) => {
         <Image src={product.image.url} alt={name} width={200} height={200} />
         <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
         <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>Zdjęcie</Form.Label>
+          <Form.Label>Image</Form.Label>
           <Form.Control
             type="file"
             accept=".jpg,.png"
@@ -185,9 +191,9 @@ const AddProduct = ({ product }) => {
           />
         </Form.Group>
         {/* TODO: zrobic upload screen */}
-        {dataFetching && <div>Edytowanie...</div>}
+        {dataFetching && <div>Editing...</div>}
         <Button variant="primary" onClick={() => editProduct()}>
-          Wyślij
+          Edit product
         </Button>
       </Form>
     </Container>

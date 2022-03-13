@@ -25,30 +25,30 @@ const FinishingOrder = ({ sessionDetails, items }) => {
   return (
     <>
       <div>
-        <h1>Dziękujemy, {name}!</h1>
-        <h2>Twoje dane do wysyłki</h2>
+        <h1>Thanks, {name}!</h1>
+        <h2>Your shipping information: </h2>
         {address ? (
           <div key={address.city}>
-            <p>Miasto: {address.city}</p>
-            <p>Ulica: {`${address.line1} ${address.line2}`}</p>
-            <p>Kod pocztowy: {postalCode}</p>
+            <p>City: {address.city}</p>
+            <p>Street: {`${address.line1} ${address.line2}`}</p>
+            <p>Postal code: {postalCode}</p>
           </div>
         ) : (
-          "brak danych"
+          "No data"
         )}
       </div>
       <div>
-        <h1>Twoje zakupy</h1>
+        <h1>Your pucharsed items</h1>
         {items ? (
           items.map((item) => (
             <div key={item.id}>
-              <p>Nazwa {item.description}</p>
-              <p>Ilość {item.quantity}</p>
-              <p>Cena {item.amount_total / 100}zł</p>
+              <p>Name {item.description}</p>
+              <p>Quantity {item.quantity}</p>
+              <p>Price {item.amount_total / 100}zł</p>
             </div>
           ))
         ) : (
-          <p>brak danych</p>
+          <p>No data!</p>
         )}
       </div>
     </>
