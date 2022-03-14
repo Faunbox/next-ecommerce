@@ -1,12 +1,17 @@
 import { Button } from "react-bootstrap";
-import styles from "../styles/Home.module.scss";
+import Slider from "../components/Slider";
+import BasicsInfo from "../components/BasicsInfo";
+import styled from "styled-components";
+
+const StyledMain = styled.main``;
 
 const About = () => {
   return (
-    <main className={styles.main}>
-      <div>Hello there! Welcome to our store!</div>
+    <StyledMain>
+      <Slider />
+      <BasicsInfo />
       <Button>Check our store!</Button>
-    </main>
+    </StyledMain>
   );
 };
 
