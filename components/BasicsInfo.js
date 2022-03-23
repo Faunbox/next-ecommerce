@@ -3,6 +3,7 @@ import Image from "next/image";
 import deliveryIcon from "../public/icons/delivery (1).png";
 import refundIcon from "../public/icons/refund.png";
 import clockIcon from "../public/icons/wall-clock.png";
+import dynamic from "next/dynamic";
 
 const StyledSection = styled.section`
   display: flex;
@@ -36,4 +37,4 @@ const BasicsInfo = () => {
   );
 };
 
-export default BasicsInfo;
+export default dynamic(async () => BasicsInfo, { ssr: false });

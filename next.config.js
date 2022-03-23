@@ -6,4 +6,7 @@ module.exports = {
     domains: ["res.cloudinary.com"],
   },
   staticPageGenerationTimeout: "60",
+  compiler: {
+    styledComponents: true,
+  },
 };

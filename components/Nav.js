@@ -4,7 +4,21 @@ import { useAuth } from "../context/auth.context";
 import { useCard, ACTION } from "../context/card.context";
 import { useEffect, useState } from "react";
 import PhoneMenu from "./PhoneMenu";
-import styles from "../styles/Nav.module.scss";
+
+import styled from "styled-components";
+
+const StyledNav = styled.nav`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  transition: 3s ease;
+`;
+
+const StyledDiv = styled.div`
+  font-size: 3rem;
+`;
 
 const Navigation = () => {
   const { state, dispatch } = useCard();
@@ -19,10 +33,10 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className={styles.nav}>
-        <div>Obrazek</div>
+      <StyledNav>
+        <StyledDiv>Sklep kosmetyczny</StyledDiv>
         <PhoneMenu />
-      </nav>
+      </StyledNav>
 
       {/* <Navbar bg="primary" expand="sm">
         <Container>
@@ -75,3 +89,4 @@ const Navigation = () => {
 };
 
 export default Navigation;
+

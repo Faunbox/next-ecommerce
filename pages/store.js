@@ -1,113 +1,95 @@
 /* eslint-disable @next/next/no-sync-scripts */
 import Head from "next/head";
 import Link from "next/link";
+import Script from "next/script";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import {
-  Button,
-  Container,
-  Row,
-  Pagination,
-  PageItem,
-  DropdownButton,
-  Dropdown,
-} from "react-bootstrap";
-import Product from "../components/Product";
+import { useEffect, useMemo, useState } from "react";
+import { Button, Container, Row, DropdownButton } from "react-bootstrap";
+import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
-import {
-  paginatedProducts,
-  searchItems,
-  getAllProducts,
-  categoryItems,
-} from "../pages/api/products/";
+import { queryClient } from "./_app";
+import { dehydrate, useQuery } from "react-query";
 
-export default function Home({
-  paginatedItems,
-  array,
-  searchedItems,
-  categorys,
-}) {
+const fetchAllProducts = async () => {
+  const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
+  return items.json();
+};
+
+export async function getServerSideProps() {
+  await queryClient.prefetchQuery("AllItems", fetchAllProducts, {
+    enabled: false,
+  });
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+}
+
+export default function Home() {
   const { userSession } = useAuth();
-  const [items, setItems] = useState(paginatedItems);
-  const [actualPage, setActualPage] = useState(1);
+  const [items, setItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
+
+  //amout of items per one load
+  const numberOfNewItems = 4;
+
+  const [actualItemsCount, setActualItemsCount] = useState(numberOfNewItems);
+  const [numbersOfItems, setNumbersOfItems] = useState(items.length);
   const router = useRouter();
 
-  const { page, search, kategoria } = router.query;
+  //possible queries
+  const { search, kategoria } = router.query;
 
-  async function fetchMoreItems(pageToFetch) {
-    const indexOfLastItem = array.length;
-    if (page >= 1 && page <= indexOfLastItem) {
-      try {
-        const data = await fetch(`./api/products/?page=${pageToFetch}`);
-        const resp = await data.json();
-        setItems(resp.paginatedItems);
-      } catch (error) {
-        console.error("Błąd podczas pobierania przedmiotów -> ", error);
-      } finally {
-        setActualPage(page);
-      }
-    }
-  }
+  //get data from ssr prefetch
+  const { data } = useQuery("AllItems", fetchAllProducts, { enabled: false });
 
-  async function fetchSearchedItem(e) {
-    e.preventDefault();
-    try {
-      const data = await fetch(`./api/products/?search=${search}`);
-      const resp = await data.json();
-      setItems(resp);
-    } catch (error) {
-      console.error("Błąd podczas pobierania przedmiotów -> ", error);
-    }
-  }
+  const getSearchedItem = () => {
+    const i = data.filter((item) =>
+      item.name.toLowerCase().includes(search.toLowerCase())
+    );
+    i.length > numberOfNewItems
+      ? setActualItemsCount(numberOfNewItems)
+      : setActualItemsCount(i.length);
+    inputValue ? setItems(i) : setItems(data);
+    setNumbersOfItems(i.length);
+  };
 
-  async function getCategoriedItems(category) {
-    try {
-      const data = await fetch(`./api/products/?kategoria=${category}`);
-      const resp = await data.json();
-      setItems(resp);
-    } catch (error) {
-      console.error("Błąd podczas pobierania przedmiotów -> ", error);
+  const showMoreItems = () => {
+    if (actualItemsCount <= numbersOfItems) {
+      setActualItemsCount((prevState) => prevState + numberOfNewItems);
     }
-  }
+    if (actualItemsCount + numberOfNewItems > numbersOfItems)
+      return setActualItemsCount(numbersOfItems);
+  };
+
+  const emptyInputValue = () => {
+    setItems(data);
+    setNumbersOfItems(data.length);
+    setActualItemsCount(numberOfNewItems);
+  };
+
+  useEffect(() => {
+    setItems(data);
+    setNumbersOfItems(data.length);
+  }, []);
+
+  useEffect(() => {
+    return search ? getSearchedItem() : emptyInputValue();
+  }, [search]);
 
   useEffect(() => {
     return kategoria ? getCategoriedItems(kategoria) : null;
   }, [kategoria]);
-  useEffect(() => {
-    return fetchMoreItems(page);
-  }, [page]);
-
-  const prevPage = () => {
-    const prevPage = actualPage - 1;
-    if (prevPage < 1) return;
-    router.push(`?page=${prevPage}`);
-  };
-
-  const nextPage = () => {
-    const nextPage = parseInt(actualPage) + 1;
-    const indexOfLastItem = array.length;
-
-    if (nextPage > indexOfLastItem) return;
-    router.push(`?page=${nextPage}`);
-  };
-
-  const firstPage = () => {
-    router.push("?page=1");
-  };
-
-  const lastPage = () => {
-    const indexOfLastItem = array.length;
-    router.push(`?page=${indexOfLastItem}`);
-  };
 
   return (
     <>
       <Head>
         <title>Strona główna</title>
         <meta name="description" content="blog" />
-        <script src="https://js.stripe.com/v3"></script>
       </Head>
+      <Script src="https://js.stripe.com/v3"></Script>
 
       <h1>Produkty</h1>
       {userSession?.role === "admin" ? (
@@ -116,132 +98,41 @@ export default function Home({
         </Link>
       ) : null}
 
-      <section>
-        <Container as={Row}>
-          <form
-            onSubmit={(e) => {
-              fetchSearchedItem(e);
-            }}
-          >
-            Wyszukaj po nazwie
-            <input
-              type="text"
-              onChange={(e) => setInputValue(e.target.value)}
-            ></input>
-            <Button
-              as={Link}
-              href={{ query: { search: inputValue } }}
-              type="submit"
-            >
-              Szukaj
-            </Button>
-            <DropdownButton id="dropdown-basic-button" title="Kategorie">
-              {categorys
-                ? categorys.map((category) => (
-                    <Dropdown.Item
-                      key={category}
-                      href={`/?kategoria=${category}`}
-                    >
-                      {category}
-                    </Dropdown.Item>
-                  ))
-                : null}
-            </DropdownButton>
-          </form>
-          {!searchedItems
-            ? items.map((product) => (
-                <Product key={product._id} product={product} />
-              ))
-            : searchedItems.map((product) => (
-                <Product key={product._id} product={product} />
-              ))}
-        </Container>
-      </section>
-      <Container>
-        <Pagination>
-          <Pagination.First onClick={() => firstPage()} />
-          <Pagination.Prev onClick={() => prevPage()} />
-          {array.map((tak, index) => {
-            return tak < 5 ? (
-              <PageItem
-                key={tak + 1}
-                active={
-                  parseInt(actualPage) === parseInt(tak + 1) ? true : false
-                }
-                onClick={(e) => router.push(`?page=${tak + 1}`)}
-              >
-                {tak + 1}
-              </PageItem>
-            ) : (
-              <>
-                <PageItem
-                  key={tak + 1}
-                  active={actualPage === tak + 1 ? true : false}
-                  onClick={(e) => router.push(`?page=${tak + 1}`)}
-                >
-                  {tak + 1}
-                </PageItem>
-                <Pagination.Ellipsis key={parseInt(index + tak)} />
-                <PageItem
-                  key={parseInt(tak + 1 + tak)}
-                  active={actualPage === tak + 1 ? true : false}
-                  onClick={(e) => router.push(`?page=${tak + 1}`)}
-                >
-                  {array.length}
-                </PageItem>
-              </>
-            );
-          })}
-          <Pagination.Next onClick={() => nextPage()} />
-          <Pagination.Last onClick={() => lastPage()} />
+      <Container as={Row}>
+        <form
+          onSubmit={(e) => {
+            getSearchedItem(e);
+          }}
+        >
+          Wyszukaj po nazwie
           <input
-            type="number"
-            onChange={async (e) => {
-              e.target.value > 0 && (await fetchMoreItems(e.target.value));
-            }}
-            placeholder="Wyszukaj po numerze"
+            type="text"
+            onChange={(e) => setInputValue(e.target.value)}
           ></input>
-        </Pagination>
+          <Button
+            as={Link}
+            href={{ query: { search: inputValue } }}
+            type="submit"
+          >
+            Szukaj
+          </Button>
+          <DropdownButton
+            id="dropdown-basic-button"
+            title="Kategorie"
+          ></DropdownButton>
+        </form>
+      </Container>
+      <Container>
+        {items.slice(0, actualItemsCount).map((item) => (
+          <ProductCard key={item._id} product={item} />
+        ))}
+        <Button
+          disabled={actualItemsCount >= numbersOfItems ? true : false}
+          onClick={() => showMoreItems()}
+        >
+          Show more items {actualItemsCount} of {numbersOfItems}
+        </Button>
       </Container>
     </>
   );
-}
-
-export async function getServerSideProps(context) {
-  const { page, search, kategoria } = context.query;
-
-  //get all categories
-  const categoryArray = [];
-  const allItems = await getAllProducts();
-
-  //check if there is no the same category
-  allItems.forEach((item) => {
-    if (categoryArray.length === 0) categoryArray.push(item.category);
-    if (!categoryArray.includes(item.category))
-      categoryArray.push(item.category);
-  });
-
-  const categoryItemss = kategoria
-    ? JSON.stringify(await categoryItems(kategoria))
-    : null;
-  //if no page query set page number to 1
-  const products = page
-    ? JSON.stringify(await paginatedProducts(page))
-    : JSON.stringify(await paginatedProducts(1));
-
-  const searchedItems = search
-    ? JSON.stringify(await searchItems(search))
-    : null;
-
-  const { paginatedItems, array } = JSON.parse(products);
-
-  return {
-    props: {
-      paginatedItems: paginatedItems,
-      array: array,
-      searchedItems: JSON.parse(searchedItems),
-      categorys: categoryArray,
-      categoryItems: JSON.parse(categoryItemss),
-    },
-  };
 }

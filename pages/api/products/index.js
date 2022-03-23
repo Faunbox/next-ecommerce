@@ -5,7 +5,8 @@ const cloudinary = require("cloudinary").v2;
 
 export const getAllProducts = async () => {
   await db.connect();
-  const products = await Product.find({});
+  const data = await Product.find({});
+  const products = await data;
   await db.disconnect();
   return products;
 };
@@ -157,7 +158,9 @@ const Products = async (req, res) => {
 
     //Delete image from cloudinary
     cloudinary.uploader.destroy(imageID, function (error, result) {
-      error ? console.error("Błąd podczas usuwania zdjęcia", error) : console.log(result)
+      error
+        ? console.error("Błąd podczas usuwania zdjęcia", error)
+        : console.log(result);
     });
 
     //delete item from db
@@ -192,37 +195,49 @@ const Products = async (req, res) => {
 
   switch (req.method) {
     case "GET": {
-      if (page) {
-        try {
-          const items = await paginatedProducts(page);
-          return res.status(200).json(items);
-        } catch (error) {
-          res
-            .status(400)
-            .json({ message: "Błąd podczas pobierania produktów", error });
-        }
-      }
-      if (search) {
-        try {
-          const items = await searchItems(search);
-          return res.status(200).json(items);
-        } catch (error) {
-          res
-            .status(400)
-            .json({ message: "Błąd podczas pobierania produktów", error });
-        }
-      }
-      if (kategoria) {
-        try {
-          const items = await categoryItems(kategoria);
-          return res.status(200).json(items);
-        } catch (err) {
-          return res.status(400).json({
-            message: "Błąd podczas wyszukiwania po kategoriach, ",
+      try {
+        const items = await getAllProducts();
+        res.status(200).json(items);
+      } catch (err) {
+        res
+          .status(400)
+          .json({
+            message: "Błąd podczas pobierania wszystkich przedmiotów. Błąd -> ",
             err,
           });
-        }
       }
+      // if (page) {
+      //   try {
+      //     const items = await paginatedProducts(page);
+      //     return res.status(200).json(items);
+      //   } catch (err) {
+      //     res
+      //       .status(400)
+      //       .json({ message: "Błąd podczas pobierania produktów", err });
+      //   }
+      // }
+      // if (search) {
+      //   try {
+      //     const items = await searchItems(search);
+      //     return res.status(200).json(items);
+      //   } catch (err) {
+      //     res.status(400).json({
+      //       message: "Błąd podczas pobierania poszukiwanego produktu",
+      //       err,
+      //     });
+      //   }
+      // }
+      // if (kategoria) {
+      //   try {
+      //     const items = await categoryItems(kategoria);
+      //     return res.status(200).json(items);
+      //   } catch (err) {
+      //     return res.status(400).json({
+      //       message: "Błąd podczas wyszukiwania po kategoriach, ",
+      //       err,
+      //     });
+      //   }
+      // }
       break;
     }
     case "POST": {

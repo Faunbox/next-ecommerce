@@ -5,9 +5,25 @@ import hamburgerIcon from "../public/icons/hamburger.png";
 import searchIcon from "../public/icons/search.png";
 import cartIcon from "../public/icons/shopping-cart.png";
 import userIcon from "../public/icons/user.png";
+import StoreMenu from "./StoreMenu.js";
+import gsap from "gsap";
+import { useEffect, useRef, useState } from "react";
 
-import styles from "../styles/Nav.module.scss";
-import { useState } from "react";
+import styled from "styled-components";
+import { Button } from "react-bootstrap";
+
+const StyledSection = styled.section`
+  position: relative;
+  text-align: center;
+`;
+const StyledUl = styled.ul`
+  display: flex;
+  list-style: none;
+`;
+
+const StyledInput = styled.input`
+  margin: 20px 0;
+`;
 
 const UserInfo = () => {
   const { userSession } = useAuth();
@@ -33,56 +49,84 @@ const PhoneMenu = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showSearchInput, setShowSearchInput] = useState(false);
   const [showUser, setShowUser] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    gsap.fromTo(
+      inputRef.current,
+      { autoAlpha: 0, x: 5 },
+      { autoAlpha: 1, x: 0, duration: 1 }
+    );
+  }, [showSearchInput]);
 
   return (
-    <div>
-      <ul className={styles.ul}>
-        <li className={styles.li}>
-          <button onClick={() => setShowMenu(!showMenu)}>
+    <StyledSection>
+      <StyledUl>
+        <li>
+          <button
+            onClick={() => {
+              setShowMenu(!showMenu);
+              setShowUser(false);
+              setShowSearchInput(false);
+            }}
+          >
             <Image src={hamburgerIcon} alt="menuIcon" />
           </button>
-          {showMenu ? (
-            <section>
-              <ul className={styles.ul}>
-                <li className={styles.li}>
-                  <Link href="/" passHref>
-                    Home
-                  </Link>
-                </li>
-                <li className={styles.li}>
-                  <Link href="/store?page=1">Store</Link>
-                </li>
-                <li className={styles.li}>
-                  <Link href="/contact" passHref>
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </section>
-          ) : null}
         </li>
-        <li className={styles.li}>
+        <li>
           <Link href="/cart" passHref>
             <button>
               <Image src={cartIcon} alt="cartIcon" />
             </button>
           </Link>
         </li>
-        <li className={styles.li}>
-          <button onClick={() => setShowSearchInput(!showSearchInput)}>
+        <li>
+          <button
+            onClick={() => {
+              setShowSearchInput(!showSearchInput);
+              setShowMenu(false);
+              setShowUser(false);
+            }}
+          >
             <Image src={searchIcon} alt="cartIcon" />
           </button>
-          {showSearchInput ? <input type="text" /> : null}
         </li>
 
-        <li className={styles.li}>
-          <button onClick={() => setShowUser(!showUser)}>
+        <li>
+          <button
+            onClick={() => {
+              setShowUser(!showUser);
+              setShowMenu(false);
+              setShowSearchInput(false);
+            }}
+          >
             <Image src={userIcon} alt="cartIcon" />
           </button>
-          {showUser ? <UserInfo /> : null}
         </li>
-      </ul>
-    </div>
+      </StyledUl>
+      {showMenu ? <StoreMenu active={showMenu} /> : null}
+      {showSearchInput ? (
+        <>
+          <StyledInput
+            type="text"
+            placeholder="Wyszukaj po nazwie"
+            onChange={(e) => setInputValue(e.target.value)}
+            ref={inputRef}
+          />
+          <Button
+            as={Link}
+            href={{
+              pathname: "/store",
+              query: { search: inputValue },
+            }}
+          >
+            Szukaj
+          </Button>
+        </>
+      ) : null}
+      {showUser ? <UserInfo /> : null}
+    </StyledSection>
   );
 };
 

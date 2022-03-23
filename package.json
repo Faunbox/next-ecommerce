@@ -20,6 +20,7 @@
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "file": "^0.2.2",
+    "gsap": "^3.9.1",
     "html-react-parser": "^1.4.8",
     "js-cookie": "^3.0.1",
     "micro": "^9.3.4",

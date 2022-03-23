@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button, Card } from "react-bootstrap";
 
-const Product = ({ product }) => {
+const ProductCard = ({ product }) => {
   return (
     <>
       <Card key={product._id} style={{ width: "18rem", margin: "10px" }}>
@@ -20,4 +20,4 @@ const Product = ({ product }) => {
   );
 };
 
-export default Product;
+export default ProductCard;

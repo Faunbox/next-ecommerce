@@ -22,13 +22,12 @@ const productSchema = new mongoose.Schema(
       priceID: { type: String, required: true },
       productID: { type: String, required: true },
     },
+    promotion: { type: Boolean, required: true, default: false },
   },
   { timestamps: true }
 );
 
-
 const Product =
   mongoose.models.Product || mongoose.model("Product", productSchema);
-
 
 export default Product;

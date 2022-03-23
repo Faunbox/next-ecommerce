@@ -3,13 +3,12 @@ import { Container } from "react-bootstrap";
 const HistoryItemList = (items) => {
   return (
     <Container>
-      {/* <h4 key={item.date}>{item.date}</h4> */}
 
       {items.items.map((item) => {
         const { items } = item;
         return (
-          <>
-            <div>{item.date}</div>
+          <div key={item.date}>
+            {item.date}
             {items.map((item) => {
               return (
                 <div key={item.id}>
@@ -20,7 +19,7 @@ const HistoryItemList = (items) => {
                 </div>
               );
             })}
-          </>
+          </div>
         );
       })}
     </Container>
