@@ -3,8 +3,14 @@ import Head from "next/head";
 import Link from "next/link";
 import Script from "next/script";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
-import { Button, Container, Row, DropdownButton } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import {
+  Button,
+  Container,
+  Row,
+  DropdownButton,
+  Dropdown,
+} from "react-bootstrap";
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
@@ -31,6 +37,7 @@ export default function Home() {
   const { userSession } = useAuth();
   const [items, setItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [categorys, setCategorys] = useState([]);
 
   //amout of items per one load
   const numberOfNewItems = 4;
@@ -40,7 +47,7 @@ export default function Home() {
   const router = useRouter();
 
   //possible queries
-  const { search, kategoria } = router.query;
+  const { search, category } = router.query;
 
   //get data from ssr prefetch
   const { data } = useQuery("AllItems", fetchAllProducts, { enabled: false });
@@ -52,7 +59,18 @@ export default function Home() {
     i.length > numberOfNewItems
       ? setActualItemsCount(numberOfNewItems)
       : setActualItemsCount(i.length);
-    inputValue ? setItems(i) : setItems(data);
+    search ? setItems(i) : setItems(data);
+    setNumbersOfItems(i.length);
+  };
+
+  const getCategoriedItems = () => {
+    const i = data.filter((item) =>
+      item.category.toLowerCase().includes(category.toLowerCase())
+    );
+    i.length > numberOfNewItems
+      ? setActualItemsCount(numberOfNewItems)
+      : setActualItemsCount(i.length);
+    category ? setItems(i) : setItems(data);
     setNumbersOfItems(i.length);
   };
 
@@ -64,6 +82,14 @@ export default function Home() {
       return setActualItemsCount(numbersOfItems);
   };
 
+  const getAllCategorys = () => {
+    let categoryArray = [];
+    data?.map((item) => {
+      categoryArray.push(item.category);
+    });
+    setCategorys([...new Set(categoryArray)]);
+  };
+
   const emptyInputValue = () => {
     setItems(data);
     setNumbersOfItems(data.length);
@@ -73,6 +99,7 @@ export default function Home() {
   useEffect(() => {
     setItems(data);
     setNumbersOfItems(data.length);
+    getAllCategorys();
   }, []);
 
   useEffect(() => {
@@ -80,8 +107,8 @@ export default function Home() {
   }, [search]);
 
   useEffect(() => {
-    return kategoria ? getCategoriedItems(kategoria) : null;
-  }, [kategoria]);
+    return category ? getCategoriedItems() : null;
+  }, [category]);
 
   return (
     <>
@@ -100,8 +127,8 @@ export default function Home() {
 
       <Container as={Row}>
         <form
-          onSubmit={(e) => {
-            getSearchedItem(e);
+          onSubmit={() => {
+            getSearchedItem();
           }}
         >
           Wyszukaj po nazwie
@@ -116,10 +143,17 @@ export default function Home() {
           >
             Szukaj
           </Button>
-          <DropdownButton
-            id="dropdown-basic-button"
-            title="Kategorie"
-          ></DropdownButton>
+          <DropdownButton id="dropdown-basic-button" title="Kategorie">
+            <Dropdown.Item href="/store">Show all</Dropdown.Item>
+            {categorys?.map((category) => (
+              <Dropdown.Item
+                href={`/store?category=${category}`}
+                key={category}
+              >
+                {category}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
         </form>
       </Container>
       <Container>
