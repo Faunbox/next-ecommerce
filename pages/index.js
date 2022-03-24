@@ -4,10 +4,17 @@ import BasicsInfo from "../components/BasicsInfo";
 import styled from "styled-components";
 import Promotions from "../components/Promotions";
 import { queryClient } from "./_app";
-import { dehydrate } from "react-query";
+import { dehydrate, useQuery } from "react-query";
 import { useEffect } from "react";
+import BrandCarusel from "../components/BrandCarusel";
+import Link from "next/link";
+import StoreInfo from "../components/StoreInfo";
 
-const StyledMain = styled.main``;
+const StyledMain = styled.main`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
@@ -33,8 +40,11 @@ const About = () => {
     <StyledMain>
       <Slider />
       <BasicsInfo />
-      <Button>Check our store!</Button>
+      <Button as={Link} href={"/store"}>
+        Check our store!
+      </Button>
       <Promotions items={data} />
+      <StoreInfo />
     </StyledMain>
   );
 };

@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/globals.css";
-import Layout from "../components/Leyout";
+import Layout from "../components/Layout";
 import { QueryClientProvider, QueryClient, React, Hydrate } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { AuthProvider } from "../context/auth.context";

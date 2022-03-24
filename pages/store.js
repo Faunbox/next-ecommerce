@@ -4,17 +4,24 @@ import Link from "next/link";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Container,
-  Row,
-  DropdownButton,
-  Dropdown,
-} from "react-bootstrap";
+import { Button, Container, DropdownButton, Dropdown } from "react-bootstrap";
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
 import { dehydrate, useQuery } from "react-query";
+import styled from "styled-components";
+
+const StyledContainer = styled(Container)`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+
+  @media (min-width: 413px) {
+    flex-direction: row;
+  }
+`;
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
@@ -125,15 +132,15 @@ export default function Home() {
         </Link>
       ) : null}
 
-      <Container as={Row}>
+      <StyledContainer>
         <form
           onSubmit={() => {
             getSearchedItem();
           }}
         >
-          Wyszukaj po nazwie
           <input
             type="text"
+            placeholder="Wyszukaj po nazwie"
             onChange={(e) => setInputValue(e.target.value)}
           ></input>
           <Button
@@ -155,18 +162,18 @@ export default function Home() {
             ))}
           </DropdownButton>
         </form>
-      </Container>
-      <Container>
+      </StyledContainer>
+      <StyledContainer>
         {items.slice(0, actualItemsCount).map((item) => (
           <ProductCard key={item._id} product={item} />
         ))}
-        <Button
-          disabled={actualItemsCount >= numbersOfItems ? true : false}
-          onClick={() => showMoreItems()}
-        >
-          Show more items {actualItemsCount} of {numbersOfItems}
-        </Button>
-      </Container>
+      </StyledContainer>
+      <Button
+        disabled={actualItemsCount >= numbersOfItems ? true : false}
+        onClick={() => showMoreItems()}
+      >
+        Show more items {actualItemsCount} of {numbersOfItems}
+      </Button>
     </>
   );
 }

@@ -7,9 +7,10 @@ import dynamic from "next/dynamic";
 
 const StyledSection = styled.section`
   display: flex;
-  min-height: auto;
+  max-height: 10vh;
   flex-wrap: wrap;
-  height: 20vh;
+  height: auto;
+  margin: 30px 10px;
   align-items: center;
   justify-content: space-around;
 `;
