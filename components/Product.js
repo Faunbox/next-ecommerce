@@ -1,13 +1,17 @@
 import Link from "next/link";
 import { Button, Card } from "react-bootstrap";
+import { StyledCardTitle, StyledCard } from "../styles/styled_store";
 
 const ProductCard = ({ product }) => {
   return (
     <>
-      <Card key={product._id} style={{ width: "18rem", margin: "10px" }}>
+      <StyledCard
+        key={product._id}
+        style={{ width: "clamp(120px, 20rem, 220px", margin: "10px" }}
+      >
         <Card.Img variant="top" src={product?.image?.url} />
         <Card.Body>
-          <Card.Title>{product.name}</Card.Title>
+          <StyledCardTitle>{product.name}</StyledCardTitle>
           <Card.Text>{product.description}</Card.Text>
           <Card.Text>{product.price}PLN</Card.Text>
           <Card.Text>Avaible: {product.countInStock}</Card.Text>
@@ -15,7 +19,7 @@ const ProductCard = ({ product }) => {
             <Button variant="primary">More Info</Button>
           </Link>
         </Card.Body>
-      </Card>
+      </StyledCard>
     </>
   );
 };

@@ -36,13 +36,13 @@ export const StyledPromotionContainter = styled.div`
   align-items: center;
   flex-wrap: wrap;
   margin: 1.5rem;
-
-  @media (min-width: 600px) {
+  @media (min-width: 413px) {
     flex-direction: row;
+    flex-wrap: wrap;
+    align-content: space-between;
   }
 `;
 export const StyledTextWrapper = styled.div`
   margin: 1.5rem;
   text-align: left;
 `;
-

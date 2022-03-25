@@ -1,7 +1,7 @@
-import { Container, Button } from "react-bootstrap";
+import { Button, Card, DropdownButton } from "react-bootstrap";
 import styled from "styled-components";
 
-export const StyledContainer = styled(Container)`
+export const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -10,6 +10,7 @@ export const StyledContainer = styled(Container)`
 
   @media (min-width: 413px) {
     flex-direction: row;
+    flex-wrap: wrap;
   }
 `;
 
@@ -22,4 +23,19 @@ export const StyledStoreForm = styled.form`
 
 export const StyledAddItemButton = styled(Button)`
   margin-bottom: 10px;
+`;
+
+export const StyledDropdownButton = styled(DropdownButton)`
+  margin: 10px;
+`;
+
+//Cart elements
+export const StyledCard = styled(Card)`
+  margin: 15px 0;
+  @media (min-width: 414px) {
+    margin: 0 15px;
+  }
+`;
+export const StyledCardTitle = styled(Card.Title)`
+  font-weight: bold;
 `;

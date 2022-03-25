@@ -4,7 +4,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Button, Container, DropdownButton, Dropdown } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
@@ -14,6 +14,7 @@ import {
   StyledContainer,
   StyledAddItemButton,
   StyledStoreForm,
+  StyledDropdownButton,
 } from "../styles/styled_store";
 
 const fetchAllProducts = async () => {
@@ -143,18 +144,15 @@ export default function Home() {
           >
             Search
           </Button>
-          <DropdownButton id="dropdown-basic-button" title="Categories">
-            <Dropdown.Item href="/store">Show all</Dropdown.Item>
-            {categorys?.map((category) => (
-              <Dropdown.Item
-                href={`/store?category=${category}`}
-                key={category}
-              >
-                {category}
-              </Dropdown.Item>
-            ))}
-          </DropdownButton>
         </StyledStoreForm>
+        <StyledDropdownButton id="dropdown-basic-button" title="Categories">
+          <Dropdown.Item href="/store">Show all</Dropdown.Item>
+          {categorys?.map((category) => (
+            <Link href={`/store?category=${category}`} passHref key={category}>
+              <Dropdown.Item>{category}</Dropdown.Item>
+            </Link>
+          ))}
+        </StyledDropdownButton>
         <StyledContainer>
           {items.slice(0, actualItemsCount).map((item) => (
             <ProductCard key={item._id} product={item} />

@@ -6,6 +6,8 @@ import { getSingleUser } from "../api/users/[email]";
 import { Button, Container } from "react-bootstrap";
 import HistoryItemList from "../../components/HistoryItem";
 import Image from "next/image";
+import { StyledWrapper } from "../../styles/styled_home";
+import { StyledUserUl } from "../../styles/styled_user-page";
 
 const User = ({ user }) => {
   const { userSession } = useAuth();
@@ -79,9 +81,9 @@ const User = ({ user }) => {
 
   return (
     <>
-      <Container>
+      <StyledWrapper>
         {
-          <ul>
+          <StyledUserUl>
             <li>{user.email}</li>
             <li>
               {!user.name ? (
@@ -119,36 +121,19 @@ const User = ({ user }) => {
                 </button>
               </>
             ) : null}
-
-            {!user?.image ? (
-              <>
-                <label>
-                  Add avatar image
-                  <input
-                    type="file"
-                    accept=".jpg,.png"
-                    onChange={(e) => {
-                      setImage(e.target.files);
-                    }}
-                  ></input>
-                </label>
-                <Button onClick={() => sendImageToCloudinary()}>Add</Button>
-              </>
-            ) : (
-              <>
-                <label>
-                  Change avatar image
-                  <input
-                    type="file"
-                    accept=".jpg,.png"
-                    onChange={(e) => {
-                      setImage(e.target.files);
-                    }}
-                  ></input>
-                </label>
-                <Button onClick={() => sendImageToCloudinary()}>Change</Button>
-              </>
-            )}
+            <label>
+              {!user?.image ? "Add avatar image" : "Change avatar Image"}
+              <input
+                type="file"
+                accept=".jpg,.png"
+                onChange={(e) => {
+                  setImage(e.target.files);
+                }}
+              ></input>
+            </label>
+            <Button onClick={() => sendImageToCloudinary()}>
+              {!user?.image ? "Set avatar" : "Change avatar"}
+            </Button>
             {user?.image ? (
               <Image
                 src={user?.image}
@@ -157,12 +142,12 @@ const User = ({ user }) => {
                 height={100}
               />
             ) : (
-              <li>There is no image!</li>
+              <li>You dont have any avatar image!</li>
             )}
-          </ul>
+          </StyledUserUl>
         }
-      </Container>
-      <Container>
+      </StyledWrapper>
+      <StyledWrapper>
         <Button
           onClick={() => {
             setShowPucharseHistory(!showPucharseHistory);
@@ -177,7 +162,7 @@ const User = ({ user }) => {
           ) : (
             <p>At this moment there wasnt any orders! Lets change that!</p>
           ))}
-      </Container>
+      </StyledWrapper>
     </>
   );
 };

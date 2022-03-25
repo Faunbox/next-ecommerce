@@ -1,6 +1,14 @@
 import styled from "styled-components";
 import Link from "next/link";
 
+export const StyledFooter = styled.footer`
+  width: 100%;
+  text-align: center;
+  padding-bottom: 2rem;
+  background-color: #eee;
+  opacity: 0.9;
+`;
+
 export const StyledSection = styled.section`
   display: flex;
   align-content: center;
@@ -31,7 +39,6 @@ export const StyledSocialsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-content: center;
-  margin: 2rem 0;
 `;

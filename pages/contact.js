@@ -1,5 +1,6 @@
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { useState } from "react";
+import { StyledTextWrapper, StyledWrapper } from "../styles/styled_home";
 
 const Contact = () => {
   const apiEndpoint = "./api/mail/";
@@ -29,11 +30,11 @@ const Contact = () => {
   };
 
   return (
-    <Container>
+    <StyledWrapper>
       <main>
         <article>
-          <div>You need professional advice?</div>
-          <div>Contact Us!</div>
+          <p>You need professional advice?</p>
+          <p>Contact Us!</p>
         </article>
         <aside>
           <Form onSubmit={handleSubmit}>
@@ -81,7 +82,7 @@ const Contact = () => {
           </Form>
         </aside>
       </main>
-    </Container>
+    </StyledWrapper>
   );
 };
 
