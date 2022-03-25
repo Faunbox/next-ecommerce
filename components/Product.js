@@ -10,9 +10,9 @@ const ProductCard = ({ product }) => {
           <Card.Title>{product.name}</Card.Title>
           <Card.Text>{product.description}</Card.Text>
           <Card.Text>{product.price}PLN</Card.Text>
-          <Card.Text>Ilość na stanie {product.countInStock}</Card.Text>
+          <Card.Text>Avaible: {product.countInStock}</Card.Text>
           <Link href={`/produkty/${product.slug}`} passHref>
-            <Button variant="primary">Wiecej informacji</Button>
+            <Button variant="primary">More Info</Button>
           </Link>
         </Card.Body>
       </Card>

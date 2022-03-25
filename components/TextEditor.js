@@ -39,7 +39,6 @@ const TextEditor = ({ value }) => {
     Cookies.set("blog_post", body);
   };
 
-  const getCookie = Cookies.get("blog_post");
 
   useEffect(() => {
     setloading(false);

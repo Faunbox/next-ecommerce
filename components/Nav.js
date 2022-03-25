@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { signIn, signOut } from "next-auth/react";
 import { useAuth } from "../context/auth.context";
 import { useCard, ACTION } from "../context/card.context";
 import { useEffect, useState } from "react";
@@ -13,7 +11,10 @@ const StyledNav = styled.nav`
   align-items: center;
   justify-content: center;
   height: auto;
-  transition: 3s ease;
+
+  @media (min-width: 720px) {
+    display: none;
+  }
 `;
 
 const StyledDiv = styled.div`
@@ -34,7 +35,7 @@ const Navigation = () => {
   return (
     <>
       <StyledNav>
-        <StyledDiv>Sklep kosmetyczny</StyledDiv>
+        <StyledDiv>Cosmetic Shop</StyledDiv>
         <PhoneMenu />
       </StyledNav>
 
@@ -89,4 +90,3 @@ const Navigation = () => {
 };
 
 export default Navigation;
-

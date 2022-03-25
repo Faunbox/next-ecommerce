@@ -1,7 +1,7 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../styles/globals.css";
 import Layout from "../components/Layout";
 import { QueryClientProvider, QueryClient, React, Hydrate } from "react-query";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { GlobalStyle } from "../styles/GlobalCss";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { AuthProvider } from "../context/auth.context";
 import { CardProvider } from "../context/card.context";
@@ -14,6 +14,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     <SSRProvider>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
+          <GlobalStyle />
           <AuthProvider>
             <CardProvider>
               <Layout>

@@ -1,36 +1,17 @@
-import { Container } from "react-bootstrap";
-import styled from "styled-components";
 import Product from "../components/Product";
-
-const StyledDivider = styled.h1`
-  width: 100%;
-  height: 2px;
-  margin: 30px 0;
-  background-color: #000;
-`;
-
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-
-  @media (min-width: 600px) {
-    flex-direction: row;
-  }
-`;
+import { StyledPromotionContainter } from "../styles/styled_home";
+import { StyledWrapper } from "../styles/styled_home";
 
 const Promotions = ({ items }) => {
   return (
-    <Container>
-      <StyledDivider>Promocje</StyledDivider>
-      <StyledContainer>
+    <StyledWrapper>
+      <h2>Promotions</h2>
+      <StyledPromotionContainter>
         {items.slice(2, 5).map((item) => (
           <Product key={item._id} product={item} />
         ))}
-      </StyledContainer>
-    </Container>
+      </StyledPromotionContainter>
+    </StyledWrapper>
   );
 };
 

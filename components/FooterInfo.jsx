@@ -1,40 +1,18 @@
-import styled from "styled-components";
 import Image from "next/image";
 import deliveryIcon from "../public/icons/delivery (1).png";
 import refundIcon from "../public/icons/refund.png";
 import mail from "../public/icons/mail.png";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { StyledDiv, StyledText, StyledLink, StyledSection } from "../styles/styled_footer";
 
-const StyledSection = styled.section`
-  display: flex;
-  align-content: center;
-  flex-direction: column;
-  flex-wrap: wrap;
-  width: 100%;
-  height: auto;
-  margin: 30px 0;
-  overflow: hidden;
-`;
-
-const StyledDiv = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column-reverse;
-  align-content: center;
-  align-items: center;
-  margin: 10px 0;
-`;
-
-const StyledLink = styled(Link)`
-  margin: 0 5px;
-`;
 
 const FooterInfo = () => {
   return (
     <StyledSection>
       <StyledDiv>
-        <p>Our Customer service is avaible everyday in 8:00 to 16:00</p>
+        <StyledText>
+          Our Customer service is avaible everyday in 8:00 to 16:00
+        </StyledText>
         <Image src={deliveryIcon} alt="ikona" />
       </StyledDiv>
       <StyledDiv>
@@ -44,7 +22,7 @@ const FooterInfo = () => {
         <Image src={mail} alt="ikona" />
       </StyledDiv>
       <StyledDiv>
-        <p>Free refund up to 150 days</p>
+        <StyledLink href={"phoneto:666666666"}>Phone Number</StyledLink>
         <Image src={refundIcon} alt="ikona" />
       </StyledDiv>
     </StyledSection>

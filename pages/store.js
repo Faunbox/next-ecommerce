@@ -9,19 +9,12 @@ import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
 import { dehydrate, useQuery } from "react-query";
-import styled from "styled-components";
-
-const StyledContainer = styled(Container)`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-
-  @media (min-width: 413px) {
-    flex-direction: row;
-  }
-`;
+import { StyledWrapper } from "../styles/styled_home";
+import {
+  StyledContainer,
+  StyledAddItemButton,
+  StyledStoreForm,
+} from "../styles/styled_store";
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
@@ -42,15 +35,16 @@ export async function getServerSideProps() {
 
 export default function Home() {
   const { userSession } = useAuth();
+
+  //number of items per one load
+  const numberOfNewItems = 4;
+
   const [items, setItems] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [categorys, setCategorys] = useState([]);
-
-  //amout of items per one load
-  const numberOfNewItems = 4;
-
   const [actualItemsCount, setActualItemsCount] = useState(numberOfNewItems);
   const [numbersOfItems, setNumbersOfItems] = useState(items.length);
+
   const router = useRouter();
 
   //possible queries
@@ -124,23 +118,22 @@ export default function Home() {
         <meta name="description" content="blog" />
       </Head>
       <Script src="https://js.stripe.com/v3"></Script>
+      <StyledWrapper>
+        <h1>Products</h1>
+        {userSession?.role === "admin" ? (
+          <Link href={"/produkty/dodaj"} passHref>
+            <StyledAddItemButton>Add new product</StyledAddItemButton>
+          </Link>
+        ) : null}
 
-      <h1>Produkty</h1>
-      {userSession?.role === "admin" ? (
-        <Link href={"/produkty/dodaj"} passHref>
-          <Button>Dodaj produkt</Button>
-        </Link>
-      ) : null}
-
-      <StyledContainer>
-        <form
+        <StyledStoreForm
           onSubmit={() => {
             getSearchedItem();
           }}
         >
           <input
             type="text"
-            placeholder="Wyszukaj po nazwie"
+            placeholder="Search by name"
             onChange={(e) => setInputValue(e.target.value)}
           ></input>
           <Button
@@ -148,9 +141,9 @@ export default function Home() {
             href={{ query: { search: inputValue } }}
             type="submit"
           >
-            Szukaj
+            Search
           </Button>
-          <DropdownButton id="dropdown-basic-button" title="Kategorie">
+          <DropdownButton id="dropdown-basic-button" title="Categories">
             <Dropdown.Item href="/store">Show all</Dropdown.Item>
             {categorys?.map((category) => (
               <Dropdown.Item
@@ -161,19 +154,19 @@ export default function Home() {
               </Dropdown.Item>
             ))}
           </DropdownButton>
-        </form>
-      </StyledContainer>
-      <StyledContainer>
-        {items.slice(0, actualItemsCount).map((item) => (
-          <ProductCard key={item._id} product={item} />
-        ))}
-      </StyledContainer>
-      <Button
-        disabled={actualItemsCount >= numbersOfItems ? true : false}
-        onClick={() => showMoreItems()}
-      >
-        Show more items {actualItemsCount} of {numbersOfItems}
-      </Button>
+        </StyledStoreForm>
+        <StyledContainer>
+          {items.slice(0, actualItemsCount).map((item) => (
+            <ProductCard key={item._id} product={item} />
+          ))}
+        </StyledContainer>
+        <Button
+          disabled={actualItemsCount >= numbersOfItems ? true : false}
+          onClick={() => showMoreItems()}
+        >
+          Show more items {actualItemsCount} of {numbersOfItems}
+        </Button>
+      </StyledWrapper>
     </>
   );
 }

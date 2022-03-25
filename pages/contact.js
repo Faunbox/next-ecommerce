@@ -1,4 +1,3 @@
-import contactStyles from "../styles/Contact.module.scss";
 import { Form, Button, Container } from "react-bootstrap";
 import { useState } from "react";
 
@@ -31,7 +30,7 @@ const Contact = () => {
 
   return (
     <Container>
-      <main className={contactStyles.contact}>
+      <main>
         <article>
           <div>You need professional advice?</div>
           <div>Contact Us!</div>

@@ -1,23 +1,14 @@
-import styled from "styled-components";
 import Image from "next/image";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+
+import {StyledSection, StyledDiv, StyledButton} from '../styles/styled_home'
+
 import deliveryIcon from "../public/icons/delivery (1).png";
 import refundIcon from "../public/icons/refund.png";
 import clockIcon from "../public/icons/wall-clock.png";
-import dynamic from "next/dynamic";
 
-const StyledSection = styled.section`
-  display: flex;
-  max-height: 10vh;
-  flex-wrap: wrap;
-  height: auto;
-  margin: 30px 10px;
-  align-items: center;
-  justify-content: space-around;
-`;
 
-const StyledDiv = styled.div`
-  flex-basis: 33%;
-`;
 
 const BasicsInfo = () => {
   return (
@@ -34,6 +25,9 @@ const BasicsInfo = () => {
         <p>Free refund up to 150 days</p>
         <Image src={refundIcon} alt="ikona" />
       </StyledDiv>
+      <Link href={"/store"} passHref>
+        <StyledButton>Check our store!</StyledButton>
+      </Link>
     </StyledSection>
   );
 };
