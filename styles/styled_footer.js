@@ -33,7 +33,7 @@ export const StyledLink = styled(Link)`
   margin: 0 5px;
 `;
 export const StyledText = styled.p`
-  margin: 0;
+  margin: 0 10px;
 `;
 export const StyledSocialsWrapper = styled.div`
   display: flex;

@@ -3,11 +3,14 @@ import { useState, useRef } from "react";
 import { useAuth } from "../../context/auth.context";
 import { getAllUsers } from "../api/users/index";
 import { getSingleUser } from "../api/users/[email]";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, Spinner } from "react-bootstrap";
 import HistoryItemList from "../../components/HistoryItem";
 import Image from "next/image";
-import { StyledWrapper } from "../../styles/styled_home";
-import { StyledUserUl } from "../../styles/styled_user-page";
+import { StyledButton, StyledWrapper } from "../../styles/styled_home";
+import {
+  StyledAvatarWrapper,
+  StyledUserUl,
+} from "../../styles/styled_user-page";
 
 const User = ({ user }) => {
   const { userSession } = useAuth();
@@ -84,22 +87,24 @@ const User = ({ user }) => {
       <StyledWrapper>
         {
           <StyledUserUl>
-            <li>{user.email}</li>
+            <li>User email: {user.email}</li>
             <li>
               {!user.name ? (
-                <button onClick={() => setShowInput((prevState) => !prevState)}>
+                <Button onClick={() => setShowInput((prevState) => !prevState)}>
                   Set username
-                </button>
+                </Button>
               ) : (
                 <>
-                  <p>{isNameChanged ? changedUserName : user.name}</p>
-                  <button
+                  <p>
+                    {isNameChanged ? changedUserName : `Username: ${user.name}`}
+                  </p>
+                  <Button
                     onClick={() => {
                       setShowInput((prevState) => !prevState);
                     }}
                   >
                     Change username
-                  </button>
+                  </Button>
                 </>
               )}
             </li>
@@ -110,7 +115,7 @@ const User = ({ user }) => {
                   type="text"
                   onChange={() => changeUserName()}
                 />
-                <button
+                <Button
                   type="submit"
                   onClick={() => {
                     sendUserNameToDatabase();
@@ -118,32 +123,34 @@ const User = ({ user }) => {
                   }}
                 >
                   Change username
-                </button>
+                </Button>
               </>
             ) : null}
-            <label>
-              {!user?.image ? "Add avatar image" : "Change avatar Image"}
-              <input
-                type="file"
-                accept=".jpg,.png"
-                onChange={(e) => {
-                  setImage(e.target.files);
-                }}
-              ></input>
-            </label>
-            <Button onClick={() => sendImageToCloudinary()}>
-              {!user?.image ? "Set avatar" : "Change avatar"}
-            </Button>
-            {user?.image ? (
-              <Image
-                src={user?.image}
-                alt={`Image avatar`}
-                width={100}
-                height={100}
-              />
-            ) : (
-              <li>You dont have any avatar image!</li>
-            )}
+            <StyledAvatarWrapper>
+              {user?.image ? (
+                <Image
+                  src={user?.image}
+                  alt={`Image avatar`}
+                  width={100}
+                  height={100}
+                />
+              ) : (
+                <li>You dont have any avatar image!</li>
+              )}
+              <label>
+                {!user?.image ? "Add avatar image" : "Change avatar Image"}
+                <input
+                  type="file"
+                  accept=".jpg,.png"
+                  onChange={(e) => {
+                    setImage(e.target.files);
+                  }}
+                ></input>
+              </label>
+              <StyledButton onClick={() => sendImageToCloudinary()}>
+                {!user?.image ? "Set avatar" : "Change avatar"}
+              </StyledButton>
+            </StyledAvatarWrapper>
           </StyledUserUl>
         }
       </StyledWrapper>
@@ -160,7 +167,10 @@ const User = ({ user }) => {
           (history ? (
             <HistoryItemList items={paymentHistory} />
           ) : (
-            <p>At this moment there wasnt any orders! Lets change that!</p>
+            <>
+              <Spinner animation="border" variant="primary" />
+              {/* <p>At this moment there wasnt any orders! Lets change that!</p> */}
+            </>
           ))}
       </StyledWrapper>
     </>

@@ -6,7 +6,6 @@ const ProductCard = ({ product }) => {
   return (
     <>
       <StyledCard
-        key={product._id}
         style={{ width: "clamp(120px, 20rem, 220px", margin: "10px" }}
       >
         <Card.Img variant="top" src={product?.image?.url} />

@@ -1,9 +1,8 @@
-import { Container } from "react-bootstrap";
+import { StyledHistoryWrapper } from "../styles/styled_user-page";
 
 const HistoryItemList = (items) => {
   return (
-    <Container>
-
+    <StyledHistoryWrapper>
       {items.items.map((item) => {
         const { items } = item;
         return (
@@ -22,7 +21,7 @@ const HistoryItemList = (items) => {
           </div>
         );
       })}
-    </Container>
+    </StyledHistoryWrapper>
   );
 };
 

@@ -1,6 +1,7 @@
 import { Form, Button } from "react-bootstrap";
 import { useState } from "react";
 import { StyledTextWrapper, StyledWrapper } from "../styles/styled_home";
+import { StyledContactArticle } from "../styles/styled_contact";
 
 const Contact = () => {
   const apiEndpoint = "./api/mail/";
@@ -32,10 +33,10 @@ const Contact = () => {
   return (
     <StyledWrapper>
       <main>
-        <article>
-          <p>You need professional advice?</p>
+        <StyledContactArticle>
+          <p>Do You have any questions or problems?</p>
           <p>Contact Us!</p>
-        </article>
+        </StyledContactArticle>
         <aside>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="email">

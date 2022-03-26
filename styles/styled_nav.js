@@ -37,3 +37,7 @@ export const StyledInput = styled.input`
 export const StyledSearchButton = styled(Button)`
   margin-left: 10px;
 `;
+
+export const StyledUserButtons = styled(Button)`
+  margin: 0 10px;
+`;

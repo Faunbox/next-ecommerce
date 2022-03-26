@@ -21,6 +21,7 @@ import {
   StyledPhoneNavIcon,
   StyledInputWrapper,
   StyledSearchButton,
+  StyledUserButtons,
 } from "../styles/styled_nav";
 
 const PhoneMenu = () => {
@@ -141,15 +142,19 @@ const PhoneMenu = () => {
       {showUser ? (
         <>
           {!userSession ? (
-            <button onClick={() => signIn()}>Log in</button>
+            <StyledUserButtons onClick={() => signIn()}>
+              Log in
+            </StyledUserButtons>
           ) : (
-            <button onClick={() => signOut()}>Log out</button>
+            <StyledUserButtons onClick={() => signOut()}>
+              Log out
+            </StyledUserButtons>
           )}
           {userSession ? (
             <Link href={`/user/${userSession.email}`} passHref>
-              <button onClick={() => setShowUser(!showMenu)}>
+              <StyledUserButtons onClick={() => setShowUser(!showUser)}>
                 {userSession.name ? userSession.name : userSession.email}
-              </button>
+              </StyledUserButtons>
             </Link>
           ) : null}
         </>

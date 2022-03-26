@@ -6,6 +6,7 @@ import { useAuth } from "../../context/auth.context";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
+import { StyledWrapper } from "../../styles/styled_home";
 
 const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
@@ -70,13 +71,13 @@ const ProductScreen = ({ product }) => {
   }
 
   return (
-    <div>
+    <StyledWrapper>
       <Button variant="secondary" onClick={() => router.back()}>
         Back
       </Button>
       <h1>{product.name}</h1>
       <p>{product.description}</p>
-      <p>{product.countInStock}</p>
+      <p>In stock: {product.countInStock}</p>
       <Image
         src={product?.image.url}
         alt={product.name}
@@ -98,15 +99,16 @@ const ProductScreen = ({ product }) => {
                 product.stripe.productID
               )
             }
+            style={{ margin: "10px 0" }}
           >
             Delete product
           </Button>
-          <Button as={Link} href={`/produkty/edycja/${product.slug}`}>
-            Edit
-          </Button>
+          <Link href={`/produkty/edycja/${product.slug}`} passHref>
+            <Button>Edit</Button>
+          </Link>
         </>
       )}
-    </div>
+    </StyledWrapper>
   );
 };
 

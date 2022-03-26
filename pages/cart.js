@@ -1,8 +1,11 @@
 import dynamic from "next/dynamic";
 import { useCard, ACTION } from "../context/card.context";
-import { Button, Container } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../context/auth.context";
+import { StyledWrapper } from "../styles/styled_home";
+import { StyledCardItemWrapper } from "../styles/styled_card";
+import { useEffect, useMemo, useState } from "react";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET);
 
 const Card = () => {
@@ -10,11 +13,16 @@ const Card = () => {
   const { cart } = state;
   const { cartItems } = cart;
   const { userSession } = useAuth();
+  const [fetchingFlag, setfetchingFlag] = useState(false);
+  const [fullPrice, setFullPrice] = useState(0);
 
   const changeQuantity = async (item, quantity) => {
+    //check db for item quantity
+    setfetchingFlag(true);
     const data = await fetch(`/api/products/${item.slug}`);
-    const changingProduct = await data.json();
-    if (changingProduct.countInStock < quantity) {
+    const quantityInfo = await data.json();
+    setfetchingFlag(false);
+    if (quantityInfo.countInStock < quantity) {
       alert("Brak na stanie!");
       return;
     }
@@ -39,42 +47,52 @@ const Card = () => {
     await stripe.redirectToCheckout({ sessionId: id });
   };
 
+  //preventing other components from rerenders after changing quantity
+  const cartItemsMemo = useMemo(
+    () =>
+      cartItems.map((item) => (
+        <StyledCardItemWrapper key={item._id}>
+          <p>Item: {item.name}</p>
+          <p>Description: {item.description}</p>
+          <p>Price: {item.price * item.quantity}PLN</p>
+          <p>Quantity: {item.quantity}</p>
+          <Button onClick={() => changeQuantity(item, item.quantity + 1)}>
+            +
+          </Button>
+          <input
+            type={"text"}
+            value={fetchingFlag ? "..." : item.quantity}
+            onChange={(e) => changeQuantity(item, e.target.value)}
+          />
+          <Button onClick={() => changeQuantity(item, item.quantity - 1)}>
+            -
+          </Button>
+
+          <Button onClick={() => deleteItem(item)}>Delete</Button>
+        </StyledCardItemWrapper>
+      )),
+    [cartItems]
+  );
+
   return (
-    <Container>
-      {cartItems.length !== 0 && (
-        <Button
-          onClick={() =>
-            goToCheckout(cartItems, userSession.email, userSession.stripeID)
-          }
-        >
-          Checkout
-        </Button>
-      )}
+    <StyledWrapper>
       {cartItems.length !== 0 ? (
-        cartItems.map((item) => (
-          <>
-            <Container key={item._id}>
-              <p>{item.name}</p>
-              <p>{item.decription}</p>
-              <p>{item.price}</p>
-              <p>{item.quantity}</p>
-              <select
-                name="quantity"
-                onChange={(e) => changeQuantity(item, e.target.value)}
-                defaultValue={item.quantity}
-              >
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-              </select>
-              <button onClick={() => deleteItem(item)}>usuń</button>
-            </Container>
-          </>
-        ))
+        <>
+          <Button
+            onClick={() =>
+              goToCheckout(cartItems, userSession.email, userSession.stripeID)
+            }
+          >
+            Checkout
+          </Button>
+        </>
+      ) : null}
+      {cartItems.length !== 0 ? (
+        cartItemsMemo
       ) : (
         <p>Cart is empty! Lets check our store!</p>
       )}
-    </Container>
+    </StyledWrapper>
   );
 };
 

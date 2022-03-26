@@ -11,13 +11,19 @@ const FooterSocials = () => {
       <h4>Socials</h4>
       <StyledSocialsWrapper>
         <Link href={"/"} passHref>
-          <Image src={facebookIcon} alt="facebook"></Image>
+          <a>
+            <Image src={facebookIcon} alt="facebook"></Image>
+          </a>
         </Link>
         <Link href={"/"} passHref>
-          <Image src={tiktokIcon} alt="facebook"></Image>
+          <a>
+            <Image src={tiktokIcon} alt="facebook"></Image>
+          </a>
         </Link>
         <Link href={"/"} passHref>
-          <Image src={instagramIcon} alt="facebook"></Image>
+          <a>
+            <Image src={instagramIcon} alt="facebook"></Image>
+          </a>
         </Link>
       </StyledSocialsWrapper>
     </>
