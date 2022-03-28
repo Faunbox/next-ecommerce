@@ -1,12 +1,12 @@
 import { signIn, useSession } from "next-auth/react";
 import { getOneProduct } from "../api/products/[slug]";
-import { Button } from "react-bootstrap";
 import { useCard, ACTION } from "../../context/card.context";
 import { useAuth } from "../../context/auth.context";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { StyledWrapper } from "../../styles/styled_home";
+import { Button, Container } from "@nextui-org/react";
 
 const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
@@ -71,8 +71,12 @@ const ProductScreen = ({ product }) => {
   }
 
   return (
-    <StyledWrapper>
-      <Button variant="secondary" onClick={() => router.back()}>
+    <Container css={{ textAlign: "center" }} justify="center">
+      <Button
+        auto
+        css={{ backgroundColor: "Gray", mx: "auto" }}
+        onClick={() => router.back()}
+      >
         Back
       </Button>
       <h1>{product.name}</h1>
@@ -81,17 +85,21 @@ const ProductScreen = ({ product }) => {
       <Image
         src={product?.image.url}
         alt={product.name}
-        width={300}
-        height={300}
+        width={200}
+        height={200}
       />
       <br />
-      <Button variant="success" onClick={() => addToCart(product)}>
+      <Button
+        color="success"
+        css={{ mx: "auto" }}
+        onClick={() => addToCart(product)}
+      >
         Add to cart
       </Button>
       {userSession?.role === "admin" && (
         <>
           <Button
-            variant="danger"
+            color="error"
             onClick={() =>
               deleteProduct(
                 product._id,
@@ -99,16 +107,16 @@ const ProductScreen = ({ product }) => {
                 product.stripe.productID
               )
             }
-            style={{ margin: "10px 0" }}
+            css={{ mx: "auto", my: 10 }}
           >
             Delete product
           </Button>
           <Link href={`/produkty/edycja/${product.slug}`} passHref>
-            <Button>Edit</Button>
+            <Button css={{ mx: "auto" }}>Edit</Button>
           </Link>
         </>
       )}
-    </StyledWrapper>
+    </Container>
   );
 };
 

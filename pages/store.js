@@ -3,15 +3,16 @@ import Head from "next/head";
 import Link from "next/link";
 import Script from "next/script";
 import { useRouter } from "next/router";
+
 import { useEffect, useState } from "react";
-import { Button, Dropdown } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
+import { dehydrate, useQuery } from "react-query";
+import { Button, Container, Grid, Input, Row, Text } from "@nextui-org/react";
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
-import { dehydrate, useQuery } from "react-query";
 import { StyledWrapper } from "../styles/styled_home";
 import {
-  StyledContainer,
   StyledAddItemButton,
   StyledStoreForm,
   StyledDropdownButton,
@@ -120,7 +121,7 @@ export default function Home() {
       </Head>
       <Script src="https://js.stripe.com/v3"></Script>
       <StyledWrapper>
-        <h1>Products</h1>
+        <Text h2>Products</Text>
         {userSession?.role === "admin" ? (
           <Link href={"/produkty/dodaj"} passHref>
             <StyledAddItemButton>Add new product</StyledAddItemButton>
@@ -132,18 +133,18 @@ export default function Home() {
             getSearchedItem();
           }}
         >
-          <input
+          <Input
             type="text"
             placeholder="Search by name"
             onChange={(e) => setInputValue(e.target.value)}
-          ></input>
-          <Button
+          ></Input>
+          <Text
             as={Link}
             href={{ query: { search: inputValue } }}
             type="submit"
           >
             Search
-          </Button>
+          </Text>
         </StyledStoreForm>
         <StyledDropdownButton id="dropdown-basic-button" title="Categories">
           <Dropdown.Item href="/store">Show all</Dropdown.Item>
@@ -153,11 +154,13 @@ export default function Home() {
             </Link>
           ))}
         </StyledDropdownButton>
-        <StyledContainer>
-          {items.slice(0, actualItemsCount).map((item) => (
-            <ProductCard key={item._id} product={item} />
-          ))}
-        </StyledContainer>
+        <Container>
+          <Grid.Container gap={2} justify="center">
+            {items.slice(0, actualItemsCount).map((item) => (
+              <ProductCard key={item._id} product={item} />
+            ))}
+          </Grid.Container>
+        </Container>
         <Button
           disabled={actualItemsCount >= numbersOfItems ? true : false}
           onClick={() => showMoreItems()}

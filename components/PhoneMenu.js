@@ -3,7 +3,6 @@ import styled from "styled-components";
 import gsap from "gsap";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "react-bootstrap";
 
 import { useAuth } from "../context/auth.context";
 
@@ -22,7 +21,9 @@ import {
   StyledInputWrapper,
   StyledSearchButton,
   StyledUserButtons,
+  StyledUserWrapper,
 } from "../styles/styled_nav";
+import { Container, Input, Row, Text } from "@nextui-org/react";
 
 const PhoneMenu = () => {
   const { userSession } = useAuth();
@@ -34,22 +35,6 @@ const PhoneMenu = () => {
 
   const inputWrapperRef = useRef(null);
   const sectionRef = useRef(null);
-
-  useEffect(() => {
-    gsap.fromTo(
-      inputWrapperRef.current,
-      { autoAlpha: 0, x: 5 },
-      { autoAlpha: 1, x: 0, duration: 1 }
-    );
-  }, [showSearchInput]);
-
-  useEffect(() => {
-    gsap.fromTo(
-      sectionRef.current,
-      { autoAlpha: 0, x: 5 },
-      { autoAlpha: 1, x: 0, duration: 1 }
-    );
-  }, [showMenu]);
 
   return (
     <StyledPhoneWrapper>
@@ -101,25 +86,36 @@ const PhoneMenu = () => {
           <StyledPhoneMenuOptionsList>
             <Link href="/" passHref>
               <li>
-                <a onClick={() => setShowMenu(!showMenu)}>Home</a>
+                <Text b onClick={() => setShowMenu(!showMenu)}>
+                  Home
+                </Text>
               </li>
             </Link>
             <Link href="/store" passHref>
               <li>
-                <a onClick={() => setShowMenu(!showMenu)}>Store</a>
+                <Text b onClick={() => setShowMenu(!showMenu)}>
+                  Store
+                </Text>
               </li>
             </Link>
             <Link href="/contact" passHref>
               <li>
-                <a onClick={() => setShowMenu(!showMenu)}>Contact</a>
+                <Text b onClick={() => setShowMenu(!showMenu)}>
+                  Contact
+                </Text>
               </li>
             </Link>
           </StyledPhoneMenuOptionsList>
         </StyledPhoneMenu>
       ) : null}
       {showSearchInput ? (
-        <StyledInputWrapper ref={inputWrapperRef}>
-          <StyledInput
+        <Row
+          align="center"
+          justify="center"
+          css={{ my: 10 }}
+          ref={inputWrapperRef}
+        >
+          <Input
             type="text"
             placeholder="Search by product name"
             onChange={(e) => setInputValue(e.target.value)}
@@ -131,33 +127,31 @@ const PhoneMenu = () => {
             }}
             passHref
           >
-            <StyledSearchButton
-              onClick={() => setShowSearchInput(!showSearchInput)}
-            >
+            <Text h6 onClick={() => setShowSearchInput(!showSearchInput)}>
               Search
-            </StyledSearchButton>
+            </Text>
           </Link>
-        </StyledInputWrapper>
+        </Row>
       ) : null}
       {showUser ? (
-        <>
-          {!userSession ? (
-            <StyledUserButtons onClick={() => signIn()}>
-              Log in
-            </StyledUserButtons>
-          ) : (
-            <StyledUserButtons onClick={() => signOut()}>
-              Log out
-            </StyledUserButtons>
-          )}
-          {userSession ? (
-            <Link href={`/user/${userSession.email}`} passHref>
-              <StyledUserButtons onClick={() => setShowUser(!showUser)}>
-                {userSession.name ? userSession.name : userSession.email}
-              </StyledUserButtons>
-            </Link>
-          ) : null}
-        </>
+        <StyledPhoneMenu>
+          <StyledUserWrapper>
+            {!userSession ? (
+              <Text auto onClick={() => signIn()}>
+                Log in
+              </Text>
+            ) : (
+              <Text onClick={() => signOut()}>Log out</Text>
+            )}
+            {userSession ? (
+              <Link href={`/user/${userSession.email}`} passHref>
+                <Text onClick={() => setShowUser(!showUser)}>
+                  {userSession.name ? userSession.name : userSession.email}
+                </Text>
+              </Link>
+            ) : null}
+          </StyledUserWrapper>
+        </StyledPhoneMenu>
       ) : null}
     </StyledPhoneWrapper>
   );

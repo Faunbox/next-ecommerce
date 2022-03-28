@@ -1,7 +1,12 @@
 import styled from "styled-components";
+import { TextWrapper } from "./mixins";
 
 export const StyledCardItemWrapper = styled.div`
-  margin: 10px 0;
-  width: 100%;
-  text-align: center;
+  ${TextWrapper}
+`;
+
+export const StyledQuantityInput = styled.input`
+  width: 10%;
+  height: 24px;
+  margin: 0 10px;
 `;

@@ -26,7 +26,7 @@ export const StyledDiv = styled.div`
   flex-direction: column-reverse;
   align-content: center;
   align-items: center;
-  margin: 10px 0;
+  margin: 10px;
 `;
 
 export const StyledLink = styled(Link)`

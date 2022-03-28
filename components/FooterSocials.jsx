@@ -4,11 +4,12 @@ import tiktokIcon from "../public/icons/tik-tok.png";
 import instagramIcon from "../public/icons/instagram.png";
 import Image from "next/image";
 import Link from "next/link";
+import { Text } from "@nextui-org/react";
 
 const FooterSocials = () => {
   return (
     <>
-      <h4>Socials</h4>
+      <Text h4>Socials</Text>
       <StyledSocialsWrapper>
         <Link href={"/"} passHref>
           <a>

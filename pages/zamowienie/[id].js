@@ -1,6 +1,8 @@
+import { Container, Text } from "@nextui-org/react";
 import { useEffect } from "react";
 import { useCard, ACTION } from "../../context/card.context";
 import clientPromise from "../../db/mongodb";
+import { StyledTextWrapper, StyledWrapper } from "../../styles/styled_home";
 
 const FinishingOrder = ({ sessionDetails, items }) => {
   const { dispatch } = useCard();
@@ -24,33 +26,33 @@ const FinishingOrder = ({ sessionDetails, items }) => {
 
   return (
     <>
-      <div>
-        <h1>Thanks, {name}!</h1>
-        <h2>Your shipping information: </h2>
+      <Container css={{ textAlign: "center" }}>
+        <Text h4>Thanks, {name}!</Text>
+        <Text h5>Your shipping information: </Text>
         {address ? (
-          <div key={address.city}>
+          <Container key={address.city}>
             <p>City: {address.city}</p>
             <p>Street: {`${address.line1} ${address.line2}`}</p>
             <p>Postal code: {postalCode}</p>
-          </div>
+          </Container>
         ) : (
           "No data"
         )}
-      </div>
-      <div>
-        <h1>Your pucharsed items</h1>
+      </Container>
+      <Container>
+        <Text h5>Your pucharsed items:</Text>
         {items ? (
           items.map((item) => (
-            <div key={item.id}>
+            <Container key={item.id}>
               <p>Name {item.description}</p>
               <p>Quantity {item.quantity}</p>
               <p>Price {item.amount_total / 100}zł</p>
-            </div>
+            </Container>
           ))
         ) : (
-          <p>No data!</p>
+          <Text>No data!</Text>
         )}
-      </div>
+      </Container>
     </>
   );
 };

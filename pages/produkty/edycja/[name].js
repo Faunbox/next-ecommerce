@@ -4,6 +4,8 @@ import { Button, Container, Form, Row } from "react-bootstrap";
 import db from "../../../db/db";
 import Image from "next/image";
 import Product from "../../../models/Product";
+import { StyledWrapper } from "../../../styles/styled_home";
+import { StyledInputForm } from "../../../styles/styled_add-edit-item";
 
 //getting signature for authorized image upload
 export const getCloudinarySignature = async () => {
@@ -119,11 +121,11 @@ const AddProduct = ({ product }) => {
   };
 
   return (
-    <Container>
-      <Form as={Row}>
+    <StyledWrapper>
+      <Form>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Product name</Form.Label>
-          <Form.Control
+          <StyledInputForm
             type="text"
             placeholder="Szprej"
             onChange={(e) => setName(e.target.value)}
@@ -134,7 +136,7 @@ const AddProduct = ({ product }) => {
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Category</Form.Label>
-          <Form.Control
+          <StyledInputForm
             type="text"
             placeholder="Szpreje"
             onChange={(e) => setCategory(e.target.value)}
@@ -143,7 +145,7 @@ const AddProduct = ({ product }) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Producent</Form.Label>
-          <Form.Control
+          <StyledInputForm
             type="text"
             placeholder="Djupą"
             onChange={(e) => setProducent(e.target.value)}
@@ -152,7 +154,7 @@ const AddProduct = ({ product }) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Avaible quantity</Form.Label>
-          <Form.Control
+          <StyledInputForm
             type="text"
             placeholder="50000"
             onChange={(e) => setInStock(e.target.value)}
@@ -161,7 +163,7 @@ const AddProduct = ({ product }) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Description</Form.Label>
-          <Form.Control
+          <StyledInputForm
             type="text"
             placeholder="Szuper szprej, polecam"
             onChange={(e) => setDescription(e.target.value)}
@@ -170,7 +172,7 @@ const AddProduct = ({ product }) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Slug</Form.Label>
-          <Form.Control
+          <StyledInputForm
             type="text"
             placeholder="szuper-szprej"
             onChange={(e) => setSlug(e.target.value.toLowerCase())}
@@ -182,7 +184,7 @@ const AddProduct = ({ product }) => {
         <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
         <Form.Group controlId="formFile" className="mb-3">
           <Form.Label>Image</Form.Label>
-          <Form.Control
+          <StyledInputForm
             type="file"
             accept=".jpg,.png"
             onChange={(e) => {
@@ -192,11 +194,11 @@ const AddProduct = ({ product }) => {
         </Form.Group>
         {/* TODO: zrobic upload screen */}
         {dataFetching && <div>Editing...</div>}
-        <Button variant="primary" onClick={() => editProduct()}>
-          Edit product
-        </Button>
       </Form>
-    </Container>
+      <Button variant="primary" onClick={() => editProduct()}>
+        Edit product
+      </Button>
+    </StyledWrapper>
   );
 };
 

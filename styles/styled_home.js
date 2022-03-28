@@ -1,6 +1,6 @@
+import { Button } from "@nextui-org/react";
 import styled from "styled-components";
-import { Button } from "react-bootstrap";
-import { Wrapper } from "../styles/GlobalCss";
+import { Wrapper } from "./mixins";
 
 export const StyledMain = styled.main`
   ${Wrapper}
@@ -16,7 +16,7 @@ export const StyledSection = styled.section`
   flex-wrap: wrap;
   height: auto;
   margin: 20px 10px 0 10px;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-around;
   overflow: hidden;
 `;

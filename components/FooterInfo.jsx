@@ -3,16 +3,14 @@ import deliveryIcon from "../public/icons/delivery (1).png";
 import refundIcon from "../public/icons/refund.png";
 import mail from "../public/icons/mail.png";
 import dynamic from "next/dynamic";
-import { StyledDiv, StyledText, StyledLink, StyledSection } from "../styles/styled_footer";
-
+import { StyledDiv, StyledLink, StyledSection } from "../styles/styled_footer";
+import { Text } from "@nextui-org/react";
 
 const FooterInfo = () => {
   return (
     <StyledSection>
       <StyledDiv>
-        <StyledText>
-          Our Customer service is avaible everyday in 8:00 to 16:00
-        </StyledText>
+        <Text>Our Customer service is avaible everyday in 8:00 to 16:00</Text>
         <Image src={deliveryIcon} alt="ikona" />
       </StyledDiv>
       <StyledDiv>

@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema(
       priceID: { type: String, required: true },
       productID: { type: String, required: true },
     },
-    promotion: { type: Boolean, required: true, default: false },
+    promotion: { type: Boolean, required: false, default: false },
   },
   { timestamps: true }
 );

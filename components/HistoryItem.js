@@ -1,13 +1,13 @@
-import { StyledHistoryWrapper } from "../styles/styled_user-page";
+import { Container } from "@nextui-org/react";
 
 const HistoryItemList = (items) => {
   return (
-    <StyledHistoryWrapper>
+    <Container>
       {items.items.map((item) => {
         const { items } = item;
         return (
           <div key={item.date}>
-            {item.date}
+            {item.date.slice(0, 10)}
             {items.map((item) => {
               return (
                 <div key={item.id}>
@@ -21,7 +21,7 @@ const HistoryItemList = (items) => {
           </div>
         );
       })}
-    </StyledHistoryWrapper>
+    </Container>
   );
 };
 

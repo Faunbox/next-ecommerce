@@ -1,4 +1,5 @@
-import { Button, Card, DropdownButton } from "react-bootstrap";
+import { Button } from "@nextui-org/react";
+import { Card, DropdownButton } from "react-bootstrap";
 import styled from "styled-components";
 
 export const StyledContainer = styled.div`

@@ -1,7 +1,8 @@
-import { Form, Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { useState } from "react";
 import { StyledTextWrapper, StyledWrapper } from "../styles/styled_home";
 import { StyledContactArticle } from "../styles/styled_contact";
+import { Button, Checkbox, Container, Text } from "@nextui-org/react";
 
 const Contact = () => {
   const apiEndpoint = "./api/mail/";
@@ -31,59 +32,62 @@ const Contact = () => {
   };
 
   return (
-    <StyledWrapper>
-      <main>
-        <StyledContactArticle>
-          <p>Do You have any questions or problems?</p>
-          <p>Contact Us!</p>
-        </StyledContactArticle>
-        <aside>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="email">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                autoComplete="email"
-                name="email"
-                placeholder="Enter email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Form.Text className="text-muted">
-                Well never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
+    <Container>
+      <Container>
+        <Text>Do You have any questions or problems?</Text>
+        <Text b>Contact Us!</Text>
+        <Form className="my-3" onSubmit={handleSubmit}>
+          <Form.Group controlId="email">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control
+              type="email"
+              autoComplete="email"
+              name="email"
+              placeholder="Enter email"
+              required
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Form.Text className="text-muted">
+              Well never share your email with anyone else.
+            </Form.Text>
+          </Form.Group>
 
-            <Form.Group className="mb-3" controlId="name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Your name"
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="text">
-              <Form.Label>Email text</Form.Label>
-              <Form.Control
-                type="text"
-                name="text"
-                placeholder="Text"
-                onChange={(e) => setText(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="check">
-              <Form.Check
-                type="checkbox"
-                label="I want to send an contact email"
-                onClick={() => setSendEmail(!sendEmail)}
-              />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </aside>
-      </main>
-    </StyledWrapper>
+          <Form.Group className="mb-3" controlId="name">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Your name"
+              required
+              minLength={2}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="text">
+            <Form.Label>Email text</Form.Label>
+            <Form.Control
+              type="text"
+              as="textarea"
+              rows={4}
+              name="text"
+              placeholder="Your message"
+              required
+              minLength={10}
+              onChange={(e) => setText(e.target.value)}
+            />
+          </Form.Group>
+          <Button css={{ mt: 10, mx: "auto" }} variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+        <Checkbox
+          size="xs"
+          checked={false}
+          onClick={() => setSendEmail(!sendEmail)}
+        >
+          I want to send an contact email
+        </Checkbox>
+      </Container>
+    </Container>
   );
 };
 

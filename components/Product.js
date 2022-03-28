@@ -1,25 +1,74 @@
 import Link from "next/link";
-import { Button, Card } from "react-bootstrap";
-import { StyledCardTitle, StyledCard } from "../styles/styled_store";
+import { Button, Card, Col, Grid, Row, Text } from "@nextui-org/react";
 
 const ProductCard = ({ product }) => {
   return (
-    <>
-      <StyledCard
-        style={{ width: "clamp(120px, 20rem, 220px", margin: "10px" }}
-      >
-        <Card.Img variant="top" src={product?.image?.url} />
+    <Grid xs={12} sm={3}>
+      <Card cover css={{ my: 6, width: "100%" }}>
+        <Card.Header css={{ position: "absolute", zIndex: 1, top: 5 }}>
+          <Col>
+            {product?.promotion ? (
+              <Text
+                size={12}
+                weight="bold"
+                transform="uppercase"
+                color="#ffffffAA"
+              >
+                Discount!
+              </Text>
+            ) : null}
+            <Text h3 color="black">
+              {product.name}
+            </Text>
+          </Col>
+        </Card.Header>
         <Card.Body>
-          <StyledCardTitle>{product.name}</StyledCardTitle>
-          <Card.Text>{product.description}</Card.Text>
-          <Card.Text>{product.price}PLN</Card.Text>
-          <Card.Text>Avaible: {product.countInStock}</Card.Text>
-          <Link href={`/produkty/${product.slug}`} passHref>
-            <Button variant="primary">More Info</Button>
-          </Link>
+          <Card.Image
+            src={product?.image?.url}
+            height={400}
+            width="auto"
+            alt={product.name}
+          />
         </Card.Body>
-      </StyledCard>
-    </>
+        <Card.Footer
+          blur
+          css={{
+            position: "absolute",
+            bgBlur: "#ffffff",
+            borderTop: "$borderWeights$light solid rgba(255, 255, 255, 0.2)",
+            bottom: 0,
+            zIndex: 1,
+          }}
+        >
+          <Row>
+            <Col>
+              <Text color="primary" size={12}>
+                Avaible: {product.countInStock}
+              </Text>
+              <Text color="#000" size={12}>
+                {product.price}PLN
+              </Text>
+            </Col>
+            <Col>
+              <Row justify="flex-end">
+                <Link href={`/produkty/${product.slug}`} passHref>
+                  <Button flat auto rounded color="gradient">
+                    <Text
+                      css={{ color: "inherit" }}
+                      size={12}
+                      weight="bold"
+                      transform="uppercase"
+                    >
+                      More Info
+                    </Text>
+                  </Button>
+                </Link>
+              </Row>
+            </Col>
+          </Row>
+        </Card.Footer>
+      </Card>
+    </Grid>
   );
 };
 

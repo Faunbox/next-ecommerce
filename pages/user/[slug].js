@@ -3,14 +3,18 @@ import { useState, useRef } from "react";
 import { useAuth } from "../../context/auth.context";
 import { getAllUsers } from "../api/users/index";
 import { getSingleUser } from "../api/users/[email]";
-import { Button, Container, Spinner } from "react-bootstrap";
 import HistoryItemList from "../../components/HistoryItem";
 import Image from "next/image";
-import { StyledButton, StyledWrapper } from "../../styles/styled_home";
 import {
-  StyledAvatarWrapper,
-  StyledUserUl,
-} from "../../styles/styled_user-page";
+  Button,
+  Card,
+  Container,
+  Grid,
+  Input,
+  Loading,
+  Progress,
+  Text,
+} from "@nextui-org/react";
 
 const User = ({ user }) => {
   const { userSession } = useAuth();
@@ -72,7 +76,6 @@ const User = ({ user }) => {
 
   const getUserPaymentHistory = async () => {
     setHistory(false);
-
     const paymentHistory = await fetch("/api/users/[email]", {
       method: "POST",
       body: user.email,
@@ -80,100 +83,108 @@ const User = ({ user }) => {
     const res = await paymentHistory;
     res.length === 0 ? setPaymentHistory(false) : setPaymentHistory(res);
     setHistory(true);
+    setShowPucharseHistory(false);
   };
 
   return (
-    <>
-      <StyledWrapper>
-        {
-          <StyledUserUl>
-            <li>User email: {user.email}</li>
-            <li>
-              {!user.name ? (
-                <Button onClick={() => setShowInput((prevState) => !prevState)}>
-                  Set username
-                </Button>
-              ) : (
-                <>
-                  <p>
-                    {isNameChanged ? changedUserName : `Username: ${user.name}`}
-                  </p>
-                  <Button
-                    onClick={() => {
-                      setShowInput((prevState) => !prevState);
-                    }}
-                  >
-                    Change username
-                  </Button>
-                </>
-              )}
-            </li>
-            {showInput ? (
-              <>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  onChange={() => changeUserName()}
-                />
-                <Button
-                  type="submit"
-                  onClick={() => {
-                    sendUserNameToDatabase();
-                    setChangedUserName(userName);
-                  }}
-                >
-                  Change username
-                </Button>
-              </>
-            ) : null}
-            <StyledAvatarWrapper>
-              {user?.image ? (
-                <Image
-                  src={user?.image}
-                  alt={`Image avatar`}
-                  width={100}
-                  height={100}
-                />
-              ) : (
-                <li>You dont have any avatar image!</li>
-              )}
-              <label>
-                {!user?.image ? "Add avatar image" : "Change avatar Image"}
-                <input
-                  type="file"
-                  accept=".jpg,.png"
-                  onChange={(e) => {
-                    setImage(e.target.files);
-                  }}
-                ></input>
-              </label>
-              <StyledButton onClick={() => sendImageToCloudinary()}>
-                {!user?.image ? "Set avatar" : "Change avatar"}
-              </StyledButton>
-            </StyledAvatarWrapper>
-          </StyledUserUl>
-        }
-      </StyledWrapper>
-      <StyledWrapper>
+    <Container justify="center">
+      <Container justify="center">
+        <Text>User email: {user.email}</Text>
+        {!user.name ? (
+          <Button
+            auto
+            css={{ my: 10, mx: "auto" }}
+            onClick={() => setShowInput((prevState) => !prevState)}
+          >
+            Set username
+          </Button>
+        ) : (
+          <>
+            <Text>
+              {isNameChanged ? changedUserName : `Username: ${user.name}`}
+            </Text>
+            <Button
+              auto
+              onClick={() => {
+                setShowInput((prevState) => !prevState);
+              }}
+              css={{ my: 10, mx: "auto" }}
+            >
+              Change username
+            </Button>
+          </>
+        )}
+        {showInput ? (
+          <Card css={{ xy: 10, width: "fit-content" }}>
+            <Input
+              ref={inputRef}
+              type="text"
+              bordered
+              status="primary"
+              css={{ my: 10 }}
+              placeholder="New username"
+              onChange={() => changeUserName()}
+              style={{ width: "fit-content" }}
+            />
+            <Button
+              type="submit"
+              css={{ my: 10, mx: "auto" }}
+              onClick={() => {
+                sendUserNameToDatabase();
+                setChangedUserName(userName);
+              }}
+            >
+              Set username
+            </Button>
+          </Card>
+        ) : null}
+      </Container>
+      <Container justify="center" css={{ textAlign: "center", my: 10 }}>
+        {user?.image ? (
+          <Image
+            src={user?.image}
+            alt={`Image avatar`}
+            width={100}
+            height={100}
+          />
+        ) : (
+          <Text>You dont have any avatar image!</Text>
+        )}
+        <Input
+          type="file"
+          label={!user?.image ? "Add avatar image" : "Change avatar Image"}
+          accept=".jpg,.png"
+          onChange={(e) => {
+            setImage(e.target.files);
+          }}
+          css={{ height: "auto" }}
+        ></Input>
+        <Button
+          auto
+          css={{ my: 20, mx: "auto" }}
+          onClick={() => sendImageToCloudinary()}
+        >
+          {!user?.image ? "Set avatar" : "Change avatar"}
+        </Button>
+      </Container>
+      <Container justify="center">
         <Button
           onClick={() => {
             setShowPucharseHistory(!showPucharseHistory);
             !showPucharseHistory ? getUserPaymentHistory() : null;
           }}
+          css={{ mx: "auto" }}
         >
-          Show history of my latest orders
-        </Button>
-        {showPucharseHistory &&
-          (history ? (
-            <HistoryItemList items={paymentHistory} />
+          {showPucharseHistory ? (
+            <Loading color="white" size="sm" />
           ) : (
-            <>
-              <Spinner animation="border" variant="primary" />
-              {/* <p>At this moment there wasnt any orders! Lets change that!</p> */}
-            </>
-          ))}
-      </StyledWrapper>
-    </>
+            "Show history of my latest orders"
+          )}
+        </Button>
+        {!showPucharseHistory &&
+          (history ? <HistoryItemList items={paymentHistory} /> : null)}
+      </Container>
+    </Container>
   );
 };
 

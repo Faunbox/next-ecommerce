@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PhoneMenu from "./PhoneMenu";
 
 import styled from "styled-components";
+import { Text } from "@nextui-org/react";
 
 const StyledNav = styled.nav`
   display: flex;
@@ -35,7 +36,7 @@ const Navigation = () => {
   return (
     <>
       <StyledNav>
-        <StyledDiv>Cosmetic Shop</StyledDiv>
+        <Text h1>Cosmetic Shop</Text>
         <PhoneMenu />
       </StyledNav>
 

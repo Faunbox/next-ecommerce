@@ -1,11 +1,13 @@
 import dynamic from "next/dynamic";
 import { useCard, ACTION } from "../context/card.context";
-import { Button, Spinner } from "react-bootstrap";
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../context/auth.context";
 import { StyledWrapper } from "../styles/styled_home";
 import { StyledCardItemWrapper } from "../styles/styled_card";
+import cartIcon from "../public/icons/shopping-cart.png";
 import { useEffect, useMemo, useState } from "react";
+import { Button, Container, Input, Row } from "@nextui-org/react";
+import Image from "next/image";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET);
 
 const Card = () => {
@@ -54,25 +56,41 @@ const Card = () => {
         <StyledCardItemWrapper key={item._id}>
           <p>Item: {item.name}</p>
           <p>Description: {item.description}</p>
-          <p>Price: {item.price * item.quantity}PLN</p>
+          <p>Total price: {item.price * item.quantity}PLN</p>
+          <p>Item price: {item.price}PLN</p>
           <p>Quantity: {item.quantity}</p>
-          <Button onClick={() => changeQuantity(item, item.quantity + 1)}>
-            +
-          </Button>
-          <input
-            type={"text"}
-            value={fetchingFlag ? "..." : item.quantity}
-            onChange={(e) => changeQuantity(item, e.target.value)}
-          />
-          <Button onClick={() => changeQuantity(item, item.quantity - 1)}>
-            -
-          </Button>
+          <Row justify="center" css={{ my: 15 }}>
+            <Button
+              auto
+              onClick={() => changeQuantity(item, item.quantity + 1)}
+            >
+              +
+            </Button>
+            <Input
+              type="text"
+              value={fetchingFlag ? "..." : item.quantity}
+              css={{ mx: 10, width: 50 }}
+              onChange={(e) => changeQuantity(item, e.target.value)}
+            />
 
-          <Button onClick={() => deleteItem(item)}>Delete</Button>
+            <Button
+              auto
+              onClick={() => changeQuantity(item, item.quantity - 1)}
+            >
+              -
+            </Button>
+          </Row>
+          <StyledWrapper>
+            <Button onClick={() => deleteItem(item)}>Delete</Button>
+          </StyledWrapper>
         </StyledCardItemWrapper>
       )),
     [cartItems]
   );
+
+  const ButtonIcon = ({ icon }) => {
+    return <Image src={icon} alt={"icon"} />;
+  };
 
   return (
     <StyledWrapper>
@@ -82,6 +100,7 @@ const Card = () => {
             onClick={() =>
               goToCheckout(cartItems, userSession.email, userSession.stripeID)
             }
+            iconRight={<ButtonIcon icon={cartIcon} />}
           >
             Checkout
           </Button>
