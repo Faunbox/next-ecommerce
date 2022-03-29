@@ -1,6 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import gsap from "gsap";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -14,13 +12,9 @@ import userIcon from "../public/icons/user.png";
 import {
   StyledPhoneWrapper,
   StyledPhoneMenuIconsList,
-  StyledInput,
   StyledPhoneMenu,
   StyledPhoneMenuOptionsList,
   StyledPhoneNavIcon,
-  StyledInputWrapper,
-  StyledSearchButton,
-  StyledUserButtons,
   StyledUserWrapper,
 } from "../styles/styled_nav";
 import { Container, Input, Row, Text } from "@nextui-org/react";
@@ -52,7 +46,13 @@ const PhoneMenu = () => {
         </li>
         <li>
           <Link href="/cart" passHref>
-            <StyledPhoneNavIcon>
+            <StyledPhoneNavIcon
+              onClick={() => {
+                setShowSearchInput(false);
+                setShowMenu(false);
+                setShowUser(false);
+              }}
+            >
               <Image src={cartIcon} alt="cartIcon" />
             </StyledPhoneNavIcon>
           </Link>

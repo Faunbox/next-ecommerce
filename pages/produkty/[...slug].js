@@ -83,7 +83,7 @@ const ProductScreen = ({ product }) => {
       <p>{product.description}</p>
       <p>In stock: {product.countInStock}</p>
       <Image
-        src={product?.image.url}
+        src={product?.image?.url}
         alt={product.name}
         width={200}
         height={200}

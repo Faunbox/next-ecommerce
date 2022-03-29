@@ -180,7 +180,7 @@ const AddProduct = ({ product }) => {
           />
         </Form.Group>
 
-        <Image src={product.image.url} alt={name} width={200} height={200} />
+        <Image src={product?.image?.url} alt={name} width={200} height={200} />
         <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
         <Form.Group controlId="formFile" className="mb-3">
           <Form.Label>Image</Form.Label>

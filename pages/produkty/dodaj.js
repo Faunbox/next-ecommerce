@@ -1,3 +1,4 @@
+import { Spacer } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Button, Container, Form, Row } from "react-bootstrap";
@@ -158,6 +159,7 @@ const AddProduct = () => {
       <Button variant="primary" onClick={() => addProductToShop()}>
         Add to store
       </Button>
+      <Spacer y={1} />
     </StyledWrapper>
   );
 };

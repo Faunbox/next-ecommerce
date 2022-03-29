@@ -12,8 +12,8 @@ export const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <NextUIProvider>
-      <SSRProvider>
+    <SSRProvider>
+      <NextUIProvider>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
             <AuthProvider>
@@ -29,8 +29,8 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             </AuthProvider>
           </Hydrate>
         </QueryClientProvider>
-      </SSRProvider>
-    </NextUIProvider>
+      </NextUIProvider>
+    </SSRProvider>
   );
 }
 

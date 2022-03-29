@@ -1,10 +1,19 @@
 import Link from "next/link";
-import { Button, Card, Col, Grid, Row, Text } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Col,
+  Grid,
+  Row,
+  Text,
+  useTheme,
+} from "@nextui-org/react";
 
 const ProductCard = ({ product }) => {
+  const { theme } = useTheme();
   return (
-    <Grid xs={12} sm={3}>
-      <Card cover css={{ my: 6, width: "100%" }}>
+    <Grid>
+      <Card cover css={{ my: 6, maxWidth: 240 }}>
         <Card.Header css={{ position: "absolute", zIndex: 1, top: 5 }}>
           <Col>
             {product?.promotion ? (
@@ -25,7 +34,7 @@ const ProductCard = ({ product }) => {
         <Card.Body>
           <Card.Image
             src={product?.image?.url}
-            height={400}
+            height={300}
             width="auto"
             alt={product.name}
           />

@@ -7,7 +7,16 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { dehydrate, useQuery } from "react-query";
-import { Button, Container, Grid, Input, Row, Text } from "@nextui-org/react";
+import {
+  Button,
+  Container,
+  Grid,
+  Input,
+  Progress,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
+
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
@@ -66,6 +75,7 @@ export default function Home() {
     setNumbersOfItems(i.length);
   };
 
+  ////////// use memo
   const getCategoriedItems = () => {
     const i = data.filter((item) =>
       item.category.toLowerCase().includes(category.toLowerCase())
@@ -102,6 +112,7 @@ export default function Home() {
   useEffect(() => {
     setItems(data);
     setNumbersOfItems(data.length);
+    setActualItemsCount(numberOfNewItems);
     getAllCategorys();
   }, []);
 
@@ -110,7 +121,7 @@ export default function Home() {
   }, [search]);
 
   useEffect(() => {
-    return category ? getCategoriedItems() : null;
+    return category && getCategoriedItems();
   }, [category]);
 
   return (
@@ -147,7 +158,9 @@ export default function Home() {
           </Text>
         </StyledStoreForm>
         <StyledDropdownButton id="dropdown-basic-button" title="Categories">
-          <Dropdown.Item href="/store">Show all</Dropdown.Item>
+          <Link href={"/store"} passHref>
+            <Dropdown.Item>Show all</Dropdown.Item>
+          </Link>
           {categorys?.map((category) => (
             <Link href={`/store?category=${category}`} passHref key={category}>
               <Dropdown.Item>{category}</Dropdown.Item>
@@ -160,13 +173,23 @@ export default function Home() {
               <ProductCard key={item._id} product={item} />
             ))}
           </Grid.Container>
+          <Spacer y={1} />
+          <Progress
+            value={actualItemsCount}
+            min={numberOfNewItems}
+            max={numbersOfItems}
+            color="gradient"
+            status="primary"
+          />
         </Container>
+        <Spacer y={1} />
         <Button
           disabled={actualItemsCount >= numbersOfItems ? true : false}
           onClick={() => showMoreItems()}
         >
           Show more items {actualItemsCount} of {numbersOfItems}
         </Button>
+        <Spacer y={1} />
       </StyledWrapper>
     </>
   );

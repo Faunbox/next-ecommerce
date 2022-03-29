@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import PhoneMenu from "./PhoneMenu";
 
 import styled from "styled-components";
-import { Text } from "@nextui-org/react";
+import { Container, Grid, Input, Row, Spacer, Text } from "@nextui-org/react";
+import Link from "next/link";
 
 const StyledNav = styled.nav`
   display: flex;
@@ -40,52 +41,32 @@ const Navigation = () => {
         <PhoneMenu />
       </StyledNav>
 
-      {/* <Navbar bg="primary" expand="sm">
-        <Container>
-          <Navbar.Brand href="/">SuperStore</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse
-            id="basic-navbar-nav"
-            className="justify-content-end"
-          >
-            <Nav className="me-auto">
+      <Container>
+        <Grid.Container direction="row" alignItems="center" gap={2}>
+          <Grid justify="flex-start">
+            <Text h2>Cosmetic Shop</Text>
+          </Grid>
+          <Grid>
+            <Input placeholder="Search" fullWidth />
+          </Grid>
+          <Grid xs>
+            <Row justify="space-around">
               <Link href="/" passHref>
-                <Nav.Link>Home</Nav.Link>
+                <Text>Home</Text>
               </Link>
-              <Link href="/store/?page=1" passHref>
-                <Nav.Link>Store</Nav.Link>
+              <Link href="/" passHref>
+                <Text>Store</Text>
               </Link>
-              <Link href="/blog" passHref>
-              <Nav.Link>Blog</Nav.Link>
-            </Link>
-              <Link href="/contact" passHref>
-                <Nav.Link>Contact</Nav.Link>
+              <Link href="/" passHref>
+                <Text>Contact</Text>
               </Link>
-            </Nav>
-            <Nav>
-              {userSession && (
-                <Link href="/cart" passHref>
-                  <Button>Cart: {cartLenght}</Button>
-                </Link>
-              )}
-            </Nav>
-            <Nav>
-              {userSession ? (
-                <Link href={`/user/${userSession.email}`} passHref>
-                  <Button>
-                    {userSession.name ? userSession.name : userSession.email}
-                  </Button>
-                </Link>
-              ) : null}
-              {!userSession ? (
-                <Button onClick={() => signIn()}>Log in</Button>
-              ) : (
-                <Button onClick={() => signOut()}>Log out</Button>
-              )}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar> */}
+              <Link href="/" passHref>
+                <Text>User</Text>
+              </Link>
+            </Row>
+          </Grid>
+        </Grid.Container>
+      </Container>
     </>
   );
 };

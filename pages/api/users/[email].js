@@ -63,12 +63,13 @@ export default async function getUser(req, res) {
           try {
             const pucharsedItems = await getItemName(items);
             const { name, description } = pucharsedItems;
+            // console.log(StripeHistory);
             if (items.length === 1) {
               Object.assign(items[0], { name, description });
               return item;
             } else {
-              items.map((tak) => {
-                Object.assign(tak, { name, description });
+              items.map((tak, index) => {
+                Object.assign(tak[index], { name, description });
               });
               return item;
             }

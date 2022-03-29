@@ -88,7 +88,7 @@ const User = ({ user }) => {
 
   return (
     <Container justify="center">
-      <Container justify="center">
+      <Container>
         <Text>User email: {user.email}</Text>
         {!user.name ? (
           <Button
@@ -119,6 +119,9 @@ const User = ({ user }) => {
             <Input
               ref={inputRef}
               type="text"
+              id="username"
+              aria-label="username"
+              aria-labelledby="username"
               bordered
               status="primary"
               css={{ my: 10 }}
@@ -152,7 +155,9 @@ const User = ({ user }) => {
         )}
         <Input
           type="file"
-          label={!user?.image ? "Add avatar image" : "Change avatar Image"}
+          id="file"
+          aria-label="file"
+          aria-labelledby="file"
           accept=".jpg,.png"
           onChange={(e) => {
             setImage(e.target.files);

@@ -1,8 +1,7 @@
-import { Container, Text } from "@nextui-org/react";
+import { Col, Container, Grid, Spacer, Text } from "@nextui-org/react";
 import { useEffect } from "react";
 import { useCard, ACTION } from "../../context/card.context";
 import clientPromise from "../../db/mongodb";
-import { StyledTextWrapper, StyledWrapper } from "../../styles/styled_home";
 
 const FinishingOrder = ({ sessionDetails, items }) => {
   const { dispatch } = useCard();
@@ -25,35 +24,52 @@ const FinishingOrder = ({ sessionDetails, items }) => {
   }, []);
 
   return (
-    <>
-      <Container css={{ textAlign: "center" }}>
+    <Container>
+      <Col>
         <Text h4>Thanks, {name}!</Text>
         <Text h5>Your shipping information: </Text>
-        {address ? (
-          <Container key={address.city}>
-            <p>City: {address.city}</p>
-            <p>Street: {`${address.line1} ${address.line2}`}</p>
-            <p>Postal code: {postalCode}</p>
-          </Container>
-        ) : (
-          "No data"
-        )}
-      </Container>
-      <Container>
+        <Spacer y={1} />
+      </Col>
+      {address ? (
+        <Grid.Container gap={1} justify="center">
+          <Grid xs={12} sm={2} key={address.city}>
+            <Text>City: {address.city}</Text>
+          </Grid>
+          <Grid xs={12} sm={2} key={address.line1}>
+            <Text>Street: {`${address.line1} ${address.line2}`}</Text>
+          </Grid>
+          <Grid xs={12} sm={2} key={address.postalCode}>
+            <Text>Postal code: {postalCode}</Text>
+          </Grid>
+        </Grid.Container>
+      ) : (
+        "No data"
+      )}
+      <Col>
+        <Spacer y={1} />
         <Text h5>Your pucharsed items:</Text>
-        {items ? (
-          items.map((item) => (
-            <Container key={item.id}>
-              <p>Name {item.description}</p>
-              <p>Quantity {item.quantity}</p>
-              <p>Price {item.amount_total / 100}zł</p>
-            </Container>
-          ))
-        ) : (
-          <Text>No data!</Text>
-        )}
-      </Container>
-    </>
+        <Spacer y={1} />
+      </Col>
+      {items ? (
+        <Grid.Container justify="center" gap={1}>
+          {items.map((item) => (
+            <>
+              <Grid xs={4} sm={4}>
+                <Text>Name {item.description}</Text>
+              </Grid>
+              <Grid xs={4} sm={4}>
+                <Text>Quantity {item.quantity}</Text>
+              </Grid>
+              <Grid xs={4} sm={4}>
+                <Text>Price {item.amount_total / 100}zł</Text>
+              </Grid>
+            </>
+          ))}
+        </Grid.Container>
+      ) : (
+        <Text>No data!</Text>
+      )}
+    </Container>
   );
 };
 
