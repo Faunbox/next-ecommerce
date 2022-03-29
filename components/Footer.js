@@ -7,9 +7,7 @@ import FooterContact from "./FooterContact";
 const Footer = () => {
   return (
     <>
-      <Container
-        css={{ backgroundColor: "rgb(240, 240, 240)", height: "auto" }}
-      >
+      <Container>
         <Grid.Container justify="center">
           <Grid xs={12} sm={6} alignItems="center">
             <FooterInfo />

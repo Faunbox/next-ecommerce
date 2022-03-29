@@ -174,13 +174,6 @@ export default function Home() {
             ))}
           </Grid.Container>
           <Spacer y={1} />
-          <Progress
-            value={actualItemsCount}
-            min={numberOfNewItems}
-            max={numbersOfItems}
-            color="gradient"
-            status="primary"
-          />
         </Container>
         <Spacer y={1} />
         <Button

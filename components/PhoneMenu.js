@@ -9,15 +9,7 @@ import searchIcon from "../public/icons/search.png";
 import cartIcon from "../public/icons/shopping-cart.png";
 import userIcon from "../public/icons/user.png";
 
-import {
-  StyledPhoneWrapper,
-  StyledPhoneMenuIconsList,
-  StyledPhoneMenu,
-  StyledPhoneMenuOptionsList,
-  StyledPhoneNavIcon,
-  StyledUserWrapper,
-} from "../styles/styled_nav";
-import { Container, Input, Row, Text } from "@nextui-org/react";
+import { Container, Input, Row, Spacer, Text } from "@nextui-org/react";
 
 const PhoneMenu = () => {
   const { userSession } = useAuth();
@@ -31,129 +23,130 @@ const PhoneMenu = () => {
   const sectionRef = useRef(null);
 
   return (
-    <StyledPhoneWrapper>
-      <StyledPhoneMenuIconsList>
-        <li>
-          <StyledPhoneNavIcon
+    <Container justify="center" css={{ textAlign: "center" }}>
+      <Text h1>Cosmetic Shop</Text>
+      <Container display="flex">
+        <Text
+          onClick={() => {
+            setShowMenu(!showMenu);
+            setShowUser(false);
+            setShowSearchInput(false);
+          }}
+        >
+          <Image src={hamburgerIcon} alt="menuIcon" />
+        </Text>
+        <Link href="/cart" passHref>
+          <Text
             onClick={() => {
-              setShowMenu(!showMenu);
-              setShowUser(false);
               setShowSearchInput(false);
-            }}
-          >
-            <Image src={hamburgerIcon} alt="menuIcon" />
-          </StyledPhoneNavIcon>
-        </li>
-        <li>
-          <Link href="/cart" passHref>
-            <StyledPhoneNavIcon
-              onClick={() => {
-                setShowSearchInput(false);
-                setShowMenu(false);
-                setShowUser(false);
-              }}
-            >
-              <Image src={cartIcon} alt="cartIcon" />
-            </StyledPhoneNavIcon>
-          </Link>
-        </li>
-        <li>
-          <StyledPhoneNavIcon
-            onClick={() => {
-              setShowSearchInput(!showSearchInput);
               setShowMenu(false);
               setShowUser(false);
             }}
           >
-            <Image src={searchIcon} alt="cartIcon" />
-          </StyledPhoneNavIcon>
-        </li>
-        <li>
-          <StyledPhoneNavIcon
-            onClick={() => {
-              setShowUser(!showUser);
-              setShowMenu(false);
-              setShowSearchInput(false);
-            }}
-          >
-            <Image src={userIcon} alt="cartIcon" />
-          </StyledPhoneNavIcon>
-        </li>
-      </StyledPhoneMenuIconsList>
+            <Image src={cartIcon} alt="cartIcon" />
+          </Text>
+        </Link>
+        <Text
+          onClick={() => {
+            setShowSearchInput(!showSearchInput);
+            setShowMenu(false);
+            setShowUser(false);
+          }}
+        >
+          <Image src={searchIcon} alt="cartIcon" />
+        </Text>
+        <Text
+          onClick={() => {
+            setShowUser(!showUser);
+            setShowMenu(false);
+            setShowSearchInput(false);
+          }}
+        >
+          <Image src={userIcon} alt="cartIcon" />
+        </Text>
+      </Container>
 
       {showMenu ? (
-        <StyledPhoneMenu ref={sectionRef} active={showMenu ? "none" : "block"}>
-          <StyledPhoneMenuOptionsList>
+        <Container
+          justify="center"
+          ref={sectionRef}
+          active={showMenu ? "none" : "block"}
+        >
+          <Spacer y={1} />
+          <Container display="flex" justify="space-between">
             <Link href="/" passHref>
-              <li>
-                <Text b onClick={() => setShowMenu(!showMenu)}>
-                  Home
-                </Text>
-              </li>
+              <Text b onClick={() => setShowMenu(!showMenu)}>
+                Home
+              </Text>
             </Link>
             <Link href="/store" passHref>
-              <li>
-                <Text b onClick={() => setShowMenu(!showMenu)}>
-                  Store
-                </Text>
-              </li>
+              <Text b onClick={() => setShowMenu(!showMenu)}>
+                Store
+              </Text>
             </Link>
             <Link href="/contact" passHref>
-              <li>
-                <Text b onClick={() => setShowMenu(!showMenu)}>
-                  Contact
-                </Text>
-              </li>
+              <Text b onClick={() => setShowMenu(!showMenu)}>
+                Contact
+              </Text>
             </Link>
-          </StyledPhoneMenuOptionsList>
-        </StyledPhoneMenu>
+          </Container>
+          <Spacer y={1} />
+        </Container>
       ) : null}
       {showSearchInput ? (
-        <Row
-          align="center"
-          justify="center"
-          css={{ my: 10 }}
-          ref={inputWrapperRef}
-        >
-          <Input
-            type="text"
-            placeholder="Search by product name"
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <Link
-            href={{
-              pathname: "/store",
-              query: { search: inputValue },
-            }}
-            passHref
+        <>
+          <Row
+            align="center"
+            justify="center"
+            css={{ my: 10 }}
+            ref={inputWrapperRef}
           >
-            <Text h6 onClick={() => setShowSearchInput(!showSearchInput)}>
-              Search
-            </Text>
-          </Link>
-        </Row>
+            <Spacer y={1} />
+            <Input
+              type="text"
+              placeholder="Search by product name"
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+            <Link
+              href={{
+                pathname: "/store",
+                query: { search: inputValue },
+              }}
+              passHref
+            >
+              <Text b onClick={() => setShowSearchInput(!showSearchInput)}>
+                Search
+              </Text>
+            </Link>
+            <Spacer y={1} />
+          </Row>
+        </>
       ) : null}
       {showUser ? (
-        <StyledPhoneMenu>
-          <StyledUserWrapper>
+        <>
+          <Spacer y={1} />
+          <Container display="flex" justify="space-between">
             {!userSession ? (
-              <Text auto onClick={() => signIn()}>
+              <Text b auto onClick={() => signIn()}>
                 Log in
               </Text>
             ) : (
-              <Text onClick={() => signOut()}>Log out</Text>
+              <Text b auto onClick={() => signOut()}>
+                Log out
+              </Text>
             )}
             {userSession ? (
               <Link href={`/user/${userSession.email}`} passHref>
-                <Text onClick={() => setShowUser(!showUser)}>
+                <Text b onClick={() => setShowUser(!showUser)}>
                   {userSession.name ? userSession.name : userSession.email}
                 </Text>
               </Link>
             ) : null}
-          </StyledUserWrapper>
-        </StyledPhoneMenu>
+          </Container>
+          <Spacer y={1} />
+        </>
       ) : null}
-    </StyledPhoneWrapper>
+    </Container>
   );
 };
 

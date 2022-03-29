@@ -6,6 +6,7 @@ import PhoneMenu from "./PhoneMenu";
 import styled from "styled-components";
 import { Container, Grid, Input, Row, Spacer, Text } from "@nextui-org/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const StyledNav = styled.nav`
   display: flex;
@@ -19,14 +20,12 @@ const StyledNav = styled.nav`
   }
 `;
 
-const StyledDiv = styled.div`
-  font-size: 3rem;
-`;
-
 const Navigation = () => {
   const { state, dispatch } = useCard();
   const { userSession } = useAuth();
   const [cartLenght, setCarLenght] = useState("");
+
+  const router = useRouter();
 
   const { cart } = state;
 
@@ -36,32 +35,42 @@ const Navigation = () => {
 
   return (
     <>
-      <StyledNav>
-        <Text h1>Cosmetic Shop</Text>
+      <Container
+        justify="center"
+        alignItems="center"
+        direction="column"
+        css={{ "@xs": { display: "none" } }}
+      >
         <PhoneMenu />
-      </StyledNav>
+      </Container>
 
-      <Container>
-        <Grid.Container direction="row" alignItems="center" gap={2}>
+      <Container display="none" css={{ "@xs": { display: "block" } }}>
+        <Grid.Container direction="row" alignItems="center" gap={4}>
           <Grid justify="flex-start">
-            <Text h2>Cosmetic Shop</Text>
+            <Link href="/" passHref>
+              <Text h1>Cosmetic Shop</Text>
+            </Link>
           </Grid>
           <Grid>
-            <Input placeholder="Search" fullWidth />
+            <Input
+              placeholder="Search"
+              fullWidth
+              onChange={(e) => router.push(`/store?search=${e.target.value}`)}
+            />
           </Grid>
           <Grid xs>
             <Row justify="space-around">
               <Link href="/" passHref>
-                <Text>Home</Text>
+                <Text h4>Home</Text>
+              </Link>
+              <Link href="/store" passHref>
+                <Text h4>Store</Text>
+              </Link>
+              <Link href="/contact" passHref>
+                <Text h4>Contact</Text>
               </Link>
               <Link href="/" passHref>
-                <Text>Store</Text>
-              </Link>
-              <Link href="/" passHref>
-                <Text>Contact</Text>
-              </Link>
-              <Link href="/" passHref>
-                <Text>User</Text>
+                <Text h4>User</Text>
               </Link>
             </Row>
           </Grid>
