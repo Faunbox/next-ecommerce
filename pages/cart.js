@@ -6,7 +6,7 @@ import { StyledWrapper } from "../styles/styled_home";
 import { StyledCardItemWrapper } from "../styles/styled_card";
 import cartIcon from "../public/icons/shopping-cart.png";
 import { useEffect, useMemo, useState } from "react";
-import { Button, Container, Input, Row } from "@nextui-org/react";
+import { Button, Container, Input, Row, Spacer } from "@nextui-org/react";
 import Image from "next/image";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET);
 
@@ -58,7 +58,7 @@ const Card = () => {
           <p>Description: {item.description}</p>
           <p>Total price: {item.price * item.quantity}PLN</p>
           <p>Item price: {item.price}PLN</p>
-          <p>Quantity: {item.quantity}</p>
+          <p>Quantity: {item.quantity === "" ? 0 : item.quantity}</p>
           <Row justify="center" css={{ my: 15 }}>
             <Button
               auto
@@ -88,19 +88,16 @@ const Card = () => {
     [cartItems]
   );
 
-  const ButtonIcon = ({ icon }) => {
-    return <Image src={icon} alt={"icon"} />;
-  };
 
   return (
     <StyledWrapper>
       {cartItems.length !== 0 ? (
         <>
+          <Spacer y={1} />
           <Button
             onClick={() =>
               goToCheckout(cartItems, userSession.email, userSession.stripeID)
             }
-            iconRight={<ButtonIcon icon={cartIcon} />}
           >
             Checkout
           </Button>

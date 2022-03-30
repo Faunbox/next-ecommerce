@@ -1,4 +1,5 @@
-import { Col, Container, Grid, Spacer, Text } from "@nextui-org/react";
+import { Button, Col, Container, Grid, Spacer, Text } from "@nextui-org/react";
+import Link from "next/link";
 import { useEffect } from "react";
 import { useCard, ACTION } from "../../context/card.context";
 import clientPromise from "../../db/mongodb";
@@ -24,7 +25,8 @@ const FinishingOrder = ({ sessionDetails, items }) => {
   }, []);
 
   return (
-    <Container>
+    <Container justify="space-around">
+      <Spacer y={1} />
       <Col>
         <Text h4>Thanks, {name}!</Text>
         <Text h5>Your shipping information: </Text>
@@ -54,14 +56,14 @@ const FinishingOrder = ({ sessionDetails, items }) => {
         <Grid.Container justify="center" gap={1}>
           {items.map((item) => (
             <>
-              <Grid xs={4} sm={4}>
-                <Text>Name {item.description}</Text>
+              <Grid>
+                <Text>Name: {item.description}</Text>
               </Grid>
-              <Grid xs={4} sm={4}>
-                <Text>Quantity {item.quantity}</Text>
+              <Grid>
+                <Text>Quantity: {item.quantity}</Text>
               </Grid>
-              <Grid xs={4} sm={4}>
-                <Text>Price {item.amount_total / 100}zł</Text>
+              <Grid>
+                <Text>Price: {item.amount_total / 100}zł</Text>
               </Grid>
             </>
           ))}
@@ -69,6 +71,10 @@ const FinishingOrder = ({ sessionDetails, items }) => {
       ) : (
         <Text>No data!</Text>
       )}
+      <Spacer y={1} />
+      <Link href={"/"} passHref>
+        <Button css={{ mx: "auto" }}>Go to home page</Button>
+      </Link>
     </Container>
   );
 };

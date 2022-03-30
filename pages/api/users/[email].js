@@ -16,6 +16,17 @@ export const getSingleUser = async (email) => {
   }
 };
 
+const getItemNameFromStripe = async (items) => {
+  for (const item of items) {
+    const res = await Product.findOne({ "stripe.productID": item.id });
+
+    ////////////Dopisac obrazek
+
+    const { name, description } = res;
+    return { name, description };
+  }
+};
+
 export default async function getUser(req, res) {
   const { email } = req.query;
 
@@ -47,40 +58,33 @@ export default async function getUser(req, res) {
       if (!StripeHistory) return res.status(200).json([]);
 
       await db.connect();
-      const getItemName = async (items) => {
-        for (const item of items) {
-          const res = await Product.findOne({ "stripe.productID": item.id });
 
-          ////////////Dopisac obrazek
-
-          const { name, description } = res;
-          return { name, description };
-        }
-      };
       const asyncArr = await Promise.all(
         StripeHistory.map(async (item) => {
           const { items } = item;
           try {
-            const pucharsedItems = await getItemName(items);
+            const pucharsedItems = await getItemNameFromStripe(items);
             const { name, description } = pucharsedItems;
-            // console.log(StripeHistory);
             if (items.length === 1) {
               Object.assign(items[0], { name, description });
               return item;
             } else {
-              items.map((tak, index) => {
-                Object.assign(tak[index], { name, description });
+              items.map((item, index) => {
+                Object.assign(items[index], { name, description });
+                return item;
               });
-              return item;
             }
           } catch (err) {
             res
               .status(400)
-              .send("Błąd podczas pobierania nazw przedmiotów z db");
+              .send("Błąd podczas pobierania nazw przedmiotów z db", err);
           }
         })
       );
+
       pucharsedItemsList = asyncArr;
+
+      console.log({ asyncArr });
       await db.disconnect();
     } catch (err) {
       res.status(400).json({

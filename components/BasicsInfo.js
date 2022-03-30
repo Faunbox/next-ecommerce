@@ -14,7 +14,10 @@ const BasicsInfo = () => {
     <StyledSection>
       <StyledDiv>
         <Text>Always free delivery</Text>
-        <Image src={deliveryIcon} alt="ikona" />
+        <Image
+          src={deliveryIcon}
+          alt="ikona"
+        />
       </StyledDiv>
       <StyledDiv>
         <Text>Send up to 24h</Text>

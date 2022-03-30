@@ -6,23 +6,27 @@ import { useEffect, useState } from "react";
 import { Container, Text } from "@nextui-org/react";
 
 const Slider = () => {
-  const [index, setIndex] = useState(0);
+  const [current, setCurrent] = useState(0);
 
-  const imageArray = [firstImage, secondImage, thirdImage];
-  const imageArrayLength = imageArray.length - 1;
+  const sliderImagesArr = [firstImage, secondImage, thirdImage];
+  const length = sliderImagesArr.length - 1;
   const time = 2000;
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(index === imageArrayLength ? 0 : index + 1);
+      setCurrent((prevState) => (prevState === length ? 0 : prevState + 1));
     }, time);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <Container justify="center">
-      {imageArray.map((image, imageIndex) => {
-        return imageIndex === index && <Image src={image} alt={"alt"} />;
+      {sliderImagesArr.map((image, imageIndex) => {
+        return (
+          imageIndex === current && (
+            <Image key={image} src={image} alt={"alt"} />
+          )
+        );
       })}
     </Container>
   );

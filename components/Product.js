@@ -1,19 +1,18 @@
 import Link from "next/link";
-import {
-  Button,
-  Card,
-  Col,
-  Grid,
-  Row,
-  Text,
-  useTheme,
-} from "@nextui-org/react";
+import { Button, Card, Col, Grid, Row, Text } from "@nextui-org/react";
+import { Router, useRouter } from "next/router";
 
 const ProductCard = ({ product }) => {
-  const { theme } = useTheme();
+  const router = useRouter();
+
   return (
     <Grid>
-      <Card cover css={{ my: 6, maxWidth: 240 }}>
+      <Card
+        clickable
+        cover
+        css={{ my: 6, maxWidth: 240 }}
+        onClick={() => router.push(`/produkty/${product.slug}`)}
+      >
         <Card.Header css={{ position: "absolute", zIndex: 1, top: 5 }}>
           <Col>
             {product?.promotion ? (
@@ -61,16 +60,18 @@ const ProductCard = ({ product }) => {
             <Col>
               <Row justify="flex-end">
                 <Link href={`/produkty/${product.slug}`} passHref>
-                  <Button flat auto rounded color="gradient">
-                    <Text
-                      css={{ color: "inherit" }}
-                      size={12}
-                      weight="bold"
-                      transform="uppercase"
-                    >
-                      More Info
-                    </Text>
-                  </Button>
+                  <a>
+                    <Button flat auto rounded color="gradient">
+                      <Text
+                        css={{ color: "inherit" }}
+                        size={12}
+                        weight="bold"
+                        transform="uppercase"
+                      >
+                        More Info
+                      </Text>
+                    </Button>
+                  </a>
                 </Link>
               </Row>
             </Col>

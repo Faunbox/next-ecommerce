@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { StyledWrapper } from "../../styles/styled_home";
-import { Button, Container, Grid, Text } from "@nextui-org/react";
+import { Button, Container, Grid, Spacer, Text } from "@nextui-org/react";
 
 const ProductScreen = ({ product }) => {
   const { dispatch, state } = useCard();
@@ -61,17 +61,23 @@ const ProductScreen = ({ product }) => {
   if (!product) {
     //render notFound page
     return (
-      <>
-        <div>We dont have this product. Sorry!</div>{" "}
-        <Button variant="secondary" onClick={() => router.back()}>
+      <Container justify="center" css={{ textAlign: "center" }}>
+        <Text h4>We dont have this product. Sorry!</Text>
+        <Spacer y={1} />
+        <Button
+          color="gradient"
+          css={{ mx: "auto" }}
+          onClick={() => router.back()}
+        >
           Back
         </Button>
-      </>
+      </Container>
     );
   }
 
   return (
     <Container css={{ textAlign: "center" }} justify="center">
+      <Spacer y={1} />
       <Button
         auto
         css={{ backgroundColor: "Gray", mx: "auto" }}
@@ -79,13 +85,13 @@ const ProductScreen = ({ product }) => {
       >
         Back
       </Button>
-      <Grid.Container>
+      <Grid.Container justify="center" gap={3}>
         <Grid>
           <Text h1>{product.name}</Text>
           <Text h4>{product.description}</Text>
           <Text h4>In stock: {product.countInStock}</Text>
-        </Grid>
-        <Grid>
+          <Text h4>Category: {product.category}</Text>
+          <Spacer y={1} />
           <Image
             src={product?.image?.url}
             alt={product.name}
@@ -93,33 +99,35 @@ const ProductScreen = ({ product }) => {
             height={200}
           />
         </Grid>
-        <br />
-        <Button
-          color="success"
-          css={{ mx: "auto" }}
-          onClick={() => addToCart(product)}
-        >
-          Add to cart
-        </Button>
-        {userSession?.role === "admin" && (
-          <>
-            <Button
-              color="error"
-              onClick={() =>
-                deleteProduct(
-                  product._id,
-                  product.stripe.priceID,
-                  product.stripe.productID
-                )
-              }
-            >
-              Delete product
-            </Button>
-            <Link href={`/produkty/edycja/${product.slug}`} passHref>
-              <Button css={{ mx: "auto" }}>Edit</Button>
-            </Link>
-          </>
-        )}
+        <Spacer y={1} />
+        <Grid justify="center" alignItems="center" css={{ margin: "auto 0" }}>
+          <Button
+            color="success"
+            css={{ mx: "auto" }}
+            onClick={() => addToCart(product)}
+          >
+            Add to cart
+          </Button>
+          {userSession?.role === "admin" && (
+            <>
+              <Button
+                color="error"
+                onClick={() =>
+                  deleteProduct(
+                    product._id,
+                    product.stripe.priceID,
+                    product.stripe.productID
+                  )
+                }
+              >
+                Delete product
+              </Button>
+              <Link href={`/produkty/edycja/${product.slug}`} passHref>
+                <Button css={{ mx: "auto" }}>Edit</Button>
+              </Link>
+            </>
+          )}
+        </Grid>
       </Grid.Container>
     </Container>
   );

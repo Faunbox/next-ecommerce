@@ -34,6 +34,9 @@ export default NextAuth({
       try {
         const mail = user.email;
 
+        user.image =
+          "https://res.cloudinary.com/faunbox/image/upload/v1648651047/avatars/cat-g7aefe4ff8_640.jpg";
+
         const role = (await clientPromise)
           .db(process.env.DB_NAME)
           .collection("users")

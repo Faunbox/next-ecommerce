@@ -104,6 +104,7 @@ const PhoneMenu = () => {
             <Spacer y={1} />
             <Input
               type="text"
+              aria-label="Search"
               placeholder="Search by product name"
               onChange={(e) => setInputValue(e.target.value)}
             />

@@ -114,10 +114,10 @@ const AddProduct = ({ product }) => {
         .then((res) => res.json())
         .then((data) => alert(data.message))
         .then(() => setDataFetching(false))
-        .catch((err) => new Error("Editing wasnt correct. Try again", err));
+        .catch((err) => new Error("Editing wasnt correct. Try again", err))
+        .finally(() => router.push("/store"));
     }
 
-    // .finally(() => router.push("/"));
   };
 
   return (
@@ -164,6 +164,7 @@ const AddProduct = ({ product }) => {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Description</Form.Label>
           <StyledInputForm
+            as={"textarea"}
             type="text"
             placeholder="Szuper szprej, polecam"
             onChange={(e) => setDescription(e.target.value)}

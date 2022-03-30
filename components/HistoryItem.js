@@ -1,7 +1,6 @@
 import { Container, Grid, Row, Text, Spacer } from "@nextui-org/react";
 
 const HistoryItemList = (items) => {
-  console.log(items);
   return (
     <Container>
       <Spacer y={2} />

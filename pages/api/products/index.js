@@ -175,6 +175,21 @@ const Products = async (req, res) => {
         !error ? console.log("result", result) : console.error(error);
       });
       await stripe.products.update(productID, { images: [url] });
+
+      await db.connect();
+      const item = await Product.findOneAndUpdate(
+        { _id: id },
+        {
+          description: description,
+          slug: slug,
+          name: name,
+          category: category,
+          image: { url, imageID },
+          price,
+          brand,
+          countInStock,
+        }
+      );
     }
     await db.connect();
     const item = await Product.findOneAndUpdate(
@@ -184,7 +199,6 @@ const Products = async (req, res) => {
         slug: slug,
         name: name,
         category: category,
-        image: { url, imageID },
         price,
         brand,
         countInStock,
@@ -199,12 +213,10 @@ const Products = async (req, res) => {
         const items = await getAllProducts();
         res.status(200).json(items);
       } catch (err) {
-        res
-          .status(400)
-          .json({
-            message: "Błąd podczas pobierania wszystkich przedmiotów. Błąd -> ",
-            err,
-          });
+        res.status(400).json({
+          message: "Błąd podczas pobierania wszystkich przedmiotów. Błąd -> ",
+          err,
+        });
       }
       // if (page) {
       //   try {

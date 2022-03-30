@@ -13,23 +13,23 @@ export const queryClient = new QueryClient();
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <SSRProvider>
-      <NextUIProvider>
-        <QueryClientProvider client={queryClient}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <AuthProvider>
-              <CardProvider>
-                {/* <GlobalStyle /> */}
-                <AnimatePresence initial={false} exitBeforeEnter>
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-                </AnimatePresence>
-                <ReactQueryDevtools />
-              </CardProvider>
-            </AuthProvider>
-          </Hydrate>
-        </QueryClientProvider>
-      </NextUIProvider>
+    <NextUIProvider>
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <AuthProvider>
+            <CardProvider>
+              {/* <GlobalStyle /> */}
+              <AnimatePresence initial={false} exitBeforeEnter>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </AnimatePresence>
+              <ReactQueryDevtools />
+            </CardProvider>
+          </AuthProvider>
+        </Hydrate>
+      </QueryClientProvider>
+    </NextUIProvider>
     </SSRProvider>
   );
 }

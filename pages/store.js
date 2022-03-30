@@ -131,43 +131,60 @@ export default function Home() {
         <meta name="description" content="blog" />
       </Head>
       <Script src="https://js.stripe.com/v3"></Script>
-      <StyledWrapper>
+      <Container justify="center" css={{ textAlign: "center" }}>
         <Text h2>Products</Text>
         {userSession?.role === "admin" ? (
-          <Link href={"/produkty/dodaj"} passHref>
-            <StyledAddItemButton>Add new product</StyledAddItemButton>
-          </Link>
-        ) : null}
-
-        <StyledStoreForm
-          onSubmit={() => {
-            getSearchedItem();
-          }}
-        >
-          <Input
-            type="text"
-            placeholder="Search by name"
-            onChange={(e) => setInputValue(e.target.value)}
-          ></Input>
-          <Text
-            as={Link}
-            href={{ query: { search: inputValue } }}
-            type="submit"
-          >
-            Search
-          </Text>
-        </StyledStoreForm>
-        <StyledDropdownButton id="dropdown-basic-button" title="Categories">
-          <Link href={"/store"} passHref>
-            <Dropdown.Item>Show all</Dropdown.Item>
-          </Link>
-          {categorys?.map((category) => (
-            <Link href={`/store?category=${category}`} passHref key={category}>
-              <Dropdown.Item>{category}</Dropdown.Item>
+          <>
+            <Spacer y={1} />
+            <Link href={"/produkty/dodaj"} passHref>
+              <Button css={{ mx: "auto" }}>Add new product</Button>
             </Link>
-          ))}
-        </StyledDropdownButton>
-        <Container>
+            <Spacer y={1} />
+          </>
+        ) : null}
+        <Grid.Container justify="center" gap={2}>
+          <StyledStoreForm
+            onSubmit={() => {
+              getSearchedItem();
+            }}
+          >
+            <Grid>
+              <Input
+                type="text"
+                size="md"
+                width="auto"
+                aria-label="Search"
+                placeholder="Search by name"
+                onChange={(e) => setInputValue(e.target.value)}
+              ></Input>
+            </Grid>
+            <Grid>
+              <Text
+                as={Link}
+                href={{ query: { search: inputValue } }}
+                type="submit"
+              >
+                Search
+              </Text>
+            </Grid>
+          </StyledStoreForm>
+          <StyledDropdownButton id="dropdown-basic-button" title="Categories">
+            <Link href={"/store"} passHref>
+              <Dropdown.Item>Show all</Dropdown.Item>
+            </Link>
+            {categorys?.map((category) => (
+              <Link
+                href={`/store?category=${category}`}
+                passHref
+                key={category}
+              >
+                <Dropdown.Item>{category}</Dropdown.Item>
+              </Link>
+            ))}
+          </StyledDropdownButton>
+        </Grid.Container>
+
+        <Container justify="center">
           <Grid.Container gap={2} justify="center">
             {items.slice(0, actualItemsCount).map((item) => (
               <ProductCard key={item._id} product={item} />
@@ -179,11 +196,12 @@ export default function Home() {
         <Button
           disabled={actualItemsCount >= numbersOfItems ? true : false}
           onClick={() => showMoreItems()}
+          css={{ mx: "auto" }}
         >
           Show more items {actualItemsCount} of {numbersOfItems}
         </Button>
         <Spacer y={1} />
-      </StyledWrapper>
+      </Container>
     </>
   );
 }

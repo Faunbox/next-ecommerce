@@ -4,15 +4,15 @@ import refundIcon from "../public/icons/refund.png";
 import mail from "../public/icons/mail.png";
 import dynamic from "next/dynamic";
 import { StyledDiv, StyledLink, StyledSection } from "../styles/styled_footer";
-import { Text } from "@nextui-org/react";
+import { Container, Text } from "@nextui-org/react";
 
 const FooterInfo = () => {
   return (
     <StyledSection>
-      <StyledDiv>
-        <Text>Our Customer service is avaible everyday in 8:00 to 16:00</Text>
+      <Container css={{ textAlign: "center" }}>
         <Image src={deliveryIcon} alt="ikona" />
-      </StyledDiv>
+        <Text>Our Customer service is avaible everyday in 8:00 to 16:00</Text>
+      </Container>
       <StyledDiv>
         <StyledLink href="mailto:faunbox2@gmail.com">
           faunbox2@gmail.com
