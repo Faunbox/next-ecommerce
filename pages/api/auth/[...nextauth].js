@@ -22,6 +22,9 @@ export default NextAuth({
   session: {
     strategy: "database",
   },
+  pages: {
+    signIn: '/auth/signin'
+  },
   callbacks: {
     async session({ session, user, token }) {
       session.user.role = user.role;

@@ -184,7 +184,7 @@ export default function Home() {
           </StyledDropdownButton>
         </Grid.Container>
 
-        <Container justify="center">
+        <Container>
           <Grid.Container gap={2} justify="center">
             {items.slice(0, actualItemsCount).map((item) => (
               <ProductCard key={item._id} product={item} />

@@ -65,15 +65,10 @@ export default async function getUser(req, res) {
           try {
             const pucharsedItems = await getItemNameFromStripe(items);
             const { name, description } = pucharsedItems;
-            if (items.length === 1) {
-              Object.assign(items[0], { name, description });
+            items.map((item, index) => {
+              Object.assign(items[index], { name, description });
               return item;
-            } else {
-              items.map((item, index) => {
-                Object.assign(items[index], { name, description });
-                return item;
-              });
-            }
+            });
           } catch (err) {
             res
               .status(400)

@@ -99,7 +99,10 @@ const LoggedUserPage = ({ user }) => {
   };
   return (
     <Container justify="center">
-      <Container css={{ textAlign: "right" }}>
+      <Container
+        display="none"
+        css={{ textAlign: "right", "@xs": { display: "block" } }}
+      >
         <Text h4 onClick={() => signOut()}>
           Logout
         </Text>
