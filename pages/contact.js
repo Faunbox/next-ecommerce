@@ -1,8 +1,14 @@
-import { Form } from "react-bootstrap";
 import { useState } from "react";
-import { StyledTextWrapper, StyledWrapper } from "../styles/styled_home";
-import { StyledContactArticle } from "../styles/styled_contact";
-import { Button, Checkbox, Container, Text } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Container,
+  Input,
+  Row,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
 
 const Contact = () => {
   const apiEndpoint = "./api/mail/";
@@ -11,8 +17,7 @@ const Contact = () => {
   const [name, setName] = useState("");
   const [text, setText] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     //check
     if (!sendEmail) return alert("Checkbox is required!");
 
@@ -29,63 +34,59 @@ const Contact = () => {
     }).catch((err) => console.error("błąd", err.message));
     const response = await req.json();
     alert(response.message);
+    setText("");
+    setEmail("");
+    setName("");
   };
 
   return (
     <Container>
       <Container>
-        <Text>Do You have any questions or problems?</Text>
-        <Text b>Contact Us!</Text>
-        <Form className="my-3" onSubmit={handleSubmit}>
-          <Form.Group controlId="email">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              autoComplete="email"
-              name="email"
-              placeholder="Enter email"
-              required
+        <Text>
+          Do You have any questions or want to contact to our customer service?
+        </Text>
+        <Text b>Send us a mail! We will reply as soon as possible!</Text>
+        <Spacer y={1} />
+        <Card>
+          <Row>
+            <Input
+              type={"text"}
+              placeholder="Your email"
+              aria-label="email"
+              value={email}
+              fullWidth
               onChange={(e) => setEmail(e.target.value)}
-            />
-            <Form.Text className="text-muted">
-              Well never share your email with anyone else.
-            </Form.Text>
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
+            ></Input>
+            <Spacer y={1} />
+            <Input
+              type={"text"}
               placeholder="Your name"
-              required
-              minLength={2}
+              aria-label="name"
+              value={name}
+              fullWidth
               onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="text">
-            <Form.Label>Email text</Form.Label>
-            <Form.Control
-              type="text"
-              as="textarea"
-              rows={4}
-              name="text"
-              placeholder="Your message"
-              required
-              minLength={10}
-              onChange={(e) => setText(e.target.value)}
-            />
-          </Form.Group>
-          <Button css={{ mt: 10, mx: "auto" }} variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
-        <Checkbox
-          size="xs"
-          checked={false}
-          onClick={() => setSendEmail(!sendEmail)}
-        >
-          I want to send an contact email
-        </Checkbox>
+            ></Input>
+          </Row>
+          <Spacer y={1} />
+          <Input
+            as="textarea"
+            type={"text"}
+            placeholder="Your message"
+            aria-label="message"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          ></Input>
+          <Spacer y={1} />
+          <Checkbox
+            checked={false}
+            size={"xs"}
+            onChange={() => setSendEmail(!sendEmail)}
+          >
+            Do you want to send a email
+          </Checkbox>
+          <Spacer y={1} />
+          <Button onClick={() => handleSubmit()}>Send email</Button>
+        </Card>
       </Container>
     </Container>
   );

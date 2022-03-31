@@ -1,4 +1,4 @@
-import { Container, Grid, Row, Text, Spacer } from "@nextui-org/react";
+import { Container, Grid, Text, Spacer } from "@nextui-org/react";
 
 const HistoryItemList = (items) => {
   return (

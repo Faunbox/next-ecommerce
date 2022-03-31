@@ -14,7 +14,8 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
+import LoginForm from "./loginForm";
 
 const Navigation = () => {
   const { state, dispatch } = useCard();
@@ -56,7 +57,7 @@ const Navigation = () => {
               />
             </Grid>
             <Grid xs>
-              {userSession ? (
+              {userSession && (
                 <Link href={`/user/${userSession.email}`} passHref>
                   <User
                     src={userSession.image ? userSession.image : ""}
@@ -69,10 +70,6 @@ const Navigation = () => {
                     }
                   ></User>
                 </Link>
-              ) : (
-                <Text b onClick={() => signIn()}>
-                  Log in
-                </Text>
               )}
             </Grid>
           </Row>
@@ -91,9 +88,7 @@ const Navigation = () => {
                 <Text h4>Contact</Text>
               </Link>
               {!userSession ? (
-                <Text h4 onClick={() => signIn()}>
-                  Log in
-                </Text>
+                <LoginForm />
               ) : (
                 <Text h4 i onClick={() => signOut()}>
                   Log out

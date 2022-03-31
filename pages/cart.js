@@ -3,11 +3,10 @@ import { useCard, ACTION } from "../context/card.context";
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../context/auth.context";
 import { StyledWrapper } from "../styles/styled_home";
-import { StyledCardItemWrapper } from "../styles/styled_card";
-import cartIcon from "../public/icons/shopping-cart.png";
 import { useEffect, useMemo, useState } from "react";
-import { Button, Container, Input, Row, Spacer } from "@nextui-org/react";
+import { Button, Container, Input, Row, Spacer, Text } from "@nextui-org/react";
 import Image from "next/image";
+import Link from "next/link";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET);
 
 const Card = () => {
@@ -16,7 +15,6 @@ const Card = () => {
   const { cartItems } = cart;
   const { userSession } = useAuth();
   const [fetchingFlag, setfetchingFlag] = useState(false);
-  const [fullPrice, setFullPrice] = useState(0);
 
   const changeQuantity = async (item, quantity) => {
     //check db for item quantity
@@ -53,12 +51,22 @@ const Card = () => {
   const cartItemsMemo = useMemo(
     () =>
       cartItems.map((item) => (
-        <StyledCardItemWrapper key={item._id}>
-          <p>Item: {item.name}</p>
-          <p>Description: {item.description}</p>
-          <p>Total price: {item.price * item.quantity}PLN</p>
-          <p>Item price: {item.price}PLN</p>
-          <p>Quantity: {item.quantity === "" ? 0 : item.quantity}</p>
+        <Container justify="center" key={item._id}>
+          <Container direction="row" css={{ textAlign: "center" }}>
+            <Container>
+              <Image
+                src={item.image.url}
+                alt={item.name}
+                height={"100%"}
+                width={"100%"}
+              />
+            </Container>
+            <Text>Item: {item.name}</Text>
+            <Text>Description: {item.description}</Text>
+            <Text>Total price: {item.price * item.quantity}PLN</Text>
+            <Text>Item price: {item.price}PLN</Text>
+            <Text>Quantity: {item.quantity === "" ? 0 : item.quantity}</Text>
+          </Container>
           <Row justify="center" css={{ my: 15 }}>
             <Button
               auto
@@ -83,11 +91,10 @@ const Card = () => {
           <StyledWrapper>
             <Button onClick={() => deleteItem(item)}>Delete</Button>
           </StyledWrapper>
-        </StyledCardItemWrapper>
+        </Container>
       )),
     [cartItems]
   );
-
 
   return (
     <StyledWrapper>
@@ -106,7 +113,12 @@ const Card = () => {
       {cartItems.length !== 0 ? (
         cartItemsMemo
       ) : (
-        <p>Cart is empty! Lets check our store!</p>
+        <Text h3>
+          Cart is empty! Lets check our{" "}
+          <Link href={"/store"}>
+            <a>store!</a>
+          </Link>
+        </Text>
       )}
     </StyledWrapper>
   );

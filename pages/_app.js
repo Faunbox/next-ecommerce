@@ -4,7 +4,6 @@ import { QueryClientProvider, QueryClient, React, Hydrate } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { AuthProvider } from "../context/auth.context";
 import { CardProvider } from "../context/card.context";
-import { SSRProvider } from "react-bootstrap";
 import { NextUIProvider } from "@nextui-org/react";
 import { AnimatePresence } from "framer-motion";
 
@@ -12,7 +11,6 @@ export const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <SSRProvider>
     <NextUIProvider>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
@@ -30,7 +28,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         </Hydrate>
       </QueryClientProvider>
     </NextUIProvider>
-    </SSRProvider>
   );
 }
 

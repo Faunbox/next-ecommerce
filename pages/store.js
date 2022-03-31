@@ -131,7 +131,7 @@ export default function Home() {
         <meta name="description" content="blog" />
       </Head>
       <Script src="https://js.stripe.com/v3"></Script>
-      <Container justify="center" css={{ textAlign: "center" }}>
+      <Container justify="center">
         <Text h2>Products</Text>
         {userSession?.role === "admin" ? (
           <>

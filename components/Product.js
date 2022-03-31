@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button, Card, Col, Grid, Row, Text } from "@nextui-org/react";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const ProductCard = ({ product }) => {
   const router = useRouter();

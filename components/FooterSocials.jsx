@@ -1,4 +1,3 @@
-import { StyledSocialsWrapper } from "../styles/styled_footer";
 import facebookIcon from "../public/icons/facebook.png";
 import tiktokIcon from "../public/icons/tik-tok.png";
 import instagramIcon from "../public/icons/instagram.png";

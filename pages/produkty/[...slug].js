@@ -5,7 +5,6 @@ import { useAuth } from "../../context/auth.context";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
-import { StyledWrapper } from "../../styles/styled_home";
 import { Button, Container, Grid, Spacer, Text } from "@nextui-org/react";
 
 const ProductScreen = ({ product }) => {

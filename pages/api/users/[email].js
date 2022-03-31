@@ -22,7 +22,8 @@ const getItemNameFromStripe = async (items) => {
 
     ////////////Dopisac obrazek
 
-    const { name, description } = res;
+    const { name, description } = await res;
+    console.log({ name });
     return { name, description };
   }
 };
@@ -59,35 +60,31 @@ export default async function getUser(req, res) {
 
       await db.connect();
 
-      const asyncArr = await Promise.all(
+      const updatedItemArray = await Promise.all(
         StripeHistory.map(async (item) => {
           const { items } = item;
           try {
-            const pucharsedItems = await getItemNameFromStripe(items);
-            const { name, description } = pucharsedItems;
+            const { name, description } = await getItemNameFromStripe(items);
             items.map((item, index) => {
               Object.assign(items[index], { name, description });
-              return item;
+              return items;
             });
           } catch (err) {
-            res
-              .status(400)
-              .send("Błąd podczas pobierania nazw przedmiotów z db", err);
+            console.error(err);
           }
         })
       );
 
-      pucharsedItemsList = asyncArr;
-
-      console.log({ asyncArr });
       await db.disconnect();
+      console.log({ updatedItemArray });
+      pucharsedItemsList = updatedItemArray;
     } catch (err) {
       res.status(400).json({
         message: "Błąd podczas pobierania histori zamówień",
         error: err,
       });
     } finally {
-      return res.status(200).send(pucharsedItemsList);
+      res.status(200).json(pucharsedItemsList);
     }
   }
 }

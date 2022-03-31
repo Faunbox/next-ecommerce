@@ -1,5 +1,4 @@
-import { Col, Container, Grid, Spacer } from "@nextui-org/react";
-import { StyledFooter } from "../styles/styled_footer";
+import { Container, Grid, Spacer } from "@nextui-org/react";
 import FooterInfo from "./FooterInfo";
 import FooterSocials from "./FooterSocials";
 import FooterContact from "./FooterContact";
