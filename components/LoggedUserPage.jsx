@@ -5,36 +5,41 @@ import {
   Grid,
   Input,
   Loading,
+  Modal,
+  Spacer,
   Text,
 } from "@nextui-org/react";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import HistoryItemList from "./HistoryItem";
 
 const LoggedUserPage = ({ user }) => {
   const inputRef = useRef(null);
+  const router = useRouter();
+
+  //Modal
+  const [visible, setVisible] = useState(false);
+  const handler = () => setVisible(true);
+  const closeHandler = () => {
+    setVisible(false);
+  };
 
   const [showInput, setShowInput] = useState(false);
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState(user.name ? user.name : "");
   const [changedUserName, setChangedUserName] = useState("");
   const [isNameChanged, setIsNameChanged] = useState(false);
   const [showPucharseHistory, setShowPucharseHistory] = useState(false);
   const [image, setImage] = useState("");
-  const [userImage, setUserImage] = useState("");
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [history, setHistory] = useState([]);
 
   const cloudinaryUploadLink =
     "https://api.cloudinary.com/v1_1/faunbox/image/upload";
 
-  const changeUserName = () => {
-    setUserName(inputRef.current.value);
-  };
-
-  const checkIsStatusOk = async (data) => {
-    if (await data.ok) {
-      console.log("Zmiana statusu", await data.json().message);
+  const checkIsStatusOk = async (status) => {
+    if (await status.ok) {
+      console.log("Zmiana statusu", await status.json().message);
     }
     return new Error("Status is not OK.");
   };
@@ -53,20 +58,21 @@ const LoggedUserPage = ({ user }) => {
   };
 
   const sendNewAvatarImageToDb = async () => {
+    if (!image)
+      return alert("You probably forgot to set new image for avatar!");
     const newImage = await sendImageToCloudinary();
     await fetch("/api/users/change-name", {
       method: "PATCH",
       body: JSON.stringify({
-        name: userName,
         email: user.email,
         image: newImage,
       }),
     })
-      .then((data) => checkIsStatusOk(data))
+      .then((data) => checkIsStatusOk(data.status))
       .catch(
         (err) => new Error({ message: "Błąd podczas zmiany avataru" }, err)
       )
-      .finally(setShowInput(false), setIsNameChanged(true));
+      .finally(setShowInput(false), router.reload());
   };
 
   const sendUserNameToDatabase = async () => {
@@ -75,15 +81,14 @@ const LoggedUserPage = ({ user }) => {
       method: "PATCH",
       body: JSON.stringify({
         name: userName,
-        email: userSession.email,
-        image: userImage,
+        email: user.email,
       }),
     })
-      .then((data) => checkIsStatusOk(data))
+      .then((data) => checkIsStatusOk(data.status))
       .catch(
         (err) => new Error({ message: "Błąd podczas zmiany nazwy konta" }, err)
       )
-      .finally(setShowInput(false), setIsNameChanged(true));
+      .finally(setShowInput(false), router.reload);
   };
 
   const getUserPaymentHistory = async () => {
@@ -93,96 +98,127 @@ const LoggedUserPage = ({ user }) => {
       body: user.email,
     }).then((res) => res.json());
     const res = await paymentHistory;
+    console.log({ res });
     res.length === 0 ? setPaymentHistory(false) : setPaymentHistory(res);
     setHistory(true);
     setShowPucharseHistory(false);
   };
   return (
     <Container justify="center">
-      <Container
-        display="none"
-        css={{ textAlign: "right", "@xs": { display: "block" } }}
-      >
-        <Text h4 onClick={() => signOut()}>
-          Logout
-        </Text>
-      </Container>
       <Container>
         <Text>User email: {user.email}</Text>
         {!user.name ? (
-          <Button
-            auto
-            css={{ my: 10, mx: "auto" }}
-            onClick={() => setShowInput((prevState) => !prevState)}
-          >
+          <Button auto css={{ my: 10, mx: "auto" }} onClick={() => handler()}>
             Set username
           </Button>
         ) : (
           <>
             <Text>
-              {isNameChanged ? changedUserName : `Username: ${user.name}`}
+              {isNameChanged
+                ? `Username: ${changedUserName}`
+                : `Username: ${user.name}`}
             </Text>
-            <Button
-              auto
-              onClick={() => {
-                setShowInput((prevState) => !prevState);
-              }}
-              css={{ my: 10, mx: "auto" }}
-            >
-              Change username
-            </Button>
+            <Container>
+              <Button
+                auto
+                onClick={() => {
+                  setShowInput((prevState) => !prevState);
+                  handler();
+                }}
+                css={{ my: 10, mx: "auto" }}
+              >
+                Change username
+              </Button>
+              {showInput ? (
+                <Modal
+                  closeButton
+                  aria-labelledby="modal-title"
+                  open={visible}
+                  onClose={() => closeHandler()}
+                >
+                  <Modal.Header>
+                    <Text b>Set your nickname</Text>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Input
+                      ref={inputRef}
+                      type="text"
+                      id="username"
+                      aria-label="username"
+                      aria-labelledby="username"
+                      bordered
+                      required
+                      status="primary"
+                      css={{ my: 10 }}
+                      placeholder="SuperUser997"
+                      onChange={(e) => setUserName(e.target.value)}
+                      style={{ width: "fit-content" }}
+                    />
+                    <Button
+                      type="submit"
+                      css={{ my: 10, mx: "auto" }}
+                      onClick={() => {
+                        sendUserNameToDatabase();
+                        setChangedUserName(userName);
+                      }}
+                    >
+                      Set nickname
+                    </Button>
+                  </Modal.Body>
+                </Modal>
+              ) : null}
+              <Spacer y={1} />
+            </Container>
           </>
         )}
-        {showInput ? (
-          <Card css={{ xy: 10, width: "fit-content" }}>
-            <Input
-              ref={inputRef}
-              type="text"
-              id="username"
-              aria-label="username"
-              aria-labelledby="username"
-              bordered
-              status="primary"
-              css={{ my: 10 }}
-              placeholder="New username"
-              onChange={() => changeUserName()}
-              style={{ width: "fit-content" }}
-            />
-            <Button
-              type="submit"
-              css={{ my: 10, mx: "auto" }}
-              onClick={() => {
-                sendUserNameToDatabase();
-                setChangedUserName(userName);
-              }}
-            >
-              Set username
-            </Button>
-          </Card>
-        ) : null}
       </Container>
       <Container justify="center" css={{ textAlign: "center", my: 10 }}>
         {!user?.image ? (
-          <Text>You dont have any avatar image!</Text>
+          <>
+            <Text h4>You dont have any avatar image!</Text>
+            <Input
+              type="file"
+              id="file"
+              aria-label="file"
+              accept=".jpg,.png"
+              required
+              onChange={(e) => {
+                setImage(e.target.files);
+              }}
+              css={{ height: "auto" }}
+            ></Input>
+            <Button
+              auto
+              css={{ my: 20, mx: "auto" }}
+              onClick={() => sendNewAvatarImageToDb()}
+            >
+              {!user?.image ? "Set avatar" : "Change avatar"}
+            </Button>
+          </>
         ) : (
-          <Grid.Container justify="space-around" alignItems="center">
-            <Grid xs>
+          <Grid.Container justify="space-evenly" alignItems="center">
+            <Grid>
               <Image
                 src={user?.image}
                 alt={`Image avatar`}
                 width={100}
                 height={100}
               />
+            </Grid>
+            <Grid>
               <Input
                 type="file"
                 id="file"
                 aria-label="file"
                 accept=".jpg,.png"
+                required
                 onChange={(e) => {
                   setImage(e.target.files);
                 }}
                 css={{ height: "auto" }}
               ></Input>
+            </Grid>
+            <Grid>
               <Button
                 auto
                 css={{ my: 20, mx: "auto" }}

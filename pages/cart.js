@@ -113,12 +113,14 @@ const Card = () => {
       {cartItems.length !== 0 ? (
         cartItemsMemo
       ) : (
-        <Text h3>
-          Cart is empty! Lets check our{" "}
-          <Link href={"/store"}>
-            <a>store!</a>
-          </Link>
-        </Text>
+        <Container css={{ textAlign: "center" }}>
+          <Text h4>
+            Cart is empty! Lets check our
+            <Link href={"/store"}>
+              <a> store!</a>
+            </Link>
+          </Text>
+        </Container>
       )}
     </StyledWrapper>
   );

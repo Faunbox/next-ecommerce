@@ -1,33 +1,35 @@
-import { Container, Grid, Text, Spacer } from "@nextui-org/react";
+import { Container, Grid, Text, Spacer, Card } from "@nextui-org/react";
 
 const HistoryItemList = (items) => {
   return (
     <Container>
       <Spacer y={2} />
-      <Grid.Container gap={1}>
+      <Grid.Container gap={1} justify="center">
         {items.items.map((item) => {
           const { items } = item;
           return (
-            <>
-              <Text h5>{item.date.slice(0, 10)}</Text>
-              <Grid
-                xs={12}
-                sm={7}
-                key={item.date}
-                css={{ textAlign: "center" }}
-              >
-                {items.map((item) => {
-                  return (
-                    <Container key={item.id}>
-                      <p>Nazwa: {item.name}</p>
-                      <p>Opis: {item.description}</p>
-                      <p>Cena: {(item.price / 100) * item.quantity}zł</p>
-                      <p>Ilość: {item.quantity}</p>
-                    </Container>
-                  );
-                })}
-              </Grid>
-            </>
+            <Grid key={item.date} css={{ textAlign: "center" }}>
+              <Card bordered="true">
+                <Card.Header>
+                  <Text h5>{item.date.slice(0, 10)}</Text>
+                </Card.Header>
+                <Card.Body>
+                  {items.map((item) => {
+                    return (
+                      <Container key={item.id} justify="center">
+                        <Text>Nazwa: {item.name}</Text>
+                        <Text>Opis: {item.description}</Text>
+                        <Text>
+                          Cena: {(item.price / 100) * item.quantity}zł
+                        </Text>
+                        <Text>Ilość: {item.quantity}</Text>
+                      </Container>
+                    );
+                  })}
+                </Card.Body>
+                <Spacer y={1} />
+              </Card>
+            </Grid>
           );
         })}
       </Grid.Container>
