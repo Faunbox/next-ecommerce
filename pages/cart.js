@@ -4,12 +4,21 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../context/auth.context";
 import { StyledWrapper } from "../styles/styled_home";
 import { useEffect, useMemo, useState } from "react";
-import { Button, Container, Input, Row, Spacer, Text } from "@nextui-org/react";
+import {
+  Button,
+  Container,
+  Card,
+  Grid,
+  Input,
+  Row,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET);
 
-const Card = () => {
+const Cart = () => {
   const { state, dispatch } = useCard();
   const { cart } = state;
   const { cartItems } = cart;
@@ -51,47 +60,55 @@ const Card = () => {
   const cartItemsMemo = useMemo(
     () =>
       cartItems.map((item) => (
-        <Container justify="center" key={item._id}>
-          <Container direction="row" css={{ textAlign: "center" }}>
-            <Container>
-              <Image
-                src={item.image.url}
-                alt={item.name}
-                height={"100%"}
-                width={"100%"}
-              />
-            </Container>
-            <Text>Item: {item.name}</Text>
-            <Text>Description: {item.description}</Text>
-            <Text>Total price: {item.price * item.quantity}PLN</Text>
-            <Text>Item price: {item.price}PLN</Text>
-            <Text>Quantity: {item.quantity === "" ? 0 : item.quantity}</Text>
-          </Container>
-          <Row justify="center" css={{ my: 15 }}>
-            <Button
-              auto
-              onClick={() => changeQuantity(item, item.quantity + 1)}
-            >
-              +
-            </Button>
-            <Input
-              type="text"
-              value={fetchingFlag ? "..." : item.quantity}
-              css={{ mx: 10, width: 50 }}
-              onChange={(e) => changeQuantity(item, e.target.value)}
-            />
+        <Grid justify="center" key={item._id}>
+          <Card>
+            <Card.Body>
+              <Container direction="row" css={{ textAlign: "center" }}>
+                <Container>
+                  <Image
+                    src={item.image.url}
+                    alt={item.name}
+                    height={"100%"}
+                    width={"100%"}
+                  />
+                </Container>
+                <Text>Item: {item.name}</Text>
+                <Text>Description: {item.description}</Text>
+                <Text>Total price: {item.price * item.quantity}PLN</Text>
+                <Text>Item price: {item.price}PLN</Text>
+                <Text>
+                  Quantity: {item.quantity === "" ? 0 : item.quantity}
+                </Text>
+              </Container>
+              <Row justify="center" css={{ my: 15 }}>
+                <Button
+                  auto
+                  onClick={() => changeQuantity(item, item.quantity + 1)}
+                >
+                  +
+                </Button>
+                <Input
+                  type="text"
+                  value={fetchingFlag ? "..." : item.quantity}
+                  css={{ mx: 10, width: 50 }}
+                  onChange={(e) => changeQuantity(item, e.target.value)}
+                />
 
-            <Button
-              auto
-              onClick={() => changeQuantity(item, item.quantity - 1)}
-            >
-              -
-            </Button>
-          </Row>
-          <StyledWrapper>
-            <Button onClick={() => deleteItem(item)}>Delete</Button>
-          </StyledWrapper>
-        </Container>
+                <Button
+                  auto
+                  onClick={() => changeQuantity(item, item.quantity - 1)}
+                >
+                  -
+                </Button>
+              </Row>
+            </Card.Body>
+            <Card.Footer>
+              <Button color="error" onClick={() => deleteItem(item)}>
+                Delete
+              </Button>
+            </Card.Footer>
+          </Card>
+        </Grid>
       )),
     [cartItems]
   );
@@ -100,7 +117,6 @@ const Card = () => {
     <StyledWrapper>
       {cartItems.length !== 0 ? (
         <>
-          <Spacer y={1} />
           <Button
             onClick={() =>
               goToCheckout(cartItems, userSession.email, userSession.stripeID)
@@ -111,7 +127,9 @@ const Card = () => {
         </>
       ) : null}
       {cartItems.length !== 0 ? (
-        cartItemsMemo
+        <Grid.Container justify="center" alignItems="center" gap={2}>
+          {cartItemsMemo}
+        </Grid.Container>
       ) : (
         <Container css={{ textAlign: "center" }}>
           <Text h4>
@@ -126,4 +144,4 @@ const Card = () => {
   );
 };
 
-export default dynamic(async () => Card, { ssr: false });
+export default dynamic(async () => Cart, { ssr: false });

@@ -5,13 +5,13 @@ import Script from "next/script";
 import { useRouter } from "next/router";
 
 import { useEffect, useState } from "react";
-import { Dropdown } from "react-bootstrap";
 import { dehydrate, useQuery } from "react-query";
 import {
   Button,
   Container,
   Grid,
   Input,
+  Modal,
   Progress,
   Spacer,
   Text,
@@ -20,12 +20,7 @@ import {
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
-import { StyledWrapper } from "../styles/styled_home";
-import {
-  StyledAddItemButton,
-  StyledStoreForm,
-  StyledDropdownButton,
-} from "../styles/styled_store";
+import { StyledStoreForm } from "../styles/styled_store";
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
@@ -46,6 +41,14 @@ export async function getServerSideProps() {
 
 export default function Home() {
   const { userSession } = useAuth();
+
+  //Modal
+  const [visible, setVisible] = useState(false);
+  const handler = () => setVisible(true);
+
+  const closeHandler = () => {
+    setVisible(false);
+  };
 
   //number of items per one load
   const numberOfNewItems = 4;
@@ -77,6 +80,12 @@ export default function Home() {
 
   ////////// use memo
   const getCategoriedItems = () => {
+    if (category === "none")
+      return (
+        setItems(data),
+        setNumbersOfItems(data.length),
+        setActualItemsCount(numberOfNewItems)
+      );
     const i = data.filter((item) =>
       item.category.toLowerCase().includes(category.toLowerCase())
     );
@@ -142,46 +151,79 @@ export default function Home() {
             <Spacer y={1} />
           </>
         ) : null}
-        <Grid.Container justify="center" gap={2}>
-          <StyledStoreForm
-            onSubmit={() => {
-              getSearchedItem();
-            }}
-          >
-            <Grid>
-              <Input
-                type="text"
-                size="md"
-                width="auto"
-                aria-label="Search"
-                placeholder="Search by name"
-                onChange={(e) => setInputValue(e.target.value)}
-              ></Input>
-            </Grid>
-            <Grid>
-              <Text
-                as={Link}
-                href={{ query: { search: inputValue } }}
-                type="submit"
-              >
-                Search
-              </Text>
-            </Grid>
-          </StyledStoreForm>
-          <StyledDropdownButton id="dropdown-basic-button" title="Categories">
-            <Link href={"/store"} passHref>
-              <Dropdown.Item>Show all</Dropdown.Item>
-            </Link>
-            {categorys?.map((category) => (
-              <Link
-                href={`/store?category=${category}`}
-                passHref
-                key={category}
-              >
-                <Dropdown.Item>{category}</Dropdown.Item>
-              </Link>
-            ))}
-          </StyledDropdownButton>
+        <Grid.Container
+          as="form"
+          justify="center"
+          gap={2}
+          onSubmit={() => {
+            getSearchedItem();
+          }}
+        >
+          <Grid>
+            <Input
+              type="text"
+              size="md"
+              width="auto"
+              aria-label="Search"
+              placeholder="Search by name"
+              onChange={(e) => setInputValue(e.target.value)}
+            ></Input>
+          </Grid>
+          <Grid>
+            <Text
+              as={Link}
+              href={{ query: { search: inputValue } }}
+              type="submit"
+            >
+              Search
+            </Text>
+          </Grid>
+          <Grid>
+            <Button
+              id="dropdown-basic-button"
+              title="Categories"
+              onClick={handler}
+            >
+              Categorys
+            </Button>
+            <Modal
+              closeButton
+              aria-labelledby="modal-title"
+              open={visible}
+              onClose={closeHandler}
+            >
+              <Modal.Header>
+                <Text id="modal-title" size={18}>
+                  Categories
+                </Text>
+              </Modal.Header>
+              <Modal.Body>
+                <Grid.Container gap={2}>
+                  <Grid>
+                    <Link href={"/store?category=none"} passHref>
+                      <Text onClick={closeHandler}>Show all</Text>
+                    </Link>
+                  </Grid>
+                  {categorys?.map((category) => (
+                    <Link
+                      href={`/store?category=${category}`}
+                      passHref
+                      key={category}
+                    >
+                      <Grid>
+                        <Text onClick={closeHandler}>{category}</Text>
+                      </Grid>
+                    </Link>
+                  ))}
+                </Grid.Container>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button auto flat color="error" onClick={closeHandler}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </Grid>
         </Grid.Container>
 
         <Container>

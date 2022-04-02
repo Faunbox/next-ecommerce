@@ -45,13 +45,16 @@ const Navigation = () => {
           <Row align="center">
             <Grid justify="center">
               <Link href="/" passHref>
-                <Text h1>Cosmetic Shop</Text>
+                <a>
+                  <Text h1>Cosmetic Shop</Text>
+                </a>
               </Link>
             </Grid>
             <Grid xs>
               <Input
                 placeholder="Search"
-                aria-label="Search"
+                id="search"
+                aria-label="searchbar"
                 fullWidth
                 onChange={(e) => router.push(`/store?search=${e.target.value}`)}
               />
@@ -59,16 +62,18 @@ const Navigation = () => {
             <Grid xs>
               {userSession && (
                 <Link href={`/user/${userSession.email}`} passHref>
-                  <User
-                    src={userSession.image ? userSession.image : ""}
-                    name={
-                      userSession.name ? (
-                        <Text h4>{userSession.name}</Text>
-                      ) : (
-                        <Text h4>{userSession.email}</Text>
-                      )
-                    }
-                  ></User>
+                  <a>
+                    <User
+                      src={userSession.image ? userSession.image : ""}
+                      name={
+                        userSession.name ? (
+                          <Text h4>{userSession.name}</Text>
+                        ) : (
+                          <Text h4>{userSession.email}</Text>
+                        )
+                      }
+                    ></User>
+                  </a>
                 </Link>
               )}
             </Grid>
@@ -76,16 +81,24 @@ const Navigation = () => {
           <Grid xs>
             <Row justify="space-around" align="center">
               <Link href="/" passHref>
-                <Text h4>Home</Text>
+                <a>
+                  <Text h4>Home</Text>
+                </a>
               </Link>
               <Link href="/store" passHref>
-                <Text h4>Store</Text>
+                <a>
+                  <Text h4>Store</Text>
+                </a>
               </Link>
               <Link href="/cart" passHref>
-                <Text h4>Cart</Text>
+                <a>
+                  <Text h4>Cart</Text>
+                </a>
               </Link>
               <Link href="/contact" passHref>
-                <Text h4>Contact</Text>
+                <a>
+                  <Text h4>Contact</Text>
+                </a>
               </Link>
               {!userSession ? (
                 <LoginForm />

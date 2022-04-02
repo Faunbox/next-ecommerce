@@ -25,6 +25,7 @@ const PhoneMenu = () => {
   return (
     <Container justify="center" css={{ textAlign: "center" }}>
       <Text h1>Cosmetic Shop</Text>
+      <Spacer y={1} />
       <Container display="flex">
         <Text
           onClick={() => {
@@ -36,15 +37,17 @@ const PhoneMenu = () => {
           <Image src={hamburgerIcon} alt="menuIcon" />
         </Text>
         <Link href="/cart" passHref>
-          <Text
-            onClick={() => {
-              setShowSearchInput(false);
-              setShowMenu(false);
-              setShowUser(false);
-            }}
-          >
-            <Image src={cartIcon} alt="cartIcon" />
-          </Text>
+          <a>
+            <Text
+              onClick={() => {
+                setShowSearchInput(false);
+                setShowMenu(false);
+                setShowUser(false);
+              }}
+            >
+              <Image src={cartIcon} alt="cartIcon" />
+            </Text>
+          </a>
         </Link>
         <Text
           onClick={() => {
@@ -75,19 +78,25 @@ const PhoneMenu = () => {
           <Spacer y={1} />
           <Container display="flex" justify="space-between">
             <Link href="/" passHref>
-              <Text b onClick={() => setShowMenu(!showMenu)}>
-                Home
-              </Text>
+              <a>
+                <Text b onClick={() => setShowMenu(!showMenu)}>
+                  Home
+                </Text>
+              </a>
             </Link>
             <Link href="/store" passHref>
-              <Text b onClick={() => setShowMenu(!showMenu)}>
-                Store
-              </Text>
+              <a>
+                <Text b onClick={() => setShowMenu(!showMenu)}>
+                  Store
+                </Text>
+              </a>
             </Link>
             <Link href="/contact" passHref>
-              <Text b onClick={() => setShowMenu(!showMenu)}>
-                Contact
-              </Text>
+              <a>
+                <Text b onClick={() => setShowMenu(!showMenu)}>
+                  Contact
+                </Text>
+              </a>
             </Link>
           </Container>
           <Spacer y={1} />
@@ -115,9 +124,11 @@ const PhoneMenu = () => {
               }}
               passHref
             >
-              <Text b onClick={() => setShowSearchInput(!showSearchInput)}>
-                Search
-              </Text>
+              <a>
+                <Text b onClick={() => setShowSearchInput(!showSearchInput)}>
+                  Search
+                </Text>
+              </a>
             </Link>
             <Spacer y={1} />
           </Row>
@@ -138,9 +149,11 @@ const PhoneMenu = () => {
             )}
             {userSession ? (
               <Link href={`/user/${userSession.email}`} passHref>
-                <Text b onClick={() => setShowUser(!showUser)}>
-                  {userSession.name ? userSession.name : userSession.email}
-                </Text>
+                <a>
+                  <Text b onClick={() => setShowUser(!showUser)}>
+                    {userSession.name ? userSession.name : userSession.email}
+                  </Text>
+                </a>
               </Link>
             ) : null}
           </Container>

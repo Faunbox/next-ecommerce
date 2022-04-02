@@ -6,6 +6,7 @@ export const Wrapper = css`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  color: #fff ;
 `;
 
 export const TextWrapper = css`

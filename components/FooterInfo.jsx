@@ -5,6 +5,7 @@ import mail from "../public/icons/mail.png";
 import dynamic from "next/dynamic";
 import { StyledDiv, StyledLink, StyledSection } from "../styles/styled_footer";
 import { Container, Text } from "@nextui-org/react";
+import Link from "next/link";
 
 const FooterInfo = () => {
   return (
@@ -14,13 +15,15 @@ const FooterInfo = () => {
         <Text>Our Customer service is avaible everyday in 8:00 to 16:00</Text>
       </Container>
       <StyledDiv>
-        <StyledLink href="mailto:faunbox2@gmail.com">
-          faunbox2@gmail.com
-        </StyledLink>
+        <Link href="mailto:faunbox2@gmail.com">
+          <a>faunbox2@gmail.com</a>
+        </Link>
         <Image src={mail} alt="ikona" />
       </StyledDiv>
       <StyledDiv>
-        <StyledLink href={"phoneto:666666666"}>Phone Number</StyledLink>
+        <Link href={"phoneto:666666666"}>
+          <a>Phone Number</a>
+        </Link>
         <Image src={refundIcon} alt="ikona" />
       </StyledDiv>
     </StyledSection>

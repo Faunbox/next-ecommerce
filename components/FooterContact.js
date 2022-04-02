@@ -31,7 +31,8 @@ const FooterContact = () => {
       <Text h6>Any questions? Contact us!</Text>
       <Spacer y={1} />
       <Input
-        type={"text"}
+        type="text"
+        id="email"
         placeholder="Your email"
         aria-label="email"
         onChange={(e) => setEmail(e.target.value)}
@@ -40,6 +41,7 @@ const FooterContact = () => {
       <Input
         type={"text"}
         placeholder="Your name"
+        id="name"
         aria-label="name"
         onChange={(e) => setName(e.target.value)}
       ></Input>
@@ -47,6 +49,7 @@ const FooterContact = () => {
       <Input
         type={"text"}
         placeholder="Your question"
+        id="message"
         aria-label="message"
         onChange={(e) => setText(e.target.value)}
       ></Input>

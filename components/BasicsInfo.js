@@ -2,22 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
-import { StyledSection, StyledDiv, StyledButton } from "../styles/styled_home";
+import { StyledSection, StyledDiv } from "../styles/styled_home";
 
 import deliveryIcon from "../public/icons/delivery (1).png";
 import refundIcon from "../public/icons/refund.png";
 import clockIcon from "../public/icons/wall-clock.png";
-import { Text } from "@nextui-org/react";
+import { Button, Text } from "@nextui-org/react";
 
 const BasicsInfo = () => {
   return (
     <StyledSection>
       <StyledDiv>
         <Text>Always free delivery</Text>
-        <Image
-          src={deliveryIcon}
-          alt="ikona"
-        />
+        <Image src={deliveryIcon} alt="ikona" />
       </StyledDiv>
       <StyledDiv>
         <Text>Send up to 24h</Text>
@@ -28,7 +25,7 @@ const BasicsInfo = () => {
         <Image src={refundIcon} alt="ikona" />
       </StyledDiv>
       <Link href={"/store"} passHref>
-        <StyledButton>Check our store!</StyledButton>
+        <Button>Check our store!</Button>
       </Link>
     </StyledSection>
   );

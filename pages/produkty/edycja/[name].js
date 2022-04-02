@@ -1,11 +1,17 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { Button, Container, Form, Row } from "react-bootstrap";
 import db from "../../../db/db";
 import Image from "next/image";
 import Product from "../../../models/Product";
-import { StyledWrapper } from "../../../styles/styled_home";
-import { StyledInputForm } from "../../../styles/styled_add-edit-item";
+import {
+  Button,
+  Card,
+  Container,
+  Grid,
+  Input,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
 
 //getting signature for authorized image upload
 export const getCloudinarySignature = async () => {
@@ -117,89 +123,108 @@ const AddProduct = ({ product }) => {
         .catch((err) => new Error("Editing wasnt correct. Try again", err))
         .finally(() => router.push("/store"));
     }
-
   };
 
   return (
-    <StyledWrapper>
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Product name</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="Szprej"
-            onChange={(e) => setName(e.target.value)}
-            value={!name ? product.name : name}
-          />
-          <Form.Text className="text-muted"></Form.Text>
-        </Form.Group>
+    <Container>
+      <Card bordered="true">
+        <Card.Header>
+          <Text h4>Add new product</Text>
+        </Card.Header>
+        <Card.Body>
+          <Grid.Container
+            justify="center
+      "
+            gap={2}
+          >
+            <Grid>
+              <Input
+                type="text"
+                placeholder="Szprej"
+                label="Product name"
+                onChange={(e) => setName(e.target.value)}
+                value={!name ? product.name : name}
+              />
+            </Grid>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Category</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="Szpreje"
-            onChange={(e) => setCategory(e.target.value)}
-            value={!category ? product.category : category}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Producent</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="Djupą"
-            onChange={(e) => setProducent(e.target.value)}
-            value={!brand ? product.brand : brand}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Avaible quantity</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="50000"
-            onChange={(e) => setInStock(e.target.value)}
-            value={!countInStock ? product.countInStock : countInStock}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Description</Form.Label>
-          <StyledInputForm
-            as={"textarea"}
-            type="text"
-            placeholder="Szuper szprej, polecam"
-            onChange={(e) => setDescription(e.target.value)}
-            value={!description ? product.description : description}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Slug</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="szuper-szprej"
-            onChange={(e) => setSlug(e.target.value.toLowerCase())}
-            value={!slug ? product.slug : slug}
-          />
-        </Form.Group>
-
-        <Image src={product?.image?.url} alt={name} width={200} height={200} />
-        <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
-        <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>Image</Form.Label>
-          <StyledInputForm
-            type="file"
-            accept=".jpg,.png"
-            onChange={(e) => {
-              setImageToUpload(e.target.files);
-            }}
-          />
-        </Form.Group>
-        {/* TODO: zrobic upload screen */}
-        {dataFetching && <div>Editing...</div>}
-      </Form>
-      <Button variant="primary" onClick={() => editProduct()}>
-        Edit product
-      </Button>
-    </StyledWrapper>
+            <Grid>
+              <Input
+                type="text"
+                placeholder="Szpreje"
+                label="Category"
+                onChange={(e) => setCategory(e.target.value)}
+                value={!category ? product.category : category}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="text"
+                label="Producent"
+                placeholder="Djupą"
+                onChange={(e) => setProducent(e.target.value)}
+                value={!brand ? product.brand : brand}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="text"
+                placeholder="50000"
+                label="Avaible quantity"
+                onChange={(e) => setInStock(e.target.value)}
+                value={!countInStock ? product.countInStock : countInStock}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                as={"textarea"}
+                type="text"
+                label="Description"
+                placeholder="Szuper szprej, polecam"
+                onChange={(e) => setDescription(e.target.value)}
+                value={!description ? product.description : description}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="text"
+                label="Slug"
+                placeholder="szuper-szprej"
+                onChange={(e) => setSlug(e.target.value.toLowerCase())}
+                value={!slug ? product.slug : slug}
+              />
+            </Grid>
+            <Grid>
+              <Container display="flex" justify="center">
+                <Image
+                  src={product?.image?.url}
+                  alt={name}
+                  width={200}
+                  height={200}
+                />
+                {/* </Grid>
+            <Grid> */}
+                <Input
+                  type="file"
+                  label="Image"
+                  accept=".jpg,.png"
+                  onChange={(e) => {
+                    setImageToUpload(e.target.files);
+                  }}
+                />
+              </Container>
+            </Grid>
+            {/* TODO: zrobic upload screen */}
+          </Grid.Container>
+          <Container display="flex" justify="center" alignItems="center">
+            {dataFetching && <div>Editing...</div>}
+            <Button variant="primary" onClick={() => editProduct()}>
+              Edit product
+            </Button>
+            <Spacer y={1} />
+          </Container>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 };
 

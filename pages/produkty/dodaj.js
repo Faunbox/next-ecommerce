@@ -1,9 +1,14 @@
-import { Spacer } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Container,
+  Grid,
+  Input,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { Button, Container, Form, Row } from "react-bootstrap";
-import { StyledInputForm } from "../../styles/styled_add-edit-item";
-import { StyledWrapper } from "../../styles/styled_home";
 
 //getting signature for authorized image upload
 export const getCloudinarySignature = async () => {
@@ -81,86 +86,91 @@ const AddProduct = () => {
   };
 
   return (
-    <StyledWrapper>
-      <Form>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Item name</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="Szprej"
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Form.Text className="text-muted"></Form.Text>
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Category</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="Szpreje"
-            onChange={(e) => setCategory(e.target.value)} //było samo e.target.value
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Price</Form.Label>
-          <StyledInputForm
-            type="number"
-            placeholder="400"
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Producent</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="Djupą"
-            onChange={(e) => setProducent(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Avaible quantity</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="50000"
-            onChange={(e) => setInStock(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Description</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="Szuper szprej, polecam"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Slug</Form.Label>
-          <StyledInputForm
-            type="text"
-            placeholder="szuper-szprej"
-            onChange={(e) => setSlug(e.target.value.toLowerCase())}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicCheckbox"></Form.Group>
-        <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>Image of item</Form.Label>
-          <StyledInputForm
-            type="file"
-            accept=".jpg,.png"
-            onChange={(e) => {
-              setImageToUpload(e.target.files);
-            }}
-          />
-        </Form.Group>
-        {/* TODO: zrobic upload screen */}
-        {dataFetching && <div>Adding to database...</div>}
-      </Form>
-      <Button variant="primary" onClick={() => addProductToShop()}>
-        Add to store
-      </Button>
-      <Spacer y={1} />
-    </StyledWrapper>
+    <Container justify="center">
+      <Card>
+        <Card.Header>
+          <Text h4>Add new product</Text>
+        </Card.Header>
+        <Card.Body controlId="formBasicEmail">
+          <Grid.Container justify="center" gap={2}>
+            <Grid>
+              <Input
+                type="text"
+                label="Item name"
+                placeholder="Szprej"
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="text"
+                label="Category"
+                placeholder="Szpreje"
+                onChange={(e) => setCategory(e.target.value)}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="number"
+                placeholder="400"
+                label="Price"
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="text"
+                label="Producent"
+                placeholder="Djupą"
+                onChange={(e) => setProducent(e.target.value)}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="text"
+                label="Avaible quantity"
+                placeholder="50000"
+                onChange={(e) => setInStock(e.target.value)}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="text"
+                label="Slug"
+                placeholder="szuper-szprej"
+                onChange={(e) => setSlug(e.target.value.toLowerCase())}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="text"
+                label="Description"
+                as="textarea"
+                placeholder="Szuper szprej, polecam"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="file"
+                label="Image"
+                accept=".jpg,.png"
+                onChange={(e) => {
+                  setImageToUpload(e.target.files);
+                }}
+              />
+            </Grid>
+          </Grid.Container>
+          <Container display="flex" justify="center" alignItems="center">
+            <Button variant="primary" onClick={() => addProductToShop()}>
+              Add to store
+            </Button>
+            <Spacer y={1} />
+            {dataFetching && <div>Adding to database...</div>}
+          </Container>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 };
 

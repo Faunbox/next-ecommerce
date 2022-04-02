@@ -29,9 +29,7 @@ export const StyledDiv = styled.div`
   margin: 10px;
 `;
 
-export const StyledLink = styled(Link)`
-  margin: 0 5px;
-`;
+
 export const StyledText = styled.p`
   margin: 0 10px;
 `;

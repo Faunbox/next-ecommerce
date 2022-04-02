@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from "../components/Layout";
 import { QueryClientProvider, QueryClient, React, Hydrate } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
