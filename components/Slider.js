@@ -9,13 +9,24 @@ const Slider = () => {
   const [current, setCurrent] = useState(0);
 
   const sliderImagesArr = [firstImage, secondImage, thirdImage];
+  const h2Text = ["Test1fasdfadsfasdf", "test2fasdfasdf", "test3fasdfasdfadsf"];
   const length = sliderImagesArr.length - 1;
-  const time = 2000;
+  const intervalTime = 5000;
+
+  const nextSlide = () => {
+    if (current > length) return setCurrent(0);
+    return setCurrent((value) => value + 1);
+  };
+
+  const prevSlide = () => {
+    if (current < 0) return setCurrent(length);
+    return setCurrent((value) => value - 1);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prevState) => (prevState === length ? 0 : prevState + 1));
-    }, time);
+    }, intervalTime);
     return () => clearInterval(interval);
   }, []);
 
@@ -24,7 +35,50 @@ const Slider = () => {
       {sliderImagesArr.map((image, imageIndex) => {
         return (
           imageIndex === current && (
-            <Image key={image} src={image} alt={"alt"} />
+            <Container key={imageIndex} css={{ position: "relative" }}>
+              <Container css={{ position: "relative" }}>
+                <Image src={image} alt={"alt"} />
+                <Text
+                  h2
+                  css={{
+                    position: "absolute",
+                    bottom: "10%",
+                    left: "50%",
+                    color: "White",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                >
+                  {h2Text[imageIndex]}
+                </Text>
+                <Text
+                  size={30}
+                  css={{
+                    position: "absolute",
+                    bottom: "50%",
+                    right: "7%",
+                    color: "White",
+                    transform: "translate(-50%, 50%)",
+                  }}
+                  onClick={() => nextSlide()}
+                >
+                  {">"}
+                </Text>
+                <Text
+                  size={30}
+                  css={{
+                    position: "absolute",
+                    bottom: "50%",
+                    left: "7%",
+                    color: "White",
+                    transform: "translate(-50%, 50%)",
+                  }}
+                  onClick={() => prevSlide()}
+                >
+                  {"<"}
+                </Text>
+              </Container>
+              <Container></Container>
+            </Container>
           )
         );
       })}

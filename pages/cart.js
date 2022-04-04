@@ -3,7 +3,7 @@ import { useCard, ACTION } from "../context/card.context";
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../context/auth.context";
 import { StyledWrapper } from "../styles/styled_home";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Button,
   Container,
@@ -11,7 +11,6 @@ import {
   Grid,
   Input,
   Row,
-  Spacer,
   Text,
 } from "@nextui-org/react";
 import Image from "next/image";

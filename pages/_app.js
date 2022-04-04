@@ -15,7 +15,6 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <Hydrate state={pageProps.dehydratedState}>
           <AuthProvider>
             <CardProvider>
-              {/* <GlobalStyle /> */}
               <AnimatePresence initial={false} exitBeforeEnter>
                 <Layout>
                   <Component {...pageProps} />
