@@ -9,9 +9,9 @@ import searchIcon from "../public/icons/search.png";
 import cartIcon from "../public/icons/shopping-cart.png";
 import userIcon from "../public/icons/user.png";
 
-import { Container, Input, Row, Spacer, Text } from "@nextui-org/react";
+import { Avatar, Container, Input, Row, Spacer, Text } from "@nextui-org/react";
 
-const PhoneMenu = () => {
+const PhoneMenu = ({ cart }) => {
   const { userSession } = useAuth();
 
   const [showMenu, setShowMenu] = useState(false);
@@ -36,19 +36,19 @@ const PhoneMenu = () => {
         >
           <Image src={hamburgerIcon} alt="menuIcon" />
         </Text>
-        <Link href="/cart" passHref>
-          <a>
-            <Text
-              onClick={() => {
-                setShowSearchInput(false);
-                setShowMenu(false);
-                setShowUser(false);
-              }}
-            >
+        <Text
+          onClick={() => {
+            setShowSearchInput(false);
+            setShowMenu(false);
+            setShowUser(false);
+          }}
+        >
+          <Link href="/cart" passHref>
+            <a>
               <Image src={cartIcon} alt="cartIcon" />
-            </Text>
-          </a>
-        </Link>
+            </a>
+          </Link>
+        </Text>
         <Text
           onClick={() => {
             setShowSearchInput(!showSearchInput);
@@ -65,9 +65,14 @@ const PhoneMenu = () => {
             setShowSearchInput(false);
           }}
         >
-          <Image src={userIcon} alt="cartIcon" />
+          <Avatar src={userSession?.image} />
         </Text>
       </Container>
+      {cart.cartItems.length !== 0 ? (
+        <Container>
+          <Text h5>You have {cart.cartItems.length} items in cart</Text>
+        </Container>
+      ) : null}
 
       {showMenu ? (
         <Container

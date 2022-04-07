@@ -60,7 +60,7 @@ const Cart = () => {
     () =>
       cartItems.map((item) => (
         <Grid justify="center" key={item._id}>
-          <Card>
+          <Card css={{ maxWidth: "300px" }}>
             <Card.Body>
               <Container direction="row" css={{ textAlign: "center" }}>
                 <Container>
@@ -69,6 +69,8 @@ const Cart = () => {
                     alt={item.name}
                     height={"100%"}
                     width={"100%"}
+                    layout="responsive"
+                    style={{ maxWidth: "250px" }}
                   />
                 </Container>
                 <Text>Item: {item.name}</Text>
@@ -88,6 +90,7 @@ const Cart = () => {
                 </Button>
                 <Input
                   type="text"
+                  aria-label="Quantity input"
                   value={fetchingFlag ? "..." : item.quantity}
                   css={{ mx: 10, width: 50 }}
                   onChange={(e) => changeQuantity(item, e.target.value)}
@@ -102,7 +105,11 @@ const Cart = () => {
               </Row>
             </Card.Body>
             <Card.Footer>
-              <Button color="error" onClick={() => deleteItem(item)}>
+              <Button
+                color="error"
+                css={{ mx: "auto" }}
+                onClick={() => deleteItem(item)}
+              >
                 Delete
               </Button>
             </Card.Footer>

@@ -224,6 +224,52 @@ export default function Home() {
               </Modal.Footer>
             </Modal>
           </Grid>
+          <Grid>
+            <Button
+              id="dropdown-basic-button"
+              title="Categories"
+              onClick={handler}
+            >
+              Sort
+            </Button>
+            <Modal
+              closeButton
+              aria-labelledby="modal-title"
+              open={visible}
+              onClose={closeHandler}
+            >
+              <Modal.Header>
+                <Text id="modal-title" size={18}>
+                  Sort by
+                </Text>
+              </Modal.Header>
+              <Modal.Body>
+                <Grid.Container gap={2}>
+                  <Grid>
+                    <Link href={"/store?category=none"} passHref>
+                      <Text onClick={closeHandler}>Show all</Text>
+                    </Link>
+                  </Grid>
+                  {categorys?.map((category) => (
+                    <Link
+                      href={`/store?category=${category}`}
+                      passHref
+                      key={category}
+                    >
+                      <Grid>
+                        <Text onClick={closeHandler}>{category}</Text>
+                      </Grid>
+                    </Link>
+                  ))}
+                </Grid.Container>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button auto flat color="error" onClick={closeHandler}>
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+          </Grid>
         </Grid.Container>
 
         <Container>

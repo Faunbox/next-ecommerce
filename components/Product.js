@@ -16,12 +16,7 @@ const ProductCard = ({ product }) => {
         <Card.Header css={{ position: "absolute", zIndex: 1, top: 5 }}>
           <Col>
             {product?.promotion ? (
-              <Text
-                size={12}
-                weight="bold"
-                transform="uppercase"
-                color="#ffffffAA"
-              >
+              <Text size={12} weight="bold" transform="uppercase" color="black">
                 Discount!
               </Text>
             ) : null}
@@ -53,9 +48,20 @@ const ProductCard = ({ product }) => {
               <Text color="primary" size={12}>
                 Avaible: {product.countInStock}
               </Text>
-              <Text color="#000" size={12}>
-                {product.price}PLN
-              </Text>
+              {!product?.promotion ? (
+                <Text color="#000" size={12}>
+                  {product.price}PLN
+                </Text>
+              ) : (
+                <>
+                  <Text del color="#000" size={12}>
+                    {product.price}PLN
+                  </Text>
+                  <Text color="#000" size={12}>
+                    {product.promotionPrice}PLN
+                  </Text>
+                </>
+              )}
             </Col>
             <Col>
               <Row justify="flex-end">

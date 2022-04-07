@@ -18,10 +18,10 @@ const Navigation = () => {
         direction="column"
         css={{ "@xs": { display: "none" }, padding: 0 }}
       >
-        <PhoneMenu />
+        <PhoneMenu cart={cart}/>
       </Container>
       <Container display="none" css={{ "@xs": { display: "block" } }}>
-        <DesktopMenu />
+        <DesktopMenu cart={cart}/>
       </Container>
       <Spacer y={1} />
     </>

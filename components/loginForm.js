@@ -1,10 +1,7 @@
 import {
   Button,
-  Checkbox,
   Input,
   Modal,
-  Row,
-  Spacer,
   Text,
 } from "@nextui-org/react";
 import { signIn } from "next-auth/react";

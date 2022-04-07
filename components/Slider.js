@@ -9,18 +9,26 @@ const Slider = () => {
   const [current, setCurrent] = useState(0);
 
   const sliderImagesArr = [firstImage, secondImage, thirdImage];
-  const h2Text = ["Test1fasdfadsfasdf", "test2fasdfasdf", "test3fasdfasdfadsf"];
+  const h2Text = [
+    "All you need for perfect makeup",
+    "Makeup brushes for professionals",
+    "Best products for bodycare",
+  ];
   const length = sliderImagesArr.length - 1;
   const intervalTime = 5000;
 
   const nextSlide = () => {
     if (current > length) return setCurrent(0);
-    return setCurrent((value) => value + 1);
+    return setCurrent((prevState) =>
+      prevState === length ? 0 : prevState + 1
+    );
   };
 
   const prevSlide = () => {
     if (current < 0) return setCurrent(length);
-    return setCurrent((value) => value - 1);
+    return setCurrent((prevState) =>
+      prevState === 0 ? length : prevState - 1
+    );
   };
 
   useEffect(() => {
@@ -42,7 +50,7 @@ const Slider = () => {
                   h2
                   css={{
                     position: "absolute",
-                    bottom: "10%",
+                    bottom: "0",
                     left: "50%",
                     color: "White",
                     transform: "translate(-50%, -50%)",

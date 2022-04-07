@@ -83,9 +83,9 @@ const Products = async (req, res) => {
     productID,
     slug,
     id,
+    promotion,
+    promotionPrice,
   } = req.body;
-
-  const { page, search, kategoria } = req.query;
 
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -174,6 +174,7 @@ const Products = async (req, res) => {
       cloudinary.uploader.destroy(oldImageID, function (error, result) {
         !error ? console.log("result", result) : console.error(error);
       });
+
       await stripe.products.update(productID, { images: [url] });
 
       await db.connect();
@@ -188,9 +189,13 @@ const Products = async (req, res) => {
           price,
           brand,
           countInStock,
+          promotion,
+          promotionPrice,
         }
       );
+      await db.disconnect();
     }
+
     await db.connect();
     const item = await Product.findOneAndUpdate(
       { _id: id },
@@ -202,6 +207,8 @@ const Products = async (req, res) => {
         price,
         brand,
         countInStock,
+        promotion,
+        promotionPrice,
       }
     );
     await db.disconnect();
@@ -279,6 +286,9 @@ const Products = async (req, res) => {
     case "PATCH": {
       try {
         console.log("Metoda PATCH w products");
+        console.log({ price });
+        console.log({ promotion });
+        console.log({ promotionPrice });
         editProduct();
         return res.status(200).json({ message: "Produkt został zmieniony" });
       } catch (error) {

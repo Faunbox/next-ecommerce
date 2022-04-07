@@ -10,6 +10,7 @@ import {
   Grid,
   Input,
   Spacer,
+  Switch,
   Text,
 } from "@nextui-org/react";
 
@@ -28,7 +29,10 @@ const AddProduct = ({ product }) => {
   const [countInStock, setInStock] = useState("");
   const [description, setDescription] = useState("");
   const [slug, setSlug] = useState(" ");
+  const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+  const [promotion, setPromotion] = useState(false);
+  const [promotionPrice, setPromotionPrice] = useState("");
   const [imageToUpload, setImageToUpload] = useState("");
   const [dataFetching, setDataFetching] = useState(false);
 
@@ -42,6 +46,8 @@ const AddProduct = ({ product }) => {
     setDescription(product.description);
     setSlug(product.slug);
     setImage(product.image.url);
+    setPrice(product.price);
+    setPromotion(false);
   }, []);
 
   const sendImageToCloudinary = async () => {
@@ -65,12 +71,19 @@ const AddProduct = ({ product }) => {
   };
 
   const editProduct = async () => {
+    if (promotionPrice >= price) {
+      alert(
+        "Cena promocyjna jest taka sama lub wyzsza od ceny sprzed promocji!"
+      );
+      return;
+    }
     setDataFetching(true);
     const id = product._id;
     if (imageToUpload) {
       const oldImageID = product.image.imageID;
       const productID = product.stripe.productID;
       const { url, imageID } = await sendImageToCloudinary();
+
       await fetch("/api/products", {
         method: "PATCH",
         headers: {
@@ -88,6 +101,8 @@ const AddProduct = ({ product }) => {
           countInStock,
           description,
           slug,
+          promotion,
+          promotionPrice,
         }),
       })
         .then((res) => res.json())
@@ -112,9 +127,12 @@ const AddProduct = ({ product }) => {
           category,
           id,
           brand,
+          price,
           countInStock,
           description,
           slug,
+          promotion,
+          promotionPrice,
         }),
       })
         .then((res) => res.json())
@@ -129,14 +147,31 @@ const AddProduct = ({ product }) => {
     <Container>
       <Card bordered="true">
         <Card.Header>
-          <Text h4>Add new product</Text>
+          <Text h3>Edit product</Text>
         </Card.Header>
         <Card.Body>
-          <Grid.Container
-            justify="center
-      "
-            gap={2}
-          >
+          <Grid.Container justify="center" gap={2}>
+            <Grid>
+              <Text>Set item promotion</Text>
+              <Switch
+                initialChecked={false}
+                checked={false}
+                onChange={() => setPromotion((prevState) => !prevState)}
+              />
+            </Grid>
+
+            {promotion ? (
+              <Grid>
+                <Input
+                  type="number"
+                  placeholder="Promotion price"
+                  label="New promotion price"
+                  labelRight="PLN"
+                  onChange={(e) => setPromotionPrice(e.target.value)}
+                  value={!promotionPrice ? product.price : promotionPrice}
+                />
+              </Grid>
+            ) : null}
             <Grid>
               <Input
                 type="text"
@@ -167,7 +202,17 @@ const AddProduct = ({ product }) => {
             </Grid>
             <Grid>
               <Input
-                type="text"
+                type="number"
+                placeholder="Actual price"
+                label="New price"
+                labelRight="PLN"
+                onChange={(e) => setPrice(e.target.value)}
+                value={!price ? product.price : price}
+              />
+            </Grid>
+            <Grid>
+              <Input
+                type="number"
                 placeholder="50000"
                 label="Avaible quantity"
                 onChange={(e) => setInStock(e.target.value)}
@@ -189,6 +234,7 @@ const AddProduct = ({ product }) => {
                 type="text"
                 label="Slug"
                 placeholder="szuper-szprej"
+                labelLeft="https://shop.com/"
                 onChange={(e) => setSlug(e.target.value.toLowerCase())}
                 value={!slug ? product.slug : slug}
               />

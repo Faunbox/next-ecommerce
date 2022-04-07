@@ -90,6 +90,16 @@ const ProductScreen = ({ product }) => {
           <Text h4>{product.description}</Text>
           <Text h4>In stock: {product.countInStock}</Text>
           <Text h4>Category: {product.category}</Text>
+          {product.promotion ? (
+            <>
+              <Text del h4>
+                Price: {product.price}PLN
+              </Text>
+              <Text h4>New price: {product.promotionPrice}PLN</Text>
+            </>
+          ) : (
+            <Text h4>Price: {product.price}PLN</Text>
+          )}
           <Spacer y={1} />
           <Image
             src={product?.image?.url}
