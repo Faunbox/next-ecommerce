@@ -105,107 +105,78 @@ const LoggedUserPage = ({ user }) => {
   };
   return (
     <Container justify="center">
-      <Container>
-        <Text>User email: {user.email}</Text>
-        {!user.name ? (
-          <Button auto css={{ my: 10, mx: "auto" }} onClick={() => handler()}>
-            Set username
-          </Button>
-        ) : (
-          <>
-            <Text>
-              {isNameChanged
-                ? `Username: ${changedUserName}`
-                : `Username: ${user.name}`}
-            </Text>
-            <Container>
-              <Button
-                auto
-                onClick={() => {
-                  setShowInput((prevState) => !prevState);
-                  handler();
-                }}
-                css={{ my: 10, mx: "auto" }}
-              >
-                Change username
-              </Button>
-              {showInput ? (
-                <Modal
-                  closeButton
-                  aria-labelledby="modal-title"
-                  open={visible}
-                  onClose={() => closeHandler()}
-                >
-                  <Modal.Header>
-                    <Text b>Set your nickname</Text>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <Input
-                      ref={inputRef}
-                      type="text"
-                      id="username"
-                      aria-label="username"
-                      aria-labelledby="username"
-                      bordered
-                      required
-                      status="primary"
-                      css={{ my: 10 }}
-                      placeholder="SuperUser997"
-                      onChange={(e) => setUserName(e.target.value)}
-                      style={{ width: "fit-content" }}
-                    />
-                    <Button
-                      type="submit"
-                      css={{ my: 10, mx: "auto" }}
-                      onClick={() => {
-                        sendUserNameToDatabase();
-                        setChangedUserName(userName);
-                      }}
-                    >
-                      Set nickname
-                    </Button>
-                  </Modal.Body>
-                </Modal>
-              ) : null}
-              <Spacer y={1} />
-            </Container>
-          </>
-        )}
-      </Container>
-      <Container justify="center" css={{ textAlign: "center", my: 10 }}>
-        {!user?.image ? (
-          <>
-            <Text h4>You dont have any avatar image!</Text>
-            <Input
-              type="file"
-              id="file"
-              aria-label="file"
-              accept=".jpg,.png"
-              required
-              onChange={(e) => {
-                setImage(e.target.files);
-              }}
-              css={{ height: "auto" }}
-            ></Input>
-            <Button
-              auto
-              css={{ my: 20, mx: "auto" }}
-              onClick={() => sendNewAvatarImageToDb()}
-            >
-              {!user?.image ? "Set avatar" : "Change avatar"}
+      <Card bordered="true">
+        <Container>
+          <Text>User email: {user.email}</Text>
+          {!user.name ? (
+            <Button auto css={{ my: 10, mx: "auto" }} onClick={() => handler()}>
+              Set username
             </Button>
-          </>
-        ) : (
-          <Grid.Container justify="space-evenly" alignItems="center">
-            <Grid>
-              <Image
-                src={user?.image}
-                alt={`Image avatar`}
-                width={100}
-                height={100}
-              />
-            </Grid>
-            <Grid>
+          ) : (
+            <>
+              <Text>
+                {isNameChanged
+                  ? `Username: ${changedUserName}`
+                  : `Username: ${user.name}`}
+              </Text>
+              <Container>
+                <Button
+                  auto
+                  onClick={() => {
+                    setShowInput((prevState) => !prevState);
+                    handler();
+                  }}
+                  css={{ my: 10, mx: "auto" }}
+                >
+                  Change username
+                </Button>
+                {showInput ? (
+                  <Modal
+                    closeButton
+                    aria-labelledby="modal-title"
+                    open={visible}
+                    onClose={() => closeHandler()}
+                  >
+                    <Modal.Header>
+                      <Text b>Set your nickname</Text>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <Input
+                        ref={inputRef}
+                        type="text"
+                        id="username"
+                        aria-label="username"
+                        aria-labelledby="username"
+                        bordered
+                        required
+                        status="primary"
+                        css={{ my: 10 }}
+                        placeholder="SuperUser997"
+                        onChange={(e) => setUserName(e.target.value)}
+                        style={{ width: "fit-content" }}
+                      />
+                      <Button
+                        type="submit"
+                        css={{ my: 10, mx: "auto" }}
+                        onClick={() => {
+                          sendUserNameToDatabase();
+                          setChangedUserName(userName);
+                        }}
+                      >
+                        Set nickname
+                      </Button>
+                    </Modal.Body>
+                  </Modal>
+                ) : null}
+                <Spacer y={1} />
+              </Container>
+            </>
+          )}
+        </Container>
+        <Container justify="center" css={{ textAlign: "center", my: 10 }}>
+          {!user?.image ? (
+            <>
+              <Text h4>You dont have any avatar image!</Text>
               <Input
                 type="file"
                 id="file"
@@ -217,8 +188,6 @@ const LoggedUserPage = ({ user }) => {
                 }}
                 css={{ height: "auto" }}
               ></Input>
-            </Grid>
-            <Grid>
               <Button
                 auto
                 css={{ my: 20, mx: "auto" }}
@@ -226,27 +195,60 @@ const LoggedUserPage = ({ user }) => {
               >
                 {!user?.image ? "Set avatar" : "Change avatar"}
               </Button>
-            </Grid>
-          </Grid.Container>
-        )}
-      </Container>
-      <Container justify="center">
-        <Button
-          onClick={() => {
-            setShowPucharseHistory(!showPucharseHistory);
-            !showPucharseHistory ? getUserPaymentHistory() : null;
-          }}
-          css={{ mx: "auto" }}
-        >
-          {showPucharseHistory ? (
-            <Loading color="white" size="sm" />
+            </>
           ) : (
-            "Show history of my latest orders"
+            <Grid.Container justify="space-evenly" alignItems="center">
+              <Grid>
+                <Image
+                  src={user?.image}
+                  alt={`Image avatar`}
+                  width={100}
+                  height={100}
+                />
+              </Grid>
+              <Grid>
+                <Input
+                  type="file"
+                  id="file"
+                  aria-label="file"
+                  accept=".jpg,.png"
+                  required
+                  onChange={(e) => {
+                    setImage(e.target.files);
+                  }}
+                  css={{ height: "auto" }}
+                ></Input>
+              </Grid>
+              <Grid>
+                <Button
+                  auto
+                  css={{ my: 20, mx: "auto" }}
+                  onClick={() => sendNewAvatarImageToDb()}
+                >
+                  {!user?.image ? "Set avatar" : "Change avatar"}
+                </Button>
+              </Grid>
+            </Grid.Container>
           )}
-        </Button>
-        {!showPucharseHistory &&
-          (history ? <HistoryItemList items={paymentHistory} /> : null)}
-      </Container>
+        </Container>
+        <Container justify="center">
+          <Button
+            onClick={() => {
+              setShowPucharseHistory(!showPucharseHistory);
+              !showPucharseHistory ? getUserPaymentHistory() : null;
+            }}
+            css={{ mx: "auto" }}
+          >
+            {showPucharseHistory ? (
+              <Loading color="white" size="sm" />
+            ) : (
+              "Show history of my latest orders"
+            )}
+          </Button>
+          {!showPucharseHistory &&
+            (history ? <HistoryItemList items={paymentHistory} /> : null)}
+        </Container>
+      </Card>
     </Container>
   );
 };

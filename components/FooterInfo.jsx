@@ -9,7 +9,7 @@ import Link from "next/link";
 
 const FooterInfo = () => {
   return (
-    <StyledSection>
+    <Container>
       <Container css={{ textAlign: "center" }}>
         <Image src={deliveryIcon} alt="ikona" />
         <Text>Our Customer service is avaible everyday in 8:00 to 16:00</Text>
@@ -26,7 +26,7 @@ const FooterInfo = () => {
         </Link>
         <Image src={refundIcon} alt="ikona" />
       </StyledDiv>
-    </StyledSection>
+    </Container>
   );
 };
 

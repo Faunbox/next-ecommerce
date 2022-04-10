@@ -5,6 +5,7 @@ import { queryClient } from "./_app";
 import { dehydrate, useQuery } from "react-query";
 import { StyledMain } from "../styles/styled_home";
 import StoreInfo from "../components/StoreInfo";
+import { Container, Grid, Spacer } from "@nextui-org/react";
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
@@ -27,12 +28,20 @@ const About = () => {
   const { data } = useQuery("AllItems", fetchAllProducts, { enabled: false });
 
   return (
-    <StyledMain>
-      <Slider />
-      <BasicsInfo />
-      <Promotions items={data} />
-      <StoreInfo />
-    </StyledMain>
+    <>
+      <StyledMain>
+        <Slider />
+        <Grid.Container
+          direction="column-reverse"
+          css={{ "@xs": { justifyContent: "column-reverse" } }}
+        >
+          <BasicsInfo />
+          <Promotions items={data} />
+        </Grid.Container>
+        <Spacer y={1} />
+        <StoreInfo />
+      </StyledMain>
+    </>
   );
 };
 

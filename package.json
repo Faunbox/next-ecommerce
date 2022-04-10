@@ -20,6 +20,7 @@
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "file": "^0.2.2",
+    "formik": "^2.2.9",
     "framer-motion": "^6.2.8",
     "gsap": "^3.9.1",
     "html-react-parser": "^1.4.8",
@@ -33,10 +34,12 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-draft-wysiwyg": "^1.14.7",
+    "react-hook-form": "^7.29.0",
     "react-query": "^3.34.15",
     "sass": "^1.49.7",
     "stripe": "^8.202.0",
-    "styled-components": "^5.3.3"
+    "styled-components": "^5.3.3",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "eslint": "7.32.0",

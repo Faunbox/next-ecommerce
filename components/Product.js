@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
               <Row justify="flex-end">
                 <Link href={`/produkty/${product.slug}`} passHref>
                   <a>
-                    <Button flat auto rounded color="gradient">
+                    <Button flat auto rounded>
                       <Text
                         css={{ color: "inherit" }}
                         size={12}

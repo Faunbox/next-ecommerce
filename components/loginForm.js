@@ -1,11 +1,8 @@
-import {
-  Button,
-  Input,
-  Modal,
-  Text,
-} from "@nextui-org/react";
+import { Button, Input, Modal, Text } from "@nextui-org/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 export const Mail = ({ fill, size, height, width, ...props }) => {
   return (
@@ -47,15 +44,28 @@ export const Password = ({ fill, size, height, width, ...props }) => {
 
 const LoginForm = () => {
   const [visible, setVisible] = useState(false);
-  const [email, setEmail] = useState();
-  const handler = () => setVisible(true);
-  const closeHandler = () => {
+  const openModalHandler = () => setVisible(true);
+  const closeModalHandler = () => {
     setVisible(false);
   };
 
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Required"),
+    }),
+    onSubmit: (values) => {
+      console.log(values);
+      signIn("email", { email: values.email });
+      closeModalHandler;
+    },
+  });
+
   return (
     <>
-      <Text h4 onClick={() => handler()}>
+      <Text h4 onClick={() => openModalHandler()}>
         Log in
       </Text>
       <Modal
@@ -63,44 +73,42 @@ const LoginForm = () => {
         blur
         aria-labelledby="modal-title"
         open={visible}
-        onClose={closeHandler}
+        onClose={closeModalHandler}
       >
-        <Modal.Header>
-          <Text id="modal-title" size={18}>
-            Welcome to
-            <Text b size={18}>
-              Cosmetic Shop!
+        <form onSubmit={formik.handleSubmit}>
+          <Modal.Header>
+            <Text id="modal-title" size={18}>
+              Welcome to
+              <Text b size={18}>
+                Cosmetic Shop!
+              </Text>
             </Text>
-          </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Email"
-            required
-            label="Passwordless login"
-            onChange={(e) => setEmail(e.target.value)}
-            contentLeft={<Mail fill="currentColor" />}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button auto flat color="error" onClick={closeHandler}>
-            Close
-          </Button>
-          <Button
-            auto
-            onClick={() => {
-              signIn("email", { email: email });
-              closeHandler;
-            }}
-          >
-            Sign in
-          </Button>
-        </Modal.Footer>
+          </Modal.Header>
+          <Modal.Body>
+            <Input
+              clearable
+              bordered
+              fullWidth
+              color="primary"
+              size="lg"
+              placeholder="Email"
+              required
+              name="email"
+              label="Passwordless login"
+              onChange={formik.handleChange}
+              contentLeft={<Mail fill="currentColor" />}
+            />
+            {formik.errors.email ? <Text>{formik.errors.email}</Text> : null}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button auto flat color="error" onClick={closeModalHandler}>
+              Close
+            </Button>
+            <Button auto type="submit">
+              Sign in
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
     </>
   );

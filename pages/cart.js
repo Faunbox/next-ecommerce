@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 import { useCard, ACTION } from "../context/card.context";
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../context/auth.context";
-import { StyledWrapper } from "../styles/styled_home";
 import { useMemo, useState } from "react";
 import {
   Button,
@@ -70,7 +69,7 @@ const Cart = () => {
                     height={"100%"}
                     width={"100%"}
                     layout="responsive"
-                    style={{ maxWidth: "250px" }}
+                    style={{ maxWidth: "300px", minWidth: "150px" }}
                   />
                 </Container>
                 <Text>Item: {item.name}</Text>
@@ -120,7 +119,7 @@ const Cart = () => {
   );
 
   return (
-    <StyledWrapper>
+    <Container display="flex" justify="center" alignItems="center">
       {cartItems.length !== 0 ? (
         <>
           <Button
@@ -146,8 +145,11 @@ const Cart = () => {
           </Text>
         </Container>
       )}
-    </StyledWrapper>
+    </Container>
   );
 };
 
-export default dynamic(async () => Cart, { ssr: false });
+export default dynamic(
+  async () => Cart
+  //  { ssr: false }
+);

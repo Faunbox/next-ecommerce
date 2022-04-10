@@ -1,4 +1,13 @@
-import { Button, Col, Container, Grid, Spacer, Text } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Grid,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
+import { SP } from "next/dist/shared/lib/utils";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useCard, ACTION } from "../../context/card.context";
@@ -25,56 +34,62 @@ const FinishingOrder = ({ sessionDetails, items }) => {
   }, []);
 
   return (
-    <Container justify="space-around">
-      <Spacer y={1} />
-      <Col>
-        <Text h4>Thanks, {name}!</Text>
-        <Text h5>Your shipping information: </Text>
-        <Spacer y={1} />
-      </Col>
-      {address ? (
-        <Grid.Container gap={1} justify="center">
-          <Grid xs={12} sm={2} key={address.city}>
-            <Text>City: {address.city}</Text>
+    <Container>
+      <Grid.Container
+        justify="space-around"
+        alignItems="center"
+        direction="column"
+      >
+        <Grid direction="column">
+          <Grid direction="column">
+            <Text h3>Thanks, {name}!</Text>
+            <Spacer y={1} />
+            <Text h4>Your shipping information: </Text>
           </Grid>
-          <Grid xs={12} sm={2} key={address.line1}>
-            <Text>Street: {`${address.line1} ${address.line2}`}</Text>
-          </Grid>
-          <Grid xs={12} sm={2} key={address.postalCode}>
-            <Text>Postal code: {postalCode}</Text>
-          </Grid>
-        </Grid.Container>
-      ) : (
-        "No data"
-      )}
-      <Col>
+          {address ? (
+            <Grid direction="column">
+              <Spacer y={1} />
+              <Text>City: {address.city}</Text>
+              <Text>Street: {`${address.line1} ${address.line2}`}</Text>
+              <Text>Postal code: {postalCode}</Text>
+            </Grid>
+          ) : (
+            "No data"
+          )}
+        </Grid>
+        <Grid>
+          <Spacer y={1} />
+          <Text h5>Your pucharsed items:</Text>
+          <Spacer y={1} />
+        </Grid>
+        {items ? (
+          <Grid.Container justify="center" gap={1}>
+            {items.map((item) => (
+              <Card
+                key={item.description}
+                css={{ w: "auto", mx: "10px" }}
+                shadow="false"
+                bordered="true"
+              >
+                <Grid>
+                  <Text>Name: {item.description}</Text>
+                  <Text>Quantity: {item.quantity}</Text>
+                  <Text>Price per item: {item.amount_total / 100}zł</Text>
+                  <Text>
+                    Total price: {(item.amount_total / 100) * item.quantity}zł
+                  </Text>
+                </Grid>
+              </Card>
+            ))}
+          </Grid.Container>
+        ) : (
+          <Text>No data!</Text>
+        )}
         <Spacer y={1} />
-        <Text h5>Your pucharsed items:</Text>
-        <Spacer y={1} />
-      </Col>
-      {items ? (
-        <Grid.Container justify="center" gap={1}>
-          {items.map((item) => (
-            <>
-              <Grid>
-                <Text>Name: {item.description}</Text>
-              </Grid>
-              <Grid>
-                <Text>Quantity: {item.quantity}</Text>
-              </Grid>
-              <Grid>
-                <Text>Price: {item.amount_total / 100}zł</Text>
-              </Grid>
-            </>
-          ))}
-        </Grid.Container>
-      ) : (
-        <Text>No data!</Text>
-      )}
-      <Spacer y={1} />
-      <Link href={"/"} passHref>
-        <Button css={{ mx: "auto" }}>Go to home page</Button>
-      </Link>
+        <Link href={"/"} passHref>
+          <Button css={{ mx: "auto" }}>Go to home page</Button>
+        </Link>
+      </Grid.Container>
     </Container>
   );
 };

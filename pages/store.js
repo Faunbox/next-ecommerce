@@ -42,14 +42,6 @@ export async function getServerSideProps() {
 export default function Home() {
   const { userSession } = useAuth();
 
-  //Modal
-  const [visible, setVisible] = useState(false);
-  const handler = () => setVisible(true);
-
-  const closeHandler = () => {
-    setVisible(false);
-  };
-
   //number of items per one load
   const numberOfNewItems = 4;
 
@@ -66,6 +58,21 @@ export default function Home() {
 
   //get data from ssr prefetch
   const { data } = useQuery("AllItems", fetchAllProducts, { enabled: false });
+
+  //Category modal
+  const [visible, setVisible] = useState(false);
+  const handler = () => setVisible(true);
+
+  const closeHandler = () => {
+    setVisible(false);
+  };
+
+  //Sorting Modal
+  const [sortVisivle, setSortVisible] = useState(false);
+
+  const modalCloseHandler = () => {
+    setSortVisible(false);
+  };
 
   const getSearchedItem = () => {
     const i = data.filter((item) =>
@@ -228,15 +235,15 @@ export default function Home() {
             <Button
               id="dropdown-basic-button"
               title="Categories"
-              onClick={handler}
+              onClick={() => setSortVisible(true)}
             >
               Sort
             </Button>
             <Modal
               closeButton
               aria-labelledby="modal-title"
-              open={visible}
-              onClose={closeHandler}
+              open={sortVisivle}
+              onClose={() => setSortVisible(false)}
             >
               <Modal.Header>
                 <Text id="modal-title" size={18}>
@@ -246,21 +253,57 @@ export default function Home() {
               <Modal.Body>
                 <Grid.Container gap={2}>
                   <Grid>
-                    <Link href={"/store?category=none"} passHref>
-                      <Text onClick={closeHandler}>Show all</Text>
-                    </Link>
-                  </Grid>
-                  {categorys?.map((category) => (
-                    <Link
-                      href={`/store?category=${category}`}
-                      passHref
-                      key={category}
+                    <Text
+                      onClick={() => {
+                        setSortVisible(false);
+                        setItems((prevState) =>
+                          prevState.sort((a, b) => a.name.localeCompare(b.name))
+                        );
+                      }}
                     >
-                      <Grid>
-                        <Text onClick={closeHandler}>{category}</Text>
-                      </Grid>
-                    </Link>
-                  ))}
+                      Name: A-Z
+                    </Text>
+                  </Grid>
+                  <Grid>
+                    <Text
+                      onClick={() => {
+                        setSortVisible(false);
+                        setItems((prevState) =>
+                          prevState.sort((a, b) => b.name.localeCompare(a.name))
+                        );
+                      }}
+                    >
+                      Z-A
+                    </Text>
+                  </Grid>
+                  <Grid>
+                    <Text
+                      onClick={() => {
+                        setSortVisible(false);
+                        setItems((prevState) =>
+                          prevState.sort((a, b) => {
+                            return a.price - b.price;
+                          })
+                        );
+                      }}
+                    >
+                      Low to high
+                    </Text>
+                  </Grid>
+                  <Grid>
+                    <Text
+                      onClick={() => {
+                        setSortVisible(false);
+                        setItems((prevState) =>
+                          prevState.sort((a, b) => {
+                            return b.price - a.price;
+                          })
+                        );
+                      }}
+                    >
+                      High to low
+                    </Text>
+                  </Grid>
                 </Grid.Container>
               </Modal.Body>
               <Modal.Footer>

@@ -144,11 +144,11 @@ const PhoneMenu = ({ cart }) => {
           <Spacer y={1} />
           <Container display="flex" justify="space-between">
             {!userSession ? (
-              <Text b auto onClick={() => signIn()}>
+              <Text b onClick={() => signIn()}>
                 Log in
               </Text>
             ) : (
-              <Text b auto onClick={() => signOut()}>
+              <Text b onClick={() => signOut()}>
                 Log out
               </Text>
             )}

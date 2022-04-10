@@ -1,7 +1,7 @@
 import Image from "next/image";
-import firstImage from "../public/slider/glass-g14c33741c_1280.jpg";
-import secondImage from "../public/slider/makeup-g851ce7124_1280.jpg";
-import thirdImage from "../public/slider/soap-g595e3af38_1280.jpg";
+import firstImage from "../public/slider/glass-g14c33741c_1280-min.jpg";
+import secondImage from "../public/slider/makeup-g851ce7124_1280-min.jpg";
+import thirdImage from "../public/slider/soap-g595e3af38_1280-min.jpg";
 import { useEffect, useState } from "react";
 import { Container, Text } from "@nextui-org/react";
 
@@ -39,7 +39,11 @@ const Slider = () => {
   }, []);
 
   return (
-    <Container justify="center">
+    <Container
+      justify="center"
+      display="none"
+      css={{ "@xs": { display: "block" }, maxW: "1000px" }}
+    >
       {sliderImagesArr.map((image, imageIndex) => {
         return (
           imageIndex === current && (
@@ -50,10 +54,10 @@ const Slider = () => {
                   h2
                   css={{
                     position: "absolute",
-                    bottom: "0",
+                    bottom: "10%",
                     left: "50%",
                     color: "White",
-                    transform: "translate(-50%, -50%)",
+                    transform: "translate(-50%, 0)",
                   }}
                 >
                   {h2Text[imageIndex]}

@@ -5,14 +5,14 @@ const Promotions = ({ items }) => {
   // console.log(items.sort((a, b) => b.date.localeCompare(a.date)));
   return (
     <Container justify="center" alignItems="center">
-      <Text h2>Newest items in our store</Text>
+      <Text h2>New items in our store</Text>
       <Grid.Container gap={2} justify="center">
         {items
           ?.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
           .map((item) => <Product key={item._id} product={item} />)
           .slice(0, 4)}
       </Grid.Container>
-      <Spacer y={1} />
+      <Spacer y={1} css={{ display: "none", "@xs": "block" }} />
     </Container>
   );
 };

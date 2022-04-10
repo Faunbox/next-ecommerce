@@ -84,10 +84,24 @@ const ProductScreen = ({ product }) => {
       >
         Back
       </Button>
-      <Grid.Container justify="center" gap={3}>
+      <Grid.Container
+        justify="center"
+        alignItems="center"
+        gap={3}
+        css={{ height: "100%" }}
+      >
         <Grid>
           <Text h1>{product.name}</Text>
-          <Text h4>{product.description}</Text>
+          <Spacer y={1} />
+          <Image
+            src={product?.image?.url}
+            alt={product.name}
+            width={300}
+            height={300}
+          />
+        </Grid>
+        <Grid justify="center" alignItems="center">
+          <Text h4>Description: {product.description}</Text>
           <Text h4>In stock: {product.countInStock}</Text>
           <Text h4>Category: {product.category}</Text>
           {product.promotion ? (
@@ -100,13 +114,6 @@ const ProductScreen = ({ product }) => {
           ) : (
             <Text h4>Price: {product.price}PLN</Text>
           )}
-          <Spacer y={1} />
-          <Image
-            src={product?.image?.url}
-            alt={product.name}
-            width={200}
-            height={200}
-          />
         </Grid>
         <Spacer y={1} />
         <Grid justify="center" alignItems="center" css={{ margin: "auto 0" }}>

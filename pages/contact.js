@@ -9,13 +9,26 @@ import {
   Spacer,
   Text,
 } from "@nextui-org/react";
+import { useFormik } from "formik";
+import * as Yup from 'yup'
 
 const Contact = () => {
   const apiEndpoint = "./api/mail/";
   const [sendEmail, setSendEmail] = useState(false);
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [text, setText] = useState("");
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      name:"",
+      message: ""
+    },
+    validationSchema: Yup.object({
+      email: Yup.string().email("Invalid email address").required("Email address is required to send a message"),
+      name: Yup.string().min(3, "Name is to short, it should have at least 3 letters").required("Name is required to send a message"),
+      // message: Yup.string().min(5, "")
+    })
+
+  })
 
   const handleSubmit = async () => {
     //check
