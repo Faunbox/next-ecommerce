@@ -57,7 +57,6 @@ const LoginForm = () => {
       email: Yup.string().email("Invalid email address").required("Required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       signIn("email", { email: values.email });
       closeModalHandler;
     },

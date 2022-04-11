@@ -1,13 +1,11 @@
 import {
   Button,
   Card,
-  Col,
   Container,
   Grid,
   Spacer,
   Text,
 } from "@nextui-org/react";
-import { SP } from "next/dist/shared/lib/utils";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useCard, ACTION } from "../../context/card.context";
