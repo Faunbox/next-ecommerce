@@ -32,7 +32,6 @@ const Contact = () => {
       message: Yup.string().min(20, "Message must have at least 20 letters"),
     }),
     onSubmit: (values) => {
-      console.log(values);
       handleSubmit(values);
     },
   });
@@ -54,7 +53,6 @@ const Contact = () => {
     const response = await req.json();
     alert(response.message);
   };
-
   return (
     <Container>
       <Container>
@@ -69,6 +67,7 @@ const Contact = () => {
               type={"text"}
               placeholder="Your email"
               aria-label="email"
+              id="email"
               name="email"
               fullWidth
               onChange={formik.handleChange}
@@ -78,6 +77,7 @@ const Contact = () => {
               type={"text"}
               placeholder="Your name"
               aria-label="name"
+              id="name"
               name="name"
               fullWidth
               onChange={formik.handleChange}
@@ -87,6 +87,7 @@ const Contact = () => {
           <Input
             as="textarea"
             type={"text"}
+            id="message"
             placeholder="Your message"
             aria-label="message"
             name="message"
@@ -100,7 +101,7 @@ const Contact = () => {
           >
             Do you want to send a email
           </Checkbox>
-          {formik.errors !== {} && (
+          {Object.keys(formik.errors).length !== 0 && (
             <>
               <Spacer y={1} />
               <Text h4>

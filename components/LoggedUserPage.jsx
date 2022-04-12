@@ -13,6 +13,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import HistoryItemList from "./HistoryItem";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const LoggedUserPage = ({ user }) => {
   const inputRef = useRef(null);
@@ -26,13 +28,37 @@ const LoggedUserPage = ({ user }) => {
   };
 
   const [showInput, setShowInput] = useState(false);
-  const [userName, setUserName] = useState(user.name ? user.name : "");
-  const [changedUserName, setChangedUserName] = useState("");
-  const [isNameChanged, setIsNameChanged] = useState(false);
   const [showPucharseHistory, setShowPucharseHistory] = useState(false);
   const [image, setImage] = useState("");
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [history, setHistory] = useState([]);
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+    },
+    validationSchema: Yup.object({
+      userName: Yup.string()
+        .required("Please insert username")
+        .min(3, "Username must have at least 3 letters")
+        .max(12, "12 is max number of letters"),
+    }),
+    onSubmit: async (values) => {
+      await fetch("/api/users/change-name", {
+        method: "PATCH",
+        body: JSON.stringify({
+          name: values.username,
+          email: user.email,
+        }),
+      })
+        .then((data) => checkIsStatusOk(data.status))
+        .catch(
+          (err) =>
+            new Error({ message: "Błąd podczas zmiany nazwy konta" }, err)
+        )
+        .finally(() => router.reload());
+    },
+  });
 
   const cloudinaryUploadLink =
     "https://api.cloudinary.com/v1_1/faunbox/image/upload";
@@ -75,22 +101,6 @@ const LoggedUserPage = ({ user }) => {
       .finally(setShowInput(false), router.reload());
   };
 
-  const sendUserNameToDatabase = async () => {
-    setChangedUserName(userName);
-    await fetch("/api/users/change-name", {
-      method: "PATCH",
-      body: JSON.stringify({
-        name: userName,
-        email: user.email,
-      }),
-    })
-      .then((data) => checkIsStatusOk(data.status))
-      .catch(
-        (err) => new Error({ message: "Błąd podczas zmiany nazwy konta" }, err)
-      )
-      .finally(setShowInput(false), router.reload);
-  };
-
   const getUserPaymentHistory = async () => {
     setHistory(false);
     const paymentHistory = await fetch("/api/users/[email]", {
@@ -101,7 +111,7 @@ const LoggedUserPage = ({ user }) => {
     console.log({ res });
     res.length === 0 ? setPaymentHistory(false) : setPaymentHistory(res);
     setHistory(true);
-    setShowPucharseHistory(false);
+    setShowPucharseHistory((prevState) => !prevState);
   };
   return (
     <Container justify="center">
@@ -114,11 +124,7 @@ const LoggedUserPage = ({ user }) => {
             </Button>
           ) : (
             <>
-              <Text>
-                {isNameChanged
-                  ? `Username: ${changedUserName}`
-                  : `Username: ${user.name}`}
-              </Text>
+              {user?.name && <Text>Username: {user.name}</Text>}
               <Container>
                 <Button
                   auto
@@ -135,37 +141,37 @@ const LoggedUserPage = ({ user }) => {
                     closeButton
                     aria-labelledby="modal-title"
                     open={visible}
-                    onClose={() => closeHandler()}
+                    onClose={() => {
+                      setShowInput((prevState) => !prevState);
+                      closeHandler();
+                    }}
                   >
-                    <Modal.Header>
-                      <Text b>Set your nickname</Text>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Input
-                        ref={inputRef}
-                        type="text"
-                        id="username"
-                        aria-label="username"
-                        aria-labelledby="username"
-                        bordered
-                        required
-                        status="primary"
-                        css={{ my: 10 }}
-                        placeholder="SuperUser997"
-                        onChange={(e) => setUserName(e.target.value)}
-                        style={{ width: "fit-content" }}
-                      />
-                      <Button
-                        type="submit"
-                        css={{ my: 10, mx: "auto" }}
-                        onClick={() => {
-                          sendUserNameToDatabase();
-                          setChangedUserName(userName);
-                        }}
-                      >
-                        Set nickname
-                      </Button>
-                    </Modal.Body>
+                    <form onSubmit={formik.handleSubmit}>
+                      <Modal.Header>
+                        <Text b>Set your nickname</Text>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Input
+                          ref={inputRef}
+                          type="text"
+                          id="username"
+                          aria-label="username"
+                          aria-labelledby="username"
+                          name="username"
+                          bordered
+                          required
+                          status="primary"
+                          css={{ my: 10 }}
+                          placeholder="SuperUser997"
+                          onChange={formik.handleChange}
+                          style={{ width: "fit-content" }}
+                          // helperText={formik.errors}
+                        />
+                        <Button type="submit" css={{ my: 10, mx: "auto" }}>
+                          Set nickname
+                        </Button>
+                      </Modal.Body>
+                    </form>
                   </Modal>
                 ) : null}
                 <Spacer y={1} />
@@ -234,7 +240,7 @@ const LoggedUserPage = ({ user }) => {
         <Container justify="center">
           <Button
             onClick={() => {
-              setShowPucharseHistory(!showPucharseHistory);
+              setShowPucharseHistory((prevState) => !prevState);
               !showPucharseHistory ? getUserPaymentHistory() : null;
             }}
             css={{ mx: "auto" }}

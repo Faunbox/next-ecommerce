@@ -21,7 +21,6 @@ const getItemNameFromStripe = async (items) => {
     const res = await Product.findOne({ "stripe.productID": item.id });
 
     ////////////Dopisac obrazek
-
     const { name, description } = await res;
     return { name, description };
   }
