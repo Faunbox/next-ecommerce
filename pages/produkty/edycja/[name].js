@@ -31,8 +31,6 @@ const AddProduct = ({ product }) => {
   const [slug, setSlug] = useState(" ");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
-  const [promotion, setPromotion] = useState(false);
-  const [promotionPrice, setPromotionPrice] = useState("");
   const [imageToUpload, setImageToUpload] = useState("");
   const [dataFetching, setDataFetching] = useState(false);
 
@@ -47,7 +45,6 @@ const AddProduct = ({ product }) => {
     setSlug(product.slug);
     setImage(product.image.url);
     setPrice(product.price);
-    setPromotion(false);
   }, []);
 
   const sendImageToCloudinary = async () => {
@@ -71,12 +68,6 @@ const AddProduct = ({ product }) => {
   };
 
   const editProduct = async () => {
-    if (promotionPrice >= price) {
-      alert(
-        "Cena promocyjna jest taka sama lub wyzsza od ceny sprzed promocji!"
-      );
-      return;
-    }
     setDataFetching(true);
     const id = product._id;
     if (imageToUpload) {
@@ -101,8 +92,6 @@ const AddProduct = ({ product }) => {
           countInStock,
           description,
           slug,
-          promotion,
-          promotionPrice,
         }),
       })
         .then((res) => res.json())
@@ -131,8 +120,6 @@ const AddProduct = ({ product }) => {
           countInStock,
           description,
           slug,
-          promotion,
-          promotionPrice,
         }),
       })
         .then((res) => res.json())
@@ -151,27 +138,6 @@ const AddProduct = ({ product }) => {
         </Card.Header>
         <Card.Body>
           <Grid.Container justify="center" gap={2}>
-            <Grid>
-              <Text>Set item promotion</Text>
-              <Switch
-                initialChecked={false}
-                checked={false}
-                onChange={() => setPromotion((prevState) => !prevState)}
-              />
-            </Grid>
-
-            {promotion ? (
-              <Grid>
-                <Input
-                  type="number"
-                  placeholder="Promotion price"
-                  label="New promotion price"
-                  labelRight="PLN"
-                  onChange={(e) => setPromotionPrice(e.target.value)}
-                  value={!promotionPrice ? product.price : promotionPrice}
-                />
-              </Grid>
-            ) : null}
             <Grid>
               <Input
                 type="text"

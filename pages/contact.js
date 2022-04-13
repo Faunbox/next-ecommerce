@@ -55,7 +55,7 @@ const Contact = () => {
   };
   return (
     <Container>
-      <Container>
+      <Container css={{ "@lg": { flexWrap: "wrap" } }}>
         <Text>
           Do You have any questions or want to contact to our customer service?
         </Text>
@@ -69,6 +69,8 @@ const Contact = () => {
               aria-label="email"
               id="email"
               name="email"
+              helperText={formik.errors.email}
+              helperColor="error"
               fullWidth
               onChange={formik.handleChange}
             ></Input>
@@ -79,6 +81,8 @@ const Contact = () => {
               aria-label="name"
               id="name"
               name="name"
+              helperText={formik.errors.name}
+              helperColor="error"
               fullWidth
               onChange={formik.handleChange}
             ></Input>
@@ -89,6 +93,8 @@ const Contact = () => {
             type={"text"}
             id="message"
             placeholder="Your message"
+            helperText={formik.errors.message}
+            helperColor="error"
             aria-label="message"
             name="message"
             onChange={formik.handleChange}
@@ -101,17 +107,6 @@ const Contact = () => {
           >
             Do you want to send a email
           </Checkbox>
-          {Object.keys(formik.errors).length !== 0 && (
-            <>
-              <Spacer y={1} />
-              <Text h4>
-                Problems:
-                {Object.entries(formik.errors).map((error) => (
-                  <Text key={error[0]}>{error[1]}</Text>
-                ))}
-              </Text>
-            </>
-          )}
           <Spacer y={1} />
           <Button onClick={() => formik.handleSubmit()}>Send email</Button>
         </Card>

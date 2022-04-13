@@ -19,7 +19,7 @@ import {
 
 const BasicsInfo = () => {
   return (
-    <Container>
+    <Container css={{ "@md": { width: "45%" } }}>
       <Spacer y={1} />
       <Grid.Container alignItems="center" justify="space-around" gap={1}>
         <Grid css={{ textAlign: "center", w: "33%" }}>

@@ -3,6 +3,7 @@ import {
   Card,
   Container,
   Grid,
+  Row,
   Spacer,
   Text,
 } from "@nextui-org/react";
@@ -37,6 +38,7 @@ const FinishingOrder = ({ sessionDetails, items }) => {
         justify="space-around"
         alignItems="center"
         direction="column"
+        css={{ textAlign: "center" }}
       >
         <Grid direction="column">
           <Grid direction="column">
@@ -45,11 +47,13 @@ const FinishingOrder = ({ sessionDetails, items }) => {
             <Text h4>Your shipping information: </Text>
           </Grid>
           {address ? (
-            <Grid direction="column">
+            <Grid direction="row" css={{ flexWrap: "wrap" }}>
               <Spacer y={1} />
-              <Text>City: {address.city}</Text>
-              <Text>Street: {`${address.line1} ${address.line2}`}</Text>
-              <Text>Postal code: {postalCode}</Text>
+              <Row gap={2} wrap="wrap" align="center" justify="center">
+                <Text>City: {address.city}</Text>
+                <Text>Street: {`${address.line1} ${address.line2}`}</Text>
+                <Text>Postal code: {postalCode}</Text>
+              </Row>
             </Grid>
           ) : (
             "No data"
@@ -61,7 +65,7 @@ const FinishingOrder = ({ sessionDetails, items }) => {
           <Spacer y={1} />
         </Grid>
         {items ? (
-          <Grid.Container justify="center" gap={1}>
+          <Grid.Container justify="center" alignItems="center" gap={1}>
             {items.map((item) => (
               <Card
                 key={item.description}

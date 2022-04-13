@@ -47,9 +47,20 @@ const Slider = () => {
       {sliderImagesArr.map((image, imageIndex) => {
         return (
           imageIndex === current && (
-            <Container key={imageIndex} css={{ position: "relative" }}>
+            <Container
+              key={imageIndex}
+              css={{
+                position: "relative",
+              }}
+            >
               <Container css={{ position: "relative" }}>
-                <Image src={image} alt={"alt"} />
+                <Image
+                  src={image}
+                  alt={"alt"}
+                  style={{
+                    borderRadius: "12px",
+                  }}
+                />
                 <Text
                   h2
                   css={{

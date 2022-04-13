@@ -58,6 +58,8 @@ const FooterContact = () => {
         name="email"
         placeholder="Your email"
         aria-label="email"
+        helperText={formik.errors.email}
+        helperColor="error"
         onChange={formik.handleChange}
       ></Input>
       <Spacer y={1} />
@@ -67,6 +69,8 @@ const FooterContact = () => {
         name="name"
         id="name"
         aria-label="name"
+        helperText={formik.errors.name}
+        helperColor="error"
         onChange={formik.handleChange}
       ></Input>
       <Spacer y={1} />
@@ -76,6 +80,8 @@ const FooterContact = () => {
         name="message"
         id="message"
         aria-label="message"
+        helperText={formik.errors.message}
+        helperColor="error"
         onChange={formik.handleChange}
       ></Input>
       <Spacer y={1} />
@@ -90,7 +96,7 @@ const FooterContact = () => {
       <Button type="submit" onClick={formik.handleSubmit}>
         Send email
       </Button>
-      {Object.keys(formik.errors).length !== 0 && (
+      {/* {Object.keys(formik.errors).length !== 0 && (
         <>
           <Spacer y={1} />
           <Text h4>
@@ -100,7 +106,7 @@ const FooterContact = () => {
             ))}
           </Text>
         </>
-      )}
+      )} */}
     </Card>
   );
 };

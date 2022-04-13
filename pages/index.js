@@ -5,14 +5,15 @@ import { queryClient } from "./_app";
 import { dehydrate, useQuery } from "react-query";
 import { StyledMain } from "../styles/styled_home";
 import StoreInfo from "../components/StoreInfo";
-import { Container, Grid, Spacer } from "@nextui-org/react";
+import { Container, Grid, Row, Spacer } from "@nextui-org/react";
+import { wrap } from "gsap";
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
   return items.json();
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   await queryClient.prefetchQuery("AllItems", fetchAllProducts, {
     enabled: false,
   });
@@ -28,20 +29,23 @@ const About = () => {
   const { data } = useQuery("AllItems", fetchAllProducts, { enabled: false });
 
   return (
-    <>
-      <StyledMain>
+    <Container>
+      <Row
+        justify="center"
+        align="center"
+        css={{ "@xs": { flexWrap: "wrap" }, "@md": { flexWrap: "nowrap" } }}
+      >
         <Slider />
-        <Grid.Container
-          direction="column-reverse"
-          css={{ "@xs": { justifyContent: "column-reverse" } }}
-        >
-          <BasicsInfo />
-          <Promotions items={data} />
-        </Grid.Container>
-        <Spacer y={1} />
-        <StoreInfo />
-      </StyledMain>
-    </>
+        <BasicsInfo />
+      </Row>
+      <Grid.Container
+      // css={{ "@xs": { justifyContent: "column-reverse" } }}
+      >
+        <Promotions items={data} />
+      </Grid.Container>
+      <Spacer y={1} />
+      <StoreInfo />
+    </Container>
   );
 };
 
