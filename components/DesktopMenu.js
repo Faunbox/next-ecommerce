@@ -4,7 +4,17 @@ import { signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAuth } from "../context/auth.context";
-import { useMemo } from "react";
+import { forwardRef, useMemo } from "react";
+import { motion } from "framer-motion";
+
+const AnimatedLink = forwardRef(({ children }, ref) => {
+  return (
+    <motion.div ref={ref} whileHover={{ scale: 1.2 }}>
+      {children}
+    </motion.div>
+  );
+});
+AnimatedLink.displayName = "motion a";
 
 const DesktopMenu = ({ cart }) => {
   const { userSession } = useAuth();
@@ -36,51 +46,63 @@ const DesktopMenu = ({ cart }) => {
         </Grid>
         {userSession && (
           <Grid xs>
-            <Link href={`/user/${userSession.email}`} passHref>
-              <a>
-                <User
-                  src={userSession.image ? userSession.image : ""}
-                  name={
-                    userSession.name ? (
-                      <Text h4>{userSession.name}</Text>
-                    ) : (
-                      <Text h4>{userSession.email}</Text>
-                    )
-                  }
-                ></User>
-              </a>
-            </Link>
+            <AnimatedLink>
+              <Link href={`/user/${userSession.email}`} passHref>
+                <a>
+                  <User
+                    src={userSession.image ? userSession.image : ""}
+                    name={
+                      userSession?.name ? (
+                        <Text h4>{userSession.name}</Text>
+                      ) : (
+                        <Text h4>{userSession.email}</Text>
+                      )
+                    }
+                  ></User>
+                </a>
+              </Link>
+            </AnimatedLink>
           </Grid>
         )}
       </Row>
       <Grid xs>
         <Row justify="space-around" align="center">
-          <Link href="/" passHref>
-            <a>
-              <Text h4>Home</Text>
-            </a>
-          </Link>
-          <Link href="/store" passHref>
-            <a>
-              <Text h4>Store</Text>
-            </a>
-          </Link>
-          <Link href="/cart" passHref>
-            <a>
-              <Text h4>Cart</Text>
-            </a>
-          </Link>
-          <Link href="/contact" passHref>
-            <a>
-              <Text h4>Contact</Text>
-            </a>
-          </Link>
+          <AnimatedLink>
+            <Link href="/" passHref>
+              <a>
+                <Text h4>Home</Text>
+              </a>
+            </Link>
+          </AnimatedLink>
+          <AnimatedLink>
+            <Link href="/store" passHref>
+              <a>
+                <Text h4>Store</Text>
+              </a>
+            </Link>
+          </AnimatedLink>
+          <AnimatedLink>
+            <Link href="/cart" passHref>
+              <a>
+                <Text h4>Cart</Text>
+              </a>
+            </Link>
+          </AnimatedLink>
+          <AnimatedLink>
+            <Link href="/contact" passHref>
+              <a>
+                <Text h4>Contact</Text>
+              </a>
+            </Link>
+          </AnimatedLink>
           {!userSession ? (
             <LoginForm />
           ) : (
-            <Text h4 onClick={() => signOut()}>
-              Log out
-            </Text>
+            <AnimatedLink>
+              <Text h4 onClick={() => signOut()}>
+                Log out
+              </Text>
+            </AnimatedLink>
           )}
         </Row>
       </Grid>

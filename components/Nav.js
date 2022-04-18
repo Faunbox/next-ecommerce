@@ -7,7 +7,6 @@ import DesktopMenu from "./DesktopMenu";
 
 const Navigation = () => {
   const { state } = useCard();
-  const [cartLenght, setCarLenght] = useState("");
 
   const { cart } = state;
 

@@ -69,7 +69,8 @@ const Cart = () => {
                     height={"100%"}
                     width={"100%"}
                     layout="responsive"
-                    style={{ maxWidth: "300px", minWidth: "150px" }}
+                    objectFit="cover"
+                    priority={true}
                   />
                 </Container>
                 <Text>Item: {item.name}</Text>
@@ -119,7 +120,7 @@ const Cart = () => {
   );
 
   return (
-    <Container display="flex" justify="center" alignItems="center">
+    <Container justify="center">
       {cartItems.length !== 0 ? (
         <>
           <Button

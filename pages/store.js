@@ -12,7 +12,6 @@ import {
   Grid,
   Input,
   Modal,
-  Progress,
   Spacer,
   Text,
 } from "@nextui-org/react";
@@ -20,7 +19,7 @@ import {
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
-import { StyledStoreForm } from "../styles/styled_store";
+import { motion } from "framer-motion";
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
@@ -147,6 +146,7 @@ export default function Home() {
         <meta name="description" content="blog" />
       </Head>
       <Script src="https://js.stripe.com/v3"></Script>
+
       <Container justify="center">
         <Text h2>Products</Text>
         {userSession?.role === "admin" ? (
@@ -316,11 +316,11 @@ export default function Home() {
         </Grid.Container>
 
         <Container>
-          <Grid.Container gap={2} justify="center">
-            {items.slice(0, actualItemsCount).map((item) => (
-              <ProductCard key={item._id} product={item} />
-            ))}
-          </Grid.Container>
+            <Grid.Container gap={2} justify="center">
+              {items.slice(0, actualItemsCount).map((item) => (
+                <ProductCard key={item._id} product={item} />
+              ))}
+            </Grid.Container>
           <Spacer y={1} />
         </Container>
         <Spacer y={1} />
