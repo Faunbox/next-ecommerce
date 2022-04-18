@@ -1,8 +1,9 @@
-import { Button, Input, Modal, Text } from "@nextui-org/react";
+import { Button, Input, Modal, Spacer, Text } from "@nextui-org/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Link from "next/link";
 
 export const Mail = ({ fill, size, height, width, ...props }) => {
   return (
@@ -74,16 +75,16 @@ const LoginForm = () => {
         open={visible}
         onClose={closeModalHandler}
       >
-        <form onSubmit={formik.handleSubmit}>
-          <Modal.Header>
-            <Text id="modal-title" size={18}>
-              Welcome to
-              <Text b size={18}>
-                Cosmetic Shop!
-              </Text>
+        <Modal.Header>
+          <Text id="modal-title" size={18}>
+            Welcome to
+            <Text b size={18}>
+              Cosmetic Shop!
             </Text>
-          </Modal.Header>
-          <Modal.Body>
+          </Text>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={formik.handleSubmit}>
             <Input
               clearable
               bordered
@@ -98,16 +99,23 @@ const LoginForm = () => {
               contentLeft={<Mail fill="currentColor" />}
             />
             {formik.errors.email ? <Text>{formik.errors.email}</Text> : null}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button auto flat color="error" onClick={closeModalHandler}>
-              Close
-            </Button>
-            <Button auto type="submit">
-              Sign in
-            </Button>
-          </Modal.Footer>
-        </form>
+          </form>
+          <Text>or</Text>
+          <Link href={"/api/auth/signin/google"} passHref>
+            <a>
+              <Button >Google</Button>
+            </a>
+          </Link>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button auto flat color="error" onClick={closeModalHandler}>
+            Close
+          </Button>
+          <Button auto type="submit">
+            Sign in
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

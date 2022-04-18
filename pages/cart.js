@@ -120,7 +120,7 @@ const Cart = () => {
   );
 
   return (
-    <Container justify="center">
+    <Container display="flex" justify="center" alignItems="center">
       {cartItems.length !== 0 ? (
         <>
           <Button
@@ -150,7 +150,4 @@ const Cart = () => {
   );
 };
 
-export default dynamic(
-  async () => Cart
-  //  { ssr: false }
-);
+export default dynamic(async () => Cart, { ssr: false });

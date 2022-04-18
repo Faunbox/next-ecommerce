@@ -22,8 +22,8 @@ const DesktopMenu = ({ cart }) => {
   const router = useRouter();
 
   const cartLengthMemo = useMemo(() => {
-    return cart.length ? cart.length : null;
-  }, [cart.length]);
+    return cart.cartItems.length ? cart.cartItems.length : 0;
+  }, [cart.cartItems.length]);
 
   return (
     <Grid.Container direction="row" alignItems="center" gap={2} md>
@@ -84,7 +84,7 @@ const DesktopMenu = ({ cart }) => {
           <AnimatedLink>
             <Link href="/cart" passHref>
               <a>
-                <Text h4>Cart</Text>
+                <Text h4>Cart: {cartLengthMemo}</Text>
               </a>
             </Link>
           </AnimatedLink>
