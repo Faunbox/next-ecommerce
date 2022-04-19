@@ -19,9 +19,18 @@ import {
 
 const BasicsInfo = () => {
   return (
-    <Container css={{ "@md": { width: "45%" } }}>
+    <Container
+      css={{
+        "@md": { width: "35%" },
+      }}
+    >
       <Spacer y={1} />
-      <Grid.Container alignItems="center" justify="space-around" gap={1}>
+      <Grid.Container
+        alignItems="center"
+        justify="space-around"
+        gap={1}
+        css={{ "@md": { display: "flex", flexDirection: "column" } }}
+      >
         <Grid css={{ textAlign: "center", w: "33%" }}>
           <Text>Always free delivery</Text>
           <Image src={deliveryIcon} alt="ikona" />

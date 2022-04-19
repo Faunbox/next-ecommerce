@@ -1,9 +1,12 @@
-import { Text } from "@nextui-org/react";
+import { Container, Text } from "@nextui-org/react";
 
 const signInPage = () => {
   return (
     <>
-      <Text>Działa</Text>
+      <Container>
+        <Text h3>Check out your email account.</Text>
+        <Text></Text>
+      </Container>
     </>
   );
 };

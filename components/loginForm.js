@@ -1,5 +1,5 @@
 import { Button, Input, Modal, Spacer, Text } from "@nextui-org/react";
-import { signIn } from "next-auth/react";
+import { signIn, getProviders } from "next-auth/react";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -75,16 +75,16 @@ const LoginForm = () => {
         open={visible}
         onClose={closeModalHandler}
       >
-        <Modal.Header>
-          <Text id="modal-title" size={18}>
-            Welcome to
-            <Text b size={18}>
-              Cosmetic Shop!
+        <form onSubmit={() => formik.handleSubmit()}>
+          <Modal.Header>
+            <Text id="modal-title" size={18}>
+              Welcome to
+              <Text b size={18}>
+                Cosmetic Shop!
+              </Text>
             </Text>
-          </Text>
-        </Modal.Header>
-        <Modal.Body>
-          <form onSubmit={formik.handleSubmit}>
+          </Modal.Header>
+          <Modal.Body>
             <Input
               clearable
               bordered
@@ -99,21 +99,23 @@ const LoginForm = () => {
               contentLeft={<Mail fill="currentColor" />}
             />
             {formik.errors.email ? <Text>{formik.errors.email}</Text> : null}
-          </form>
-          <Text>or</Text>
-          <Link href={"/api/auth/signin/google"} passHref>
-            <a>
-              <Button >Google</Button>
-            </a>
-          </Link>
-        </Modal.Body>
+          </Modal.Body>
 
+          <Modal.Footer>
+            <Button auto type="submit">
+              Sign in
+            </Button>
+          </Modal.Footer>
+        </form>
+        <Modal.Body>
+          <Text>Google account</Text>
+          <Button onClick={() => signIn("google")} css={{ mx: "auto" }}>
+            Google
+          </Button>
+        </Modal.Body>
         <Modal.Footer>
           <Button auto flat color="error" onClick={closeModalHandler}>
             Close
-          </Button>
-          <Button auto type="submit">
-            Sign in
           </Button>
         </Modal.Footer>
       </Modal>

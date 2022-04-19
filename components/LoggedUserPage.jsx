@@ -38,7 +38,7 @@ const LoggedUserPage = ({ user }) => {
       username: "",
     },
     validationSchema: Yup.object({
-      userName: Yup.string()
+      username: Yup.string()
         .required("Please insert username")
         .min(3, "Username must have at least 3 letters")
         .max(12, "12 is max number of letters"),
@@ -146,10 +146,14 @@ const LoggedUserPage = ({ user }) => {
                       closeHandler();
                     }}
                   >
-                    <form onSubmit={formik.handleSubmit}>
-                      <Modal.Header>
-                        <Text b>Set your nickname</Text>
-                      </Modal.Header>
+                    <Modal.Header>
+                      <Text b>Set your nickname</Text>
+                    </Modal.Header>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault(), formik.handleSubmit();
+                      }}
+                    >
                       <Modal.Body>
                         <Input
                           ref={inputRef}
@@ -165,7 +169,7 @@ const LoggedUserPage = ({ user }) => {
                           placeholder="SuperUser997"
                           onChange={formik.handleChange}
                           style={{ width: "fit-content" }}
-                          // helperText={formik.errors}
+                          helperText={formik.errors.username}
                         />
                         <Button type="submit" css={{ my: 10, mx: "auto" }}>
                           Set nickname
