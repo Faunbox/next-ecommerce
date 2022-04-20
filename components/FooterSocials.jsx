@@ -9,7 +9,7 @@ const FooterSocials = () => {
   return (
     <Col css={{ textAlign: "center" }}>
       <Spacer y={1} />
-      <Text h4>Socials</Text>
+      <Text h4>Our social media</Text>
       <Spacer y={1} />
       <Grid.Container justify="center">
         <Grid xs={4} justify="center">

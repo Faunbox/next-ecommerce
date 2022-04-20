@@ -4,11 +4,13 @@ import {
   Card,
   Checkbox,
   Container,
+  Grid,
   Input,
   Row,
   Spacer,
   Text,
 } from "@nextui-org/react";
+import FooterSocials from "../components/FooterSocials";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -55,62 +57,73 @@ const Contact = () => {
   };
   return (
     <Container>
-      <Container css={{ "@lg": { flexWrap: "wrap" } }}>
-        <Text>
-          Do You have any questions or want to contact to our customer service?
-        </Text>
-        <Text b>Send us a mail! We will reply as soon as possible!</Text>
+      <Grid.Container
+        alignItems="center"
+        justify="space-around"
+        css={{ "@lg": { flexWrap: "wrap" } }}
+      >
+        <Grid>
+          <Text>
+            Do You have any questions or want to contact to our customer
+            service?
+          </Text>
+          <Text b>Send us a mail! We will reply as soon as possible!</Text>
+        </Grid>
         <Spacer y={1} />
-        <Card>
-          <Row>
+        <Grid md={7}>
+          <Card>
+            <Row>
+              <Input
+                type={"text"}
+                placeholder="Your email"
+                aria-label="email"
+                id="email"
+                name="email"
+                helperText={formik.errors.email}
+                helperColor="error"
+                fullWidth
+                onChange={formik.handleChange}
+              ></Input>
+              <Spacer y={1} />
+              <Input
+                type={"text"}
+                placeholder="Your name"
+                aria-label="name"
+                id="name"
+                name="name"
+                helperText={formik.errors.name}
+                helperColor="error"
+                fullWidth
+                onChange={formik.handleChange}
+              ></Input>
+            </Row>
+            <Spacer y={1} />
             <Input
+              as="textarea"
               type={"text"}
-              placeholder="Your email"
-              aria-label="email"
-              id="email"
-              name="email"
-              helperText={formik.errors.email}
+              id="message"
+              placeholder="Your message"
+              helperText={formik.errors.message}
               helperColor="error"
-              fullWidth
+              aria-label="message"
+              name="message"
               onChange={formik.handleChange}
             ></Input>
             <Spacer y={1} />
-            <Input
-              type={"text"}
-              placeholder="Your name"
-              aria-label="name"
-              id="name"
-              name="name"
-              helperText={formik.errors.name}
-              helperColor="error"
-              fullWidth
-              onChange={formik.handleChange}
-            ></Input>
-          </Row>
-          <Spacer y={1} />
-          <Input
-            as="textarea"
-            type={"text"}
-            id="message"
-            placeholder="Your message"
-            helperText={formik.errors.message}
-            helperColor="error"
-            aria-label="message"
-            name="message"
-            onChange={formik.handleChange}
-          ></Input>
-          <Spacer y={1} />
-          <Checkbox
-            checked={false}
-            size={"xs"}
-            onChange={() => setSendEmail(!sendEmail)}
-          >
-            Do you want to send a email
-          </Checkbox>
-          <Spacer y={1} />
-          <Button onClick={() => formik.handleSubmit()}>Send email</Button>
-        </Card>
-      </Container>
+            <Checkbox
+              checked={false}
+              size={"xs"}
+              onChange={() => setSendEmail(!sendEmail)}
+            >
+              Do you want to send a email
+            </Checkbox>
+            <Spacer y={1} />
+            <Button onClick={() => formik.handleSubmit()}>Send email</Button>
+          </Card>
+        </Grid>
+        <FooterSocials />
+      </Grid.Container>
+      <Spacer y={1} />
     </Container>
   );
 };

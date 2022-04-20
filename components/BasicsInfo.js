@@ -24,7 +24,7 @@ const BasicsInfo = () => {
         "@md": { width: "35%" },
       }}
     >
-      <Spacer y={1} />
+      <Spacer y={1} css={{ "@md": { display: "none" } }} />
       <Grid.Container
         alignItems="center"
         justify="space-around"
@@ -32,16 +32,16 @@ const BasicsInfo = () => {
         css={{ "@md": { display: "flex", flexDirection: "column" } }}
       >
         <Grid css={{ textAlign: "center", w: "33%" }}>
-          <Text>Always free delivery</Text>
-          <Image src={deliveryIcon} alt="ikona" />
+          <Text h4>Always free delivery</Text>
+          <Image src={deliveryIcon} alt="ikona" width="40" height="40" />
         </Grid>
         <Grid css={{ textAlign: "center", w: "33%" }}>
-          <Text>Send up to 24h</Text>
-          <Image src={clockIcon} alt="ikona" />
+          <Text h4>Send up to 24h</Text>
+          <Image src={clockIcon} alt="ikona" width="40" height="40" />
         </Grid>
         <Grid css={{ textAlign: "center", w: "33%" }}>
-          <Text>Free refund up to 150 days</Text>
-          <Image src={refundIcon} alt="ikona" />
+          <Text h4>Free refund up to 150 days</Text>
+          <Image src={refundIcon} alt="ikona" width="40" height="40" />
         </Grid>
         <Col>
           <Spacer y={1} />

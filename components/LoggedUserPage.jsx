@@ -108,7 +108,7 @@ const LoggedUserPage = ({ user }) => {
       body: user.email,
     }).then((res) => res.json());
     const res = await paymentHistory;
-    console.log({ res });
+    // console.log({ res });
     res.length === 0 ? setPaymentHistory(false) : setPaymentHistory(res);
     setHistory(true);
     setShowPucharseHistory((prevState) => !prevState);
@@ -117,14 +117,14 @@ const LoggedUserPage = ({ user }) => {
     <Container justify="center">
       <Card bordered="true">
         <Container>
-          <Text>User email: {user.email}</Text>
+          <Text h4>User email: {user.email}</Text>
           {!user.name ? (
             <Button auto css={{ my: 10, mx: "auto" }} onClick={() => handler()}>
               Set username
             </Button>
           ) : (
             <>
-              {user?.name && <Text>Username: {user.name}</Text>}
+              {user?.name && <Text h4>Username: {user.name}</Text>}
               <Container>
                 <Button
                   auto
@@ -244,8 +244,8 @@ const LoggedUserPage = ({ user }) => {
         <Container justify="center">
           <Button
             onClick={() => {
-              setShowPucharseHistory((prevState) => !prevState);
               !showPucharseHistory ? getUserPaymentHistory() : null;
+              setShowPucharseHistory((prevState) => !prevState);
             }}
             css={{ mx: "auto" }}
           >
@@ -259,6 +259,7 @@ const LoggedUserPage = ({ user }) => {
             (history ? <HistoryItemList items={paymentHistory} /> : null)}
         </Container>
       </Card>
+      <Spacer y={1} />
     </Container>
   );
 };

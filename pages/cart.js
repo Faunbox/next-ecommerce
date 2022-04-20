@@ -11,6 +11,7 @@ import {
   Input,
   Row,
   Text,
+  Spacer,
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -138,14 +139,17 @@ const Cart = () => {
         </Grid.Container>
       ) : (
         <Container css={{ textAlign: "center" }}>
+          <Spacer y={1} />
           <Text h4>
             Cart is empty! Lets check our
             <Link href={"/store"}>
               <a> store!</a>
             </Link>
           </Text>
+          <Spacer y={1} />
         </Container>
       )}
+      <Spacer y={1} />
     </Container>
   );
 };

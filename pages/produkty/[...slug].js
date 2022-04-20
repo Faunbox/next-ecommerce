@@ -6,8 +6,19 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Container, Grid, Spacer, Text } from "@nextui-org/react";
+import Promotions from "../../components/Promotions";
+import { queryClient } from "../_app";
+import { dehydrate, useQuery } from "react-query";
+import SimilarProducts from "../../components/SimilarProducts";
+
+const fetchAllProducts = async () => {
+  const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
+  return items.json();
+};
 
 const ProductScreen = ({ product }) => {
+  const { data } = useQuery("AllItems", fetchAllProducts, { enabled: false });
+
   const { dispatch, state } = useCard();
   const { userSession } = useAuth();
   const router = useRouter();
@@ -85,22 +96,24 @@ const ProductScreen = ({ product }) => {
         Back
       </Button>
       <Grid.Container
-        justify="center"
+        justify="space-around"
         alignItems="center"
         gap={3}
         css={{ height: "100%" }}
       >
         <Grid>
-          <Text h1>{product.name}</Text>
           <Spacer y={1} />
           <Image
             src={product?.image?.url}
             alt={product.name}
             width={300}
             height={300}
+            // layout="responsive"
+            objectFit="cover"
           />
         </Grid>
         <Grid justify="center" alignItems="center">
+          <Text h1>{product.name}</Text>
           <Text h4>Description: {product.description}</Text>
           <Text h4>In stock: {product.countInStock}</Text>
           <Text h4>Category: {product.category}</Text>
@@ -115,8 +128,13 @@ const ProductScreen = ({ product }) => {
             <Text h4>Price: {product.price}PLN</Text>
           )}
         </Grid>
-        <Spacer y={1} />
-        <Grid justify="center" alignItems="center" css={{ margin: "auto 0" }}>
+        <Spacer y={1} css={{ display: "none", "@md": { display: "block" } }} />
+        <Grid
+          justify="center"
+          md={12}
+          alignItems="center"
+          css={{ margin: "auto 0" }}
+        >
           <Button
             color="success"
             css={{ mx: "auto" }}
@@ -145,6 +163,8 @@ const ProductScreen = ({ product }) => {
           )}
         </Grid>
       </Grid.Container>
+      <Spacer y={1} />
+      <SimilarProducts items={data} category={product.category} />
     </Container>
   );
 };
@@ -152,6 +172,9 @@ const ProductScreen = ({ product }) => {
 export default ProductScreen;
 
 export async function getServerSideProps(context) {
+  await queryClient.prefetchQuery("AllItems", fetchAllProducts, {
+    enabled: false,
+  });
   const { query } = context;
   const slug = query.slug;
 
@@ -161,6 +184,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       product,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 }

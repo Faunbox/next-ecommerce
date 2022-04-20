@@ -19,7 +19,7 @@ import {
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
@@ -170,6 +170,7 @@ export default function Home() {
             <Input
               type="text"
               size="md"
+              id="Search"
               width="auto"
               aria-label="Search"
               placeholder="Search by name"
@@ -316,11 +317,20 @@ export default function Home() {
         </Grid.Container>
 
         <Container>
+          <AnimatePresence>
             <Grid.Container gap={2} justify="center">
               {items.slice(0, actualItemsCount).map((item) => (
-                <ProductCard key={item._id} product={item} />
+                <motion.div
+                  // animate={{ opacity: 1}}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  key={item._id}
+                >
+                  <ProductCard product={item} />
+                </motion.div>
               ))}
             </Grid.Container>
+          </AnimatePresence>
           <Spacer y={1} />
         </Container>
         <Spacer y={1} />

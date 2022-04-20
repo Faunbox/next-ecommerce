@@ -8,14 +8,14 @@ const Footer = () => {
     <>
       <Container>
         <Grid.Container justify="center">
-          <Grid xs={12} sm={6} alignItems="center">
-            <FooterInfo />
-          </Grid>
           <Grid xs={12} sm={6} justify="center" alignItems="center">
             <Container direction="column" justify="center">
-              <FooterSocials />
+              {/* <FooterSocials /> */}
               <FooterContact />
             </Container>
+          </Grid>
+          <Grid xs={12} sm={6} alignItems="center">
+            <FooterInfo />
           </Grid>
         </Grid.Container>
         <Spacer y={1} />

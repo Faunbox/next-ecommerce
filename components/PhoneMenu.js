@@ -7,7 +7,6 @@ import { useAuth } from "../context/auth.context";
 import hamburgerIcon from "../public/icons/hamburger.png";
 import searchIcon from "../public/icons/search.png";
 import cartIcon from "../public/icons/shopping-cart.png";
-import userIcon from "../public/icons/user.png";
 
 import { Avatar, Container, Input, Row, Spacer, Text } from "@nextui-org/react";
 
