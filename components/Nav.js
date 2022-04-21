@@ -1,5 +1,4 @@
 import { useCard, ACTION } from "../context/card.context";
-import { useEffect, useState } from "react";
 import PhoneMenu from "./PhoneMenu";
 
 import { Container, Spacer } from "@nextui-org/react";

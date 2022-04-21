@@ -1,20 +1,20 @@
 import { Grid, Input, Row, Text, User } from "@nextui-org/react";
 import LoginForm from "./loginForm";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAuth } from "../context/auth.context";
 import { forwardRef, useMemo } from "react";
 import { motion } from "framer-motion";
 
-const AnimatedLink = forwardRef(({ children }, ref) => {
+export const AnimatedLink = forwardRef(({ children }, ref) => {
+  AnimatedLink.displayName = "motion a";
   return (
     <motion.div ref={ref} whileHover={{ scale: 1.2 }}>
       {children}
     </motion.div>
   );
 });
-AnimatedLink.displayName = "motion a";
 
 const DesktopMenu = ({ cart }) => {
   const { userSession } = useAuth();
@@ -37,6 +37,7 @@ const DesktopMenu = ({ cart }) => {
         </Grid>
         <Grid xs>
           <Input
+            clearable
             placeholder="Search"
             id="search"
             aria-label="searchbar"

@@ -6,9 +6,6 @@ import * as Yup from "yup";
 const FooterContact = () => {
   const apiEndpoint = "./api/mail/";
   const [sendEmail, setSendEmail] = useState(false);
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [text, setText] = useState("");
 
   const formik = useFormik({
     initialValues: {

@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
-import { StyledSection, StyledDiv } from "../styles/styled_home";
-
 import deliveryIcon from "../public/icons/delivery (1).png";
 import refundIcon from "../public/icons/refund.png";
 import clockIcon from "../public/icons/wall-clock.png";
@@ -12,7 +10,6 @@ import {
   Col,
   Container,
   Grid,
-  Row,
   Spacer,
   Text,
 } from "@nextui-org/react";
@@ -21,7 +18,7 @@ const BasicsInfo = () => {
   return (
     <Container
       css={{
-        "@md": { width: "35%" },
+        "@md": { width: "40%" },
       }}
     >
       <Spacer y={1} css={{ "@md": { display: "none" } }} />

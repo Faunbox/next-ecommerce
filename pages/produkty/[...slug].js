@@ -6,18 +6,13 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { Button, Container, Grid, Spacer, Text } from "@nextui-org/react";
-import Promotions from "../../components/Promotions";
-import { queryClient } from "../_app";
+import { fetchAllItems } from "../../lib/next-auth-react-query";
 import { dehydrate, useQuery } from "react-query";
 import SimilarProducts from "../../components/SimilarProducts";
-
-const fetchAllProducts = async () => {
-  const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
-  return items.json();
-};
+import { queryClient } from "../_app";
 
 const ProductScreen = ({ product }) => {
-  const { data } = useQuery("AllItems", fetchAllProducts, { enabled: false });
+  const { data } = useQuery("AllItems", fetchAllItems, { enabled: false });
 
   const { dispatch, state } = useCard();
   const { userSession } = useAuth();
@@ -172,7 +167,7 @@ const ProductScreen = ({ product }) => {
 export default ProductScreen;
 
 export async function getServerSideProps(context) {
-  await queryClient.prefetchQuery("AllItems", fetchAllProducts, {
+  await queryClient.prefetchQuery("AllItems", fetchAllItems, {
     enabled: false,
   });
   const { query } = context;

@@ -5,8 +5,8 @@ const UserPage = ({ user }) => {
   return (
     <Container justify="center">
       <Container>
-        <Text h6>User email: {user.email}</Text>
-        {user.name ? <Text h6>User name: {user.name}</Text> : null}
+        <Text h4>User email: {user.email}</Text>
+        {user.name ? <Text h4>User name: {user.name}</Text> : null}
       </Container>
       <Container justify="center" css={{ textAlign: "center", my: 10 }}>
         {user?.image && (

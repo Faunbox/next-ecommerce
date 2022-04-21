@@ -123,7 +123,6 @@ const Contact = () => {
         </Grid>
         <FooterSocials />
       </Grid.Container>
-      <Spacer y={1} />
     </Container>
   );
 };

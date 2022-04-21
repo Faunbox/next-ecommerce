@@ -1,9 +1,8 @@
-import { Button, Input, Modal, Spacer, Text } from "@nextui-org/react";
-import { signIn, getProviders } from "next-auth/react";
+import { Button, Input, Modal, Text } from "@nextui-org/react";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Link from "next/link";
 
 export const Mail = ({ fill, size, height, width, ...props }) => {
   return (

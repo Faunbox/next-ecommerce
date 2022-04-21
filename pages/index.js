@@ -3,10 +3,8 @@ import BasicsInfo from "../components/BasicsInfo";
 import Promotions from "../components/Promotions";
 import { queryClient } from "./_app";
 import { dehydrate, useQuery } from "react-query";
-import { StyledMain } from "../styles/styled_home";
 import StoreInfo from "../components/StoreInfo";
 import { Container, Grid, Row, Spacer } from "@nextui-org/react";
-import { wrap } from "gsap";
 
 const fetchAllProducts = async () => {
   const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);

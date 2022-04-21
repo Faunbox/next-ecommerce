@@ -3,7 +3,7 @@ import deliveryIcon from "../public/icons/delivery (1).png";
 import refundIcon from "../public/icons/refund.png";
 import mail from "../public/icons/mail.png";
 import dynamic from "next/dynamic";
-import { StyledDiv, StyledLink, StyledSection } from "../styles/styled_footer";
+import { StyledDiv } from "../styles/styled_footer";
 import { Container, Text } from "@nextui-org/react";
 import Link from "next/link";
 

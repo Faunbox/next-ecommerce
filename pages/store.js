@@ -3,7 +3,6 @@ import Head from "next/head";
 import Link from "next/link";
 import Script from "next/script";
 import { useRouter } from "next/router";
-
 import { useEffect, useState } from "react";
 import { dehydrate, useQuery } from "react-query";
 import {
@@ -16,18 +15,15 @@ import {
   Text,
 } from "@nextui-org/react";
 
+import { AnimatePresence, motion } from "framer-motion";
 import ProductCard from "../components/Product";
 import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
-import { AnimatePresence, motion } from "framer-motion";
-
-const fetchAllProducts = async () => {
-  const items = await fetch(`${process.env.NEXTAUTH_URL}/api/products`);
-  return items.json();
-};
+import { fetchAllItems } from "../lib/next-auth-react-query";
+import { AnimatedLink } from "../components/DesktopMenu";
 
 export async function getServerSideProps() {
-  await queryClient.prefetchQuery("AllItems", fetchAllProducts, {
+  await queryClient.prefetchQuery("AllItems", fetchAllItems, {
     enabled: false,
   });
 
@@ -56,7 +52,7 @@ export default function Home() {
   const { search, category } = router.query;
 
   //get data from ssr prefetch
-  const { data } = useQuery("AllItems", fetchAllProducts, { enabled: false });
+  const { data } = useQuery("AllItems", fetchAllItems, { enabled: false });
 
   //Category modal
   const [visible, setVisible] = useState(false);
@@ -201,27 +197,45 @@ export default function Home() {
               onClose={closeHandler}
             >
               <Modal.Header>
-                <Text id="modal-title" size={18}>
+                <Text id="modal-title" b h3>
                   Categories
                 </Text>
               </Modal.Header>
               <Modal.Body>
                 <Grid.Container gap={2}>
                   <Grid>
-                    <Link href={"/store?category=none"} passHref>
-                      <Text onClick={closeHandler}>Show all</Text>
-                    </Link>
+                    <AnimatedLink>
+                      <Link href={"/store?category=none"} passHref>
+                        <a>
+                          <Text
+                            css={{ cursor: "pointer" }}
+                            onClick={closeHandler}
+                          >
+                            Show all
+                          </Text>
+                        </a>
+                      </Link>
+                    </AnimatedLink>
                   </Grid>
                   {categorys?.map((category) => (
-                    <Link
-                      href={`/store?category=${category}`}
-                      passHref
-                      key={category}
-                    >
-                      <Grid>
-                        <Text onClick={closeHandler}>{category}</Text>
-                      </Grid>
-                    </Link>
+                    <Grid key={category}>
+                      <AnimatedLink>
+                        <Link
+                          href={`/store?category=${category}`}
+                          passHref
+                          key={category}
+                        >
+                          <a>
+                            <Text
+                              css={{ cursor: "pointer" }}
+                              onClick={closeHandler}
+                            >
+                              {category}
+                            </Text>
+                          </a>
+                        </Link>
+                      </AnimatedLink>
+                    </Grid>
                   ))}
                 </Grid.Container>
               </Modal.Body>
@@ -247,68 +261,80 @@ export default function Home() {
               onClose={() => setSortVisible(false)}
             >
               <Modal.Header>
-                <Text id="modal-title" size={18}>
+                <Text id="modal-title" h3 b>
                   Sort by
                 </Text>
               </Modal.Header>
               <Modal.Body>
                 <Grid.Container gap={2}>
                   <Grid>
-                    <Text
-                      onClick={() => {
-                        setSortVisible(false);
-                        setItems((prevState) =>
-                          prevState.sort((a, b) => a.name.localeCompare(b.name))
-                        );
-                      }}
-                    >
-                      Name: A-Z
-                    </Text>
+                    <AnimatedLink>
+                      <Text
+                        onClick={() => {
+                          setSortVisible(false);
+                          setItems((prevState) =>
+                            prevState.sort((a, b) =>
+                              a.name.localeCompare(b.name)
+                            )
+                          );
+                        }}
+                      >
+                        Name: A-Z
+                      </Text>
+                    </AnimatedLink>
                   </Grid>
                   <Grid>
-                    <Text
-                      onClick={() => {
-                        setSortVisible(false);
-                        setItems((prevState) =>
-                          prevState.sort((a, b) => b.name.localeCompare(a.name))
-                        );
-                      }}
-                    >
-                      Z-A
-                    </Text>
+                    <AnimatedLink>
+                      <Text
+                        onClick={() => {
+                          setSortVisible(false);
+                          setItems((prevState) =>
+                            prevState.sort((a, b) =>
+                              b.name.localeCompare(a.name)
+                            )
+                          );
+                        }}
+                      >
+                        Z-A
+                      </Text>
+                    </AnimatedLink>
                   </Grid>
                   <Grid>
-                    <Text
-                      onClick={() => {
-                        setSortVisible(false);
-                        setItems((prevState) =>
-                          prevState.sort((a, b) => {
-                            return a.price - b.price;
-                          })
-                        );
-                      }}
-                    >
-                      Low to high
-                    </Text>
+                    <AnimatedLink>
+                      <Text
+                        onClick={() => {
+                          setSortVisible(false);
+                          setItems((prevState) =>
+                            prevState.sort((a, b) => {
+                              return a.price - b.price;
+                            })
+                          );
+                        }}
+                      >
+                        Low to high
+                      </Text>
+                    </AnimatedLink>
                   </Grid>
                   <Grid>
-                    <Text
-                      onClick={() => {
-                        setSortVisible(false);
-                        setItems((prevState) =>
-                          prevState.sort((a, b) => {
-                            return b.price - a.price;
-                          })
-                        );
-                      }}
-                    >
-                      High to low
-                    </Text>
+                    <AnimatedLink>
+                      <Text
+                        onClick={() => {
+                          setSortVisible(false);
+                          setItems((prevState) =>
+                            prevState.sort((a, b) => {
+                              return b.price - a.price;
+                            })
+                          );
+                        }}
+                      >
+                        High to low
+                      </Text>
+                    </AnimatedLink>
                   </Grid>
                 </Grid.Container>
               </Modal.Body>
               <Modal.Footer>
-                <Button auto flat color="error" onClick={closeHandler}>
+                <Button auto flat color="error" onClick={modalCloseHandler}>
                   Close
                 </Button>
               </Modal.Footer>
@@ -341,7 +367,6 @@ export default function Home() {
         >
           Show more items {actualItemsCount} of {numbersOfItems}
         </Button>
-        <Spacer y={1} />
       </Container>
     </>
   );

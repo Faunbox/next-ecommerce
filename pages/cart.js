@@ -149,7 +149,6 @@ const Cart = () => {
           <Spacer y={1} />
         </Container>
       )}
-      <Spacer y={1} />
     </Container>
   );
 };
