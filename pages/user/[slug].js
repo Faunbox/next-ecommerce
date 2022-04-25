@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // import { useState, useRef } from "react";
+import dynamic from "next/dynamic";
 import LoggedUserPage from "../../components/LoggedUserPage";
 import UserPage from "../../components/UserPage";
 import { useAuth } from "../../context/auth.context";

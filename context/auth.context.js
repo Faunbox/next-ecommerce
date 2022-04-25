@@ -14,7 +14,6 @@ export function AuthProvider({ children }) {
     queryConfig: {
       staleTime: 60 * 1000 * 60 * 3,
       refetchInterval: 60 * 1000 * 5,
-      
     },
   });
   const [userSession, setUserSession] = useState({});
@@ -26,8 +25,7 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    const userSession = checkSession();
-    return userSession;
+    checkSession();
   }, [loading, session]);
 
   const value = { userSession };

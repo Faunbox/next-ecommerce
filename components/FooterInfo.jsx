@@ -3,30 +3,41 @@ import deliveryIcon from "../public/icons/delivery (1).png";
 import refundIcon from "../public/icons/refund.png";
 import mail from "../public/icons/mail.png";
 import dynamic from "next/dynamic";
-import { StyledDiv } from "../styles/styled_footer";
 import { Container, Text } from "@nextui-org/react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const FooterInfo = () => {
+  const [mount, setMount] = useState(false);
+
+  useEffect(() => {
+    setMount(true);
+  }, []);
   return (
-    <Container>
-      <Container css={{ textAlign: "center" }}>
-        <Image src={deliveryIcon} alt="ikona" />
-        <Text>Our Customer service is avaible everyday in 8:00 to 16:00</Text>
-      </Container>
-      <StyledDiv>
-        <Link href="mailto:faunbox2@gmail.com">
-          <a>faunbox2@gmail.com</a>
-        </Link>
-        <Image src={mail} alt="ikona" />
-      </StyledDiv>
-      <StyledDiv>
-        <Link href={"phoneto:666666666"}>
-          <a>Phone Number</a>
-        </Link>
-        <Image src={refundIcon} alt="ikona" />
-      </StyledDiv>
-    </Container>
+    mount && (
+      <>
+        <Container>
+          <Container css={{ textAlign: "center" }}>
+            <Image src={deliveryIcon} alt="ikona" />
+            <Text>
+              Our Customer service is avaible everyday in 8:00 to 16:00
+            </Text>
+          </Container>
+          <Container>
+            <Link href="mailto:faunbox2@gmail.com">
+              <a>faunbox2@gmail.com</a>
+            </Link>
+            <Image src={mail} alt="ikona" />
+          </Container>
+          <Container>
+            <Link href={"phoneto:666666666"}>
+              <a>Phone Number</a>
+            </Link>
+            <Image src={refundIcon} alt="ikona" />
+          </Container>
+        </Container>
+      </>
+    )
   );
 };
 

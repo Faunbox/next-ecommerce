@@ -7,6 +7,7 @@ import {
   Spacer,
   Text,
 } from "@nextui-org/react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useCard, ACTION } from "../../context/card.context";

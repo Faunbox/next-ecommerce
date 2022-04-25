@@ -1,6 +1,7 @@
 import Slider from "../components/Slider";
 import BasicsInfo from "../components/BasicsInfo";
 import Promotions from "../components/Promotions";
+import dynamic from "next/dynamic";
 import { queryClient } from "./_app";
 import { dehydrate, useQuery } from "react-query";
 import StoreInfo from "../components/StoreInfo";
@@ -47,4 +48,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default dynamic(async () => About);

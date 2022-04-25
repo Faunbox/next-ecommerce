@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import { useCard, ACTION } from "../context/card.context";
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../context/auth.context";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Container,
@@ -22,7 +22,12 @@ const Cart = () => {
   const { cart } = state;
   const { cartItems } = cart;
   const { userSession } = useAuth();
+  const [mount, setMount] = useState(false);
   const [fetchingFlag, setfetchingFlag] = useState(false);
+
+  useEffect(() => {
+    setMount(true);
+  }, []);
 
   const changeQuantity = async (item, quantity) => {
     //check db for item quantity
@@ -121,35 +126,39 @@ const Cart = () => {
   );
 
   return (
-    <Container display="flex" justify="center" alignItems="center">
-      {cartItems.length !== 0 ? (
-        <>
-          <Button
-            onClick={() =>
-              goToCheckout(cartItems, userSession.email, userSession.stripeID)
-            }
-          >
-            Checkout
-          </Button>
-        </>
-      ) : null}
-      {cartItems.length !== 0 ? (
-        <Grid.Container justify="center" alignItems="center" gap={2}>
-          {cartItemsMemo}
-        </Grid.Container>
-      ) : (
-        <Container css={{ textAlign: "center" }}>
-          <Spacer y={1} />
-          <Text h4>
-            Cart is empty! Lets check our
-            <Link href={"/store"}>
-              <a> store!</a>
-            </Link>
-          </Text>
-          <Spacer y={1} />
+    <>
+      {mount && (
+        <Container display="flex" justify="center" alignItems="center">
+          {cartItems?.length !== 0 && (
+            <Button
+              className="checkout"
+              id="checkout"
+              onClick={() =>
+                goToCheckout(cartItems, userSession.email, userSession.stripeID)
+              }
+            >
+              Checkout
+            </Button>
+          )}
+          {cartItems.length !== 0 ? (
+            <Grid.Container justify="center" alignItems="center" gap={2}>
+              {cartItemsMemo}
+            </Grid.Container>
+          ) : (
+            <Container css={{ textAlign: "center" }}>
+              <Spacer y={1} />
+              <Text h4>
+                Cart is empty! Lets check our
+                <Link href={"/store"}>
+                  <a> store!</a>
+                </Link>
+              </Text>
+              <Spacer y={1} />
+            </Container>
+          )}
         </Container>
       )}
-    </Container>
+    </>
   );
 };
 

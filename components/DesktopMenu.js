@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "../context/auth.context";
 import { forwardRef, useMemo } from "react";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 
 export const AnimatedLink = forwardRef(({ children }, ref) => {
   AnimatedLink.displayName = "motion a";
@@ -100,7 +101,7 @@ const DesktopMenu = ({ cart }) => {
             <LoginForm />
           ) : (
             <AnimatedLink>
-              <Text h4 onClick={() => signOut()}>
+              <Text h4 onClick={signOut}>
                 Log out
               </Text>
             </AnimatedLink>
@@ -111,4 +112,4 @@ const DesktopMenu = ({ cart }) => {
   );
 };
 
-export default DesktopMenu;
+export default dynamic(async () => DesktopMenu, { ssr: false });

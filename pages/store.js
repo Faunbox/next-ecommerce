@@ -21,6 +21,7 @@ import { useAuth } from "../context/auth.context";
 import { queryClient } from "./_app";
 import { fetchAllItems } from "../lib/next-auth-react-query";
 import { AnimatedLink } from "../components/DesktopMenu";
+import dynamic from "next/dynamic";
 
 export async function getServerSideProps() {
   await queryClient.prefetchQuery("AllItems", fetchAllItems, {
@@ -34,7 +35,7 @@ export async function getServerSideProps() {
   };
 }
 
-export default function Home() {
+function Home() {
   const { userSession } = useAuth();
 
   //number of items per one load
@@ -371,3 +372,5 @@ export default function Home() {
     </>
   );
 }
+
+export default dynamic(async () => Home);

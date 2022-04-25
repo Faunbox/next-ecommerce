@@ -9,6 +9,7 @@ import searchIcon from "../public/icons/search.png";
 import cartIcon from "../public/icons/shopping-cart.png";
 
 import { Avatar, Container, Input, Row, Spacer, Text } from "@nextui-org/react";
+import dynamic from "next/dynamic";
 
 const PhoneMenu = ({ cart }) => {
   const { userSession } = useAuth();
@@ -22,7 +23,7 @@ const PhoneMenu = ({ cart }) => {
   const sectionRef = useRef(null);
 
   return (
-    <Container justify="center" css={{ textAlign: "center" }}>
+    <>
       <Text h1>Cosmetic Shop</Text>
       <Spacer y={1} />
       <Container display="flex">
@@ -67,11 +68,11 @@ const PhoneMenu = ({ cart }) => {
           <Avatar src={userSession?.image} />
         </Text>
       </Container>
-      {cart.cartItems.length !== 0 ? (
+      {cart?.cartItems.length !== 0 && (
         <Container>
           <Text h5>You have {cart.cartItems.length} items in cart</Text>
         </Container>
-      ) : null}
+      )}
 
       {showMenu ? (
         <Container
@@ -164,8 +165,8 @@ const PhoneMenu = ({ cart }) => {
           <Spacer y={1} />
         </>
       ) : null}
-    </Container>
+    </>
   );
 };
 
-export default PhoneMenu;
+export default dynamic(async () => PhoneMenu, { ssr: false });

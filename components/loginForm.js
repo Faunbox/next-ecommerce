@@ -3,6 +3,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { AnimatedLink } from "./DesktopMenu";
 
 export const Mail = ({ fill, size, height, width, ...props }) => {
   return (
@@ -64,9 +65,11 @@ const LoginForm = () => {
 
   return (
     <>
-      <Text h4 onClick={() => openModalHandler()}>
-        Log in
-      </Text>
+      <AnimatedLink>
+        <Text h4 onClick={() => openModalHandler()}>
+          Log in
+        </Text>
+      </AnimatedLink>
       <Modal
         closeButton
         blur

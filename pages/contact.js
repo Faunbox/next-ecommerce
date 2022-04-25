@@ -13,6 +13,7 @@ import {
 import FooterSocials from "../components/FooterSocials";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import dynamic from "next/dynamic";
 
 const Contact = () => {
   const apiEndpoint = "./api/mail/";
@@ -127,4 +128,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default dynamic(async () => Contact);

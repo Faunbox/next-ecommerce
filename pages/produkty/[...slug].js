@@ -22,7 +22,6 @@ const ProductScreen = ({ product }) => {
     //check is user logged in
     if (!userSession) {
       alert("If You want to add item to card, login first!");
-      return signIn();
     }
 
     //get product info from db
