@@ -9,6 +9,7 @@ import searchIcon from "../public/icons/search.png";
 import cartIcon from "../public/icons/shopping-cart.png";
 
 import { Avatar, Container, Input, Row, Spacer, Text } from "@nextui-org/react";
+import dynamic from "next/dynamic";
 
 const PhoneMenu = ({ cart }) => {
   const { userSession } = useAuth();
@@ -168,4 +169,4 @@ const PhoneMenu = ({ cart }) => {
   );
 };
 
-export default PhoneMenu;
+export default dynamic(async () => PhoneMenu);
