@@ -1,7 +1,7 @@
 import LoggedUserPage from "../../components/LoggedUserPage";
 import UserPage from "../../components/UserPage";
 import { useAuth } from "../../context/auth.context";
-import { getAllUsers } from "../api/users/index";
+// import { getAllUsers } from "../api/users/index";
 import { getSingleUser } from "../api/users/[email]";
 
 const User = ({ user }) => {
@@ -14,27 +14,15 @@ const User = ({ user }) => {
   );
 };
 
-export async function getStaticPaths() {
-  const users = await getAllUsers();
-
-  const paths = users.map((user) => ({
-    params: { slug: user.email },
-  }));
-  return {
-    paths,
-    fallback: false,
-  };
-}
-
-export async function getStaticProps({ params }) {
-  const { slug } = params;
+export async function getServerSideProps(context) {
+  const { query } = context;
+  const slug = query.slug;
   const user = JSON.stringify(await getSingleUser(slug));
 
   return {
     props: {
       user: JSON.parse(user),
     },
-    revalidate: 1,
   };
 }
 
