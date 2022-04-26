@@ -2,6 +2,7 @@ import { Button, Input, Modal, Text } from "@nextui-org/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useFormik } from "formik";
+import { AnimatedLink } from "./DesktopMenu";
 import * as Yup from "yup";
 
 export const Mail = ({ fill, size, height, width, ...props }) => {
@@ -64,9 +65,11 @@ const LoginForm = () => {
 
   return (
     <>
-      <Text h4 onClick={() => openModalHandler()}>
-        Log in
-      </Text>
+      <AnimatedLink>
+        <Text h4 onClick={() => openModalHandler()}>
+          Log in
+        </Text>
+      </AnimatedLink>
       <Modal
         closeButton
         blur
@@ -101,16 +104,20 @@ const LoginForm = () => {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button auto type="submit">
-              Sign in
-            </Button>
+            <AnimatedLink>
+              <Button auto type="submit">
+                Sign in
+              </Button>
+            </AnimatedLink>
           </Modal.Footer>
         </form>
         <Modal.Body>
           <Text>Google account</Text>
-          <Button onClick={() => signIn("google")} css={{ mx: "auto" }}>
-            Google
-          </Button>
+          <AnimatedLink>
+            <Button onClick={() => signIn("google")} css={{ mx: "auto" }}>
+              Google
+            </Button>
+          </AnimatedLink>
         </Modal.Body>
         <Modal.Footer>
           <Button auto flat color="error" onClick={closeModalHandler}>

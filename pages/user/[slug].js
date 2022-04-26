@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// import { useState, useRef } from "react";
 import LoggedUserPage from "../../components/LoggedUserPage";
 import UserPage from "../../components/UserPage";
 import { useAuth } from "../../context/auth.context";

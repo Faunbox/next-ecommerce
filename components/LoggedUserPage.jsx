@@ -28,10 +28,10 @@ const LoggedUserPage = ({ user }) => {
   };
 
   const [showInput, setShowInput] = useState(false);
-  const [showPucharseHistory, setShowPucharseHistory] = useState(false);
   const [image, setImage] = useState("");
   const [paymentHistory, setPaymentHistory] = useState([]);
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(false);
+  const [showProgressButton, setShowProgressButton] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -102,16 +102,16 @@ const LoggedUserPage = ({ user }) => {
   };
 
   const getUserPaymentHistory = async () => {
-    setHistory(false);
+    setHistory(true);
+    setShowProgressButton(true);
     const paymentHistory = await fetch("/api/users/[email]", {
       method: "POST",
       body: user.email,
     }).then((res) => res.json());
     const res = await paymentHistory;
-    // console.log({ res });
-    res.length === 0 ? setPaymentHistory(false) : setPaymentHistory(res);
-    setHistory(true);
-    setShowPucharseHistory((prevState) => !prevState);
+    console.log({ res });
+    res.length !== 0 ? setPaymentHistory(res) : null;
+    setShowProgressButton(false);
   };
   return (
     <Container justify="center">
@@ -244,19 +244,26 @@ const LoggedUserPage = ({ user }) => {
         <Container justify="center">
           <Button
             onClick={() => {
-              !showPucharseHistory ? getUserPaymentHistory() : null;
-              setShowPucharseHistory((prevState) => !prevState);
+              !history ? getUserPaymentHistory() : setHistory(false);
             }}
             css={{ mx: "auto" }}
           >
-            {showPucharseHistory ? (
+            {showProgressButton ? (
               <Loading color="white" size="sm" />
             ) : (
               "Show history of my latest orders"
             )}
           </Button>
-          {!showPucharseHistory &&
-            (history ? <HistoryItemList items={paymentHistory} /> : null)}
+          {history &&
+            (paymentHistory.length !== 0 ? (
+              <HistoryItemList items={paymentHistory} />
+            ) : (
+              <Container css={{ textAlign: "center" }}>
+                <Spacer y={1} />
+                <Text h3>You dont have any pucharsed items</Text>
+                <Spacer y={1} />
+              </Container>
+            ))}
         </Container>
       </Card>
       <Spacer y={1} />

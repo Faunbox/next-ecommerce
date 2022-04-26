@@ -33,7 +33,7 @@ const HistoryItemList = (items) => {
     <Container>
       <Spacer y={2} />
       <Grid.Container gap={1} justify="center">
-        {itemsArray}
+        {items.length !== 0 ? itemsArray : "You dont have any pucharsed items!"}
       </Grid.Container>
     </Container>
   );
