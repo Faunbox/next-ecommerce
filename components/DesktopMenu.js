@@ -101,7 +101,7 @@ const DesktopMenu = ({ cart }) => {
             <LoginForm />
           ) : (
             <AnimatedLink>
-              <Text h4 onClick={() => signOut()}>
+              <Text h4 onClick={signOut}>
                 Log out
               </Text>
             </AnimatedLink>
