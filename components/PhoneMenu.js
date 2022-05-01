@@ -143,16 +143,15 @@ const PhoneMenu = ({ cart }) => {
       {showUser ? (
         <>
           <Spacer y={1} />
-          <Container display="flex" justify="space-between">
+          <Container
+            display="flex"
+            justify="space-between"
+            css={{ textAlign: "center" }}
+          >
             {!userSession ? (
-              <Container css={{ textAlign: "center" }}>
-                <LoginForm />
-              </Container>
+              <LoginForm />
             ) : (
-              // <Text b onClick={() => signIn()}>
-              //   Log in
-              // </Text>
-              <Text b onClick={signOut}>
+              <Text b onClick={() => signOut()}>
                 Log out
               </Text>
             )}

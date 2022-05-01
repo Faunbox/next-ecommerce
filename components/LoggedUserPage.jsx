@@ -109,7 +109,6 @@ const LoggedUserPage = ({ user }) => {
       body: user.email,
     }).then((res) => res.json());
     const res = await paymentHistory;
-    console.log({ res });
     res.length !== 0 ? setPaymentHistory(res) : null;
     setShowProgressButton(false);
   };
