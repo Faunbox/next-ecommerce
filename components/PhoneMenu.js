@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import LoginForm from "./loginForm";
 
 import { useAuth } from "../context/auth.context";
 
@@ -144,11 +145,14 @@ const PhoneMenu = ({ cart }) => {
           <Spacer y={1} />
           <Container display="flex" justify="space-between">
             {!userSession ? (
-              <Text b onClick={() => signIn()}>
-                Log in
-              </Text>
+              <Container css={{ textAlign: "center" }}>
+                <LoginForm />
+              </Container>
             ) : (
-              <Text b onClick={() => signOut()}>
+              // <Text b onClick={() => signIn()}>
+              //   Log in
+              // </Text>
+              <Text b onClick={signOut}>
                 Log out
               </Text>
             )}
