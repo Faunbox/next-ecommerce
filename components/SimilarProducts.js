@@ -1,8 +1,7 @@
 import { Container, Grid, Spacer, Text } from "@nextui-org/react";
 import Product from "../components/Product";
 
-const SimilarProducts = ({ items, category }) => {
-  // console.log(items.sort((a, b) => b.date.localeCompare(a.date)));
+const SimilarProducts = ({ items, category, actualProduct }) => {
   return (
     <Container justify="center" alignItems="center">
       <Text h2>Similar Products:</Text>

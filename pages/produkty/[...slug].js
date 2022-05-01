@@ -12,6 +12,8 @@ import {
   Row,
   Spacer,
   Text,
+  Popover,
+  Col,
 } from "@nextui-org/react";
 import { fetchAllItems } from "../../lib/next-auth-react-query";
 import { dehydrate, useQuery } from "react-query";
@@ -44,14 +46,6 @@ const ProductScreen = ({ product }) => {
     //get product info from db
     const data = await fetch(`/api/products/${product.slug}`);
     const selectedProduct = await data.json();
-
-    //checking of same product in card and add 1 to quantity
-    const existItem = state.cart.cartItems.find(
-      (item) => item._id === selectedProduct._id
-    );
-    const quantity = existItem
-      ? setItemQuantity((prevState) => prevState + 1)
-      : 1;
 
     if (selectedProduct.countInStock === 0) {
       alert("No item avaible!");
@@ -129,7 +123,11 @@ const ProductScreen = ({ product }) => {
         </Grid>
         <Grid justify="center" alignItems="center">
           <Text h1>{product.name}</Text>
-          <Text h4>Description: {product.description}</Text>
+          <Col>
+            <Text h4>Description:</Text>
+            <Text h5> {product.description}</Text>
+            <Spacer y={1} />
+          </Col>
           <Text h4>In stock: {product.countInStock}</Text>
           <Text h4>Category: {product.category}</Text>
           {product.promotion ? (
@@ -142,7 +140,7 @@ const ProductScreen = ({ product }) => {
           ) : (
             <Text h4>Price: {product.price}PLN</Text>
           )}
-          <Text h4> Quantity</Text>
+          <Text h4> Quantity: </Text>
           <Row justify="center" css={{ my: 15 }}>
             <Button
               auto
@@ -173,17 +171,28 @@ const ProductScreen = ({ product }) => {
 
         <Grid
           justify="center"
+          xs={8}
           md={12}
           alignItems="center"
           css={{ margin: "auto 0" }}
         >
-          <Button
-            color="success"
-            css={{ mx: "auto" }}
-            onClick={() => addToCart(product)}
-          >
-            Add to cart
-          </Button>
+          <Popover placement="top">
+            <Popover.Trigger>
+              <Button
+                color="success"
+                css={{ mx: "auto" }}
+                onClick={() => addToCart(product)}
+              >
+                Add to cart
+              </Button>
+            </Popover.Trigger>
+            <Popover.Content>
+              <Text h4 css={{ p: "$10" }}>
+                Item has been added to cart
+              </Text>
+            </Popover.Content>
+          </Popover>
+
           {userSession?.role === "admin" && (
             <>
               <Button
@@ -206,7 +215,11 @@ const ProductScreen = ({ product }) => {
         </Grid>
       </Grid.Container>
       <Spacer y={1} />
-      <SimilarProducts items={data} category={product.category} />
+      <SimilarProducts
+        items={data}
+        category={product.category}
+        actualProduct={product.name}
+      />
     </Container>
   );
 };

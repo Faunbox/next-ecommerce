@@ -100,7 +100,9 @@ const LoginForm = () => {
               onChange={formik.handleChange}
               contentLeft={<Mail fill="currentColor" />}
             />
-            {formik.errors.email ? <Text>{formik.errors.email}</Text> : null}
+            {formik.errors.email ? (
+              <Text color="error">{formik.errors.email}</Text>
+            ) : null}
           </Modal.Body>
 
           <Modal.Footer>

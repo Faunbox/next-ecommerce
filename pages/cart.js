@@ -24,17 +24,20 @@ const Cart = () => {
   const { userSession } = useAuth();
   const [fetchingFlag, setfetchingFlag] = useState(false);
 
-  const changeQuantity = async (item, quantity) => {
+  const changeQuantity = async (item, itemQuantity) => {
     //check db for item quantity
     setfetchingFlag(true);
     const data = await fetch(`/api/products/${item.slug}`);
     const quantityInfo = await data.json();
     setfetchingFlag(false);
-    if (quantityInfo.countInStock < quantity) {
-      alert("Brak na stanie!");
+    if (quantityInfo.countInStock < itemQuantity) {
+      alert(
+        "Currently that amount is not avaible! In stock: ",
+        quantityInfo.countInStock
+      );
       return;
     }
-    dispatch({ type: ACTION.ADD_TO_CART, payload: { ...item, quantity } });
+    dispatch({ type: ACTION.ADD_TO_CART, payload: { ...item, itemQuantity } });
   };
 
   const deleteItem = (item) => {
