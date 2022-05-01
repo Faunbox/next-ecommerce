@@ -5,6 +5,7 @@ import { AuthProvider } from "../context/auth.context";
 import { CardProvider } from "../context/card.context";
 import { NextUIProvider } from "@nextui-org/react";
 import { AnimatePresence } from "framer-motion";
+import NextNProgress from "nextjs-progressbar";
 
 export const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <Hydrate state={pageProps.dehydratedState}>
           <AuthProvider>
             <CardProvider>
+              <NextNProgress height={10} />
               <AnimatePresence initial={false} exitBeforeEnter>
                 <Layout>
                   <Component {...pageProps} />

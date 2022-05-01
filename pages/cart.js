@@ -42,6 +42,10 @@ const Cart = () => {
   };
 
   const goToCheckout = async (products, email, stripeID) => {
+    //check is user logged in
+    if (!userSession) {
+      alert("If You want to add item to card, login first!");
+    }
     const response = await fetch("/api/checkout", {
       method: "post",
       headers: {
@@ -76,30 +80,30 @@ const Cart = () => {
                 </Container>
                 <Text>Item: {item.name}</Text>
                 <Text>Description: {item.description}</Text>
-                <Text>Total price: {item.price * item.quantity}PLN</Text>
+                <Text>Total price: {item.price * item.itemQuantity}PLN</Text>
                 <Text>Item price: {item.price}PLN</Text>
                 <Text>
-                  Quantity: {item.quantity === "" ? 0 : item.quantity}
+                  Quantity: {item.itemQuantity === "" ? 0 : item.itemQuantity}
                 </Text>
               </Container>
               <Row justify="center" css={{ my: 15 }}>
                 <Button
                   auto
-                  onClick={() => changeQuantity(item, item.quantity + 1)}
+                  onClick={() => changeQuantity(item, item.itemQuantity + 1)}
                 >
                   +
                 </Button>
                 <Input
                   type="text"
                   aria-label="Quantity input"
-                  value={fetchingFlag ? "..." : item.quantity}
+                  value={fetchingFlag ? "..." : item.itemQuantity}
                   css={{ mx: 10, width: 50 }}
                   onChange={(e) => changeQuantity(item, e.target.value)}
                 />
 
                 <Button
                   auto
-                  onClick={() => changeQuantity(item, item.quantity - 1)}
+                  onClick={() => changeQuantity(item, item.itemQuantity - 1)}
                 >
                   -
                 </Button>
@@ -125,9 +129,14 @@ const Cart = () => {
       {cartItems.length !== 0 ? (
         <>
           <Button
-            onClick={() =>
-              goToCheckout(cartItems, userSession.email, userSession.stripeID)
-            }
+            onClick={() => {
+              //check is user logged in
+              if (!userSession) {
+                alert("If You want to buy something, login first!");
+                return;
+              }
+              goToCheckout(cartItems, userSession.email, userSession.stripeID);
+            }}
           >
             Checkout
           </Button>

@@ -228,8 +228,6 @@ const LoggedUserPage = ({ user }) => {
                   }}
                   css={{ height: "auto" }}
                 ></Input>
-              </Grid>
-              <Grid>
                 <Button
                   auto
                   css={{ my: 20, mx: "auto" }}

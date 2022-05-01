@@ -1,30 +1,46 @@
-import { signIn, useSession } from "next-auth/react";
 import { getOneProduct } from "../api/products/[slug]";
 import { useCard, ACTION } from "../../context/card.context";
 import { useAuth } from "../../context/auth.context";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
-import { Button, Container, Grid, Spacer, Text } from "@nextui-org/react";
+import {
+  Button,
+  Container,
+  Grid,
+  Input,
+  Row,
+  Spacer,
+  Text,
+} from "@nextui-org/react";
 import { fetchAllItems } from "../../lib/next-auth-react-query";
 import { dehydrate, useQuery } from "react-query";
 import SimilarProducts from "../../components/SimilarProducts";
 import { queryClient } from "../_app";
+import { useEffect, useState } from "react";
 
 const ProductScreen = ({ product }) => {
   const { data } = useQuery("AllItems", fetchAllItems, { enabled: false });
 
   const { dispatch, state } = useCard();
   const { userSession } = useAuth();
+  const [itemQuantity, setItemQuantity] = useState(1);
+
+  useEffect(() => {
+    const itemInCart = state.cart.cartItems.find(
+      (item) => item._id === product._id
+    );
+    itemInCart
+      ? setItemQuantity(
+          state.cart.cartItems.find((item) => item._id === product._id)
+            ?.itemQuantity
+        )
+      : 1;
+  }, []);
+
   const router = useRouter();
 
   const addToCart = async () => {
-    //check is user logged in
-    if (!userSession) {
-      alert("If You want to add item to card, login first!");
-      return signIn();
-    }
-
     //get product info from db
     const data = await fetch(`/api/products/${product.slug}`);
     const selectedProduct = await data.json();
@@ -33,15 +49,19 @@ const ProductScreen = ({ product }) => {
     const existItem = state.cart.cartItems.find(
       (item) => item._id === selectedProduct._id
     );
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-    if (selectedProduct.countInStock < quantity) {
+    const quantity = existItem
+      ? setItemQuantity((prevState) => prevState + 1)
+      : 1;
+
+    if (selectedProduct.countInStock === 0) {
       alert("No item avaible!");
       return;
     }
     dispatch({
       type: ACTION.ADD_TO_CART,
-      payload: { ...selectedProduct, quantity },
+      payload: { ...selectedProduct, itemQuantity },
     });
+    setItemQuantity(1);
   };
 
   const deleteProduct = async (id, priceID, productID) => {
@@ -122,8 +142,35 @@ const ProductScreen = ({ product }) => {
           ) : (
             <Text h4>Price: {product.price}PLN</Text>
           )}
+          <Text h4> Quantity</Text>
+          <Row justify="center" css={{ my: 15 }}>
+            <Button
+              auto
+              onClick={() => setItemQuantity((prevState) => prevState + 1)}
+            >
+              +
+            </Button>
+            <Input
+              type="text"
+              aria-label="Quantity input"
+              value={itemQuantity}
+              css={{ mx: 10, width: 50 }}
+              onChange={(e) => changeQuantity(product, e.target.value)}
+            />
+
+            <Button
+              auto
+              onClick={() => {
+                if (itemQuantity === 1) return setItemQuantity(1);
+                setItemQuantity((prevState) => prevState - 1);
+              }}
+            >
+              -
+            </Button>
+          </Row>
         </Grid>
         <Spacer y={1} css={{ display: "none", "@md": { display: "block" } }} />
+
         <Grid
           justify="center"
           md={12}

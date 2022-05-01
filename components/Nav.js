@@ -14,12 +14,12 @@ const Navigation = () => {
       <Container
         alignItems="center"
         direction="column"
-        css={{ "@xs": { display: "none" }, padding: 0 }}
+        css={{ "@xs": { display: "none" }, padding: 0, textAlign: "center" }}
       >
-        <PhoneMenu cart={cart}/>
+        <PhoneMenu cart={cart} />
       </Container>
       <Container display="none" css={{ "@xs": { display: "block" } }}>
-        <DesktopMenu cart={cart}/>
+        <DesktopMenu cart={cart} />
       </Container>
       <Spacer y={1} />
     </>

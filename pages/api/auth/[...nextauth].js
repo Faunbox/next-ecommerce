@@ -29,7 +29,7 @@ export default NextAuth({
     // strategy: "jwt",
   },
   pages: {
-    signIn: "/",
+    verifyRequest: "/auth/verify-request",
   },
   callbacks: {
     async session({ session, user, token }) {

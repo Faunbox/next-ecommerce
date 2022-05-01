@@ -111,7 +111,7 @@ const LoginForm = () => {
             </AnimatedLink>
           </Modal.Footer>
         </form>
-        <Modal.Body>
+        <Modal.Body css={{ overflow: "hidden" }}>
           <Text>Google account</Text>
           <AnimatedLink>
             <Button onClick={() => signIn("google")} css={{ mx: "auto" }}>
