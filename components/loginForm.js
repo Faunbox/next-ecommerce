@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Text } from "@nextui-org/react";
+import { Button, Input, Modal, Spacer, Text } from "@nextui-org/react";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useFormik } from "formik";
@@ -77,7 +77,7 @@ const LoginForm = () => {
         open={visible}
         onClose={closeModalHandler}
       >
-        <form onSubmit={() => formik.handleSubmit()}>
+        {/* <form onSubmit={() => formik.handleSubmit()}>
           <Modal.Header>
             <Text id="modal-title" size={18}>
               Welcome to
@@ -112,14 +112,13 @@ const LoginForm = () => {
               </Button>
             </AnimatedLink>
           </Modal.Footer>
-        </form>
-        <Modal.Body css={{ overflow: "hidden" }}>
-          <Text>Google account</Text>
-          <AnimatedLink>
-            <Button onClick={() => signIn("google")} css={{ mx: "auto" }}>
-              Google
-            </Button>
-          </AnimatedLink>
+        </form> */}
+        <Modal.Body css={{ overflow: "hidden", textAlign: "center" }}>
+          <Text h4>Log in via Google account</Text>
+          <Spacer y={1} />
+          <Button onClick={() => signIn("google")} css={{ mx: "auto" }}>
+            Google
+          </Button>
         </Modal.Body>
         <Modal.Footer>
           <Button auto flat color="error" onClick={closeModalHandler}>

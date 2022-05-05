@@ -28,9 +28,6 @@ export default NextAuth({
     strategy: "database",
     // strategy: "jwt",
   },
-  pages: {
-    verifyRequest: "/auth/verify-request",
-  },
   callbacks: {
     async session({ session, user, token }) {
       session.user.role = user.role;

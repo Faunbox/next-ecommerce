@@ -11,6 +11,7 @@ import cartIcon from "../public/icons/shopping-cart.png";
 
 import { Avatar, Container, Input, Row, Spacer, Text } from "@nextui-org/react";
 import dynamic from "next/dynamic";
+import { signOut } from "next-auth/react";
 
 const PhoneMenu = ({ cart }) => {
   const { userSession } = useAuth();

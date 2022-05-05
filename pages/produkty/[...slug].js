@@ -187,7 +187,7 @@ const ProductScreen = ({ product }) => {
             </Popover.Trigger>
             <Popover.Content>
               <Text h4 css={{ p: "$10" }}>
-                Item has been added to cart
+                Done!
               </Text>
             </Popover.Content>
           </Popover>
