@@ -12,7 +12,7 @@ export default async (req, res) => {
       minimum: 1,
       maximum: item.countInStock,
     },
-    quantity: item.quantity,
+    quantity: item.itemQuantity,
   }));
   const session = stripeID
     ? await stripe.checkout.sessions.create({
