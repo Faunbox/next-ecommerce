@@ -1,15 +1,16 @@
 import { Container, Grid, Spacer, Text } from "@nextui-org/react";
+import { useEffect } from "react";
 import Product from "../components/Product";
 
-const SimilarProducts = ({ items, category, actualProduct }) => {
+const SimilarProducts = ({ items, category, itemName }) => {
   return (
     <Container justify="center" alignItems="center">
       <Text h2>Similar Products:</Text>
       <Grid.Container gap={2} justify="center">
         {items
-          ?.filter((item) =>
-            item.category.toLowerCase().includes(category.toLowerCase())
-          )
+          ?.filter((element) => {
+            return element.name != itemName;
+          })
           .map((item) => <Product key={item._id} product={item} />)
           .slice(0, 4)}
       </Grid.Container>

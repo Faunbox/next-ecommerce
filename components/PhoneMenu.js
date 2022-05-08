@@ -144,11 +144,16 @@ const PhoneMenu = ({ cart }) => {
       {showUser ? (
         <>
           <Spacer y={1} />
-          <Container
-            display="flex"
-            justify="space-between"
-            css={{ textAlign: "center" }}
-          >
+          <Container display="flex" css={{ textAlign: "center" }}>
+            {userSession ? (
+              <Text b onClick={() => setShowUser(!showUser)}>
+                <Link href={`/user/${userSession.email}`} passHref>
+                  <a>
+                    {userSession.name ? userSession.name : userSession.email}
+                  </a>
+                </Link>
+              </Text>
+            ) : null}
             {!userSession ? (
               <LoginForm />
             ) : (
@@ -156,15 +161,6 @@ const PhoneMenu = ({ cart }) => {
                 Log out
               </Text>
             )}
-            {userSession ? (
-              <Link href={`/user/${userSession.email}`} passHref>
-                <a>
-                  <Text b onClick={() => setShowUser(!showUser)}>
-                    {userSession.name ? userSession.name : userSession.email}
-                  </Text>
-                </a>
-              </Link>
-            ) : null}
           </Container>
           <Spacer y={1} />
         </>

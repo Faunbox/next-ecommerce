@@ -13,8 +13,9 @@ const UserPage = ({ user }) => {
           <Image
             src={user?.image}
             alt={`Image avatar`}
-            width={100}
-            height={100}
+            width={300}
+            height={300}
+            objectFit="scale-down"
           />
         )}
       </Container>

@@ -125,6 +125,7 @@ const LoggedUserPage = ({ user }) => {
             <>
               {user?.name && <Text h4>Username: {user.name}</Text>}
               <Container>
+                <Spacer y={1} />
                 <Button
                   auto
                   onClick={() => {
@@ -204,15 +205,21 @@ const LoggedUserPage = ({ user }) => {
               >
                 {!user?.image ? "Set avatar" : "Change avatar"}
               </Button>
+              <Spacer y={1} />
             </>
           ) : (
-            <Grid.Container justify="space-evenly" alignItems="center">
+            <Grid.Container
+              justify="space-evenly"
+              alignItems="center"
+              css={{ border: "1px solid grey" }}
+            >
               <Grid>
                 <Image
                   src={user?.image}
                   alt={`Image avatar`}
-                  width={100}
-                  height={100}
+                  width={200}
+                  height={200}
+                  objectFit="scale-down"
                 />
               </Grid>
               <Grid>
@@ -234,11 +241,13 @@ const LoggedUserPage = ({ user }) => {
                 >
                   {!user?.image ? "Set avatar" : "Change avatar"}
                 </Button>
+                <Spacer y={1} />
               </Grid>
             </Grid.Container>
           )}
         </Container>
         <Container justify="center">
+          <Spacer y={1} />
           <Button
             onClick={() => {
               !history ? getUserPaymentHistory() : setHistory(false);
@@ -262,8 +271,8 @@ const LoggedUserPage = ({ user }) => {
               </Container>
             ))}
         </Container>
+        <Spacer y={1} />
       </Card>
-      <Spacer y={1} />
     </Container>
   );
 };

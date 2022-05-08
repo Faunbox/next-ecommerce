@@ -25,6 +25,10 @@ const Cart = () => {
   const [fetchingFlag, setfetchingFlag] = useState(false);
 
   const changeQuantity = async (item, itemQuantity) => {
+    //prevent item quantity to by lower than 1
+    if (itemQuantity === 0) {
+      return;
+    }
     //check db for item quantity
     setfetchingFlag(true);
     const data = await fetch(`/api/products/${item.slug}`);
@@ -56,7 +60,7 @@ const Cart = () => {
       },
       body: JSON.stringify({ products, email, stripeID }),
     });
-    const { id } = await response.json();
+    const { id, url } = await response.json();
     dispatch({ type: ACTION.SET_STRIPE_SESSION_ID, payload: id });
     const stripe = await stripePromise;
     await stripe.redirectToCheckout({ sessionId: id });
@@ -70,6 +74,7 @@ const Cart = () => {
           <Card css={{ maxWidth: "300px" }}>
             <Card.Body>
               <Container direction="row" css={{ textAlign: "center" }}>
+                <Text h3>{item.name}</Text>
                 <Container>
                   <Image
                     src={item.image.url}
@@ -81,13 +86,13 @@ const Cart = () => {
                     priority={true}
                   />
                 </Container>
-                <Text>Item: {item.name}</Text>
-                <Text>Description: {item.description}</Text>
+                <Text b>Description:</Text>
+                <Text>{item.description}</Text>
+                <Spacer y={1} />
                 <Text>Total price: {item.price * item.itemQuantity}PLN</Text>
                 <Text>Item price: {item.price}PLN</Text>
-                <Text>
-                  Quantity: {item.itemQuantity === "" ? 0 : item.itemQuantity}
-                </Text>
+                <Spacer y={1} />
+                <Text b>Quantity:</Text>
               </Container>
               <Row justify="center" css={{ my: 15 }}>
                 <Button

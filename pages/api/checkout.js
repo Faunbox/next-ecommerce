@@ -27,7 +27,7 @@ export default async (req, res) => {
         payment_method_types: ["card", "p24"],
         customer: stripeID,
         success_url: `${YOUR_DOMAIN}/zamowienie/{CHECKOUT_SESSION_ID}`,
-        cancel_url: `${YOUR_DOMAIN}/zamowienie/{CHECKOUT_SESSION_ID}`,
+        cancel_url: `${YOUR_DOMAIN}/cart`,
       })
     : await stripe.checkout.sessions.create({
         line_items: lineItems,
@@ -41,8 +41,7 @@ export default async (req, res) => {
         payment_method_types: ["card", "p24"],
         customer_email: email,
         success_url: `${YOUR_DOMAIN}/zamowienie/{CHECKOUT_SESSION_ID}`,
-        cancel_url: `${YOUR_DOMAIN}`,
+        cancel_url: `${YOUR_DOMAIN}/cart`,
       });
-
   res.status(200).json(session);
 };

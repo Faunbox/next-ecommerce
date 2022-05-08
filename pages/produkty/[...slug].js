@@ -170,7 +170,6 @@ const ProductScreen = ({ product }) => {
 
         <Grid
           justify="center"
-          xs={8}
           md={12}
           alignItems="center"
           css={{ margin: "auto 0" }}
@@ -217,7 +216,7 @@ const ProductScreen = ({ product }) => {
       <SimilarProducts
         items={data}
         category={product.category}
-        actualProduct={product.name}
+        itemName={product.name}
       />
     </Container>
   );

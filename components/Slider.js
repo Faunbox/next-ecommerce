@@ -5,6 +5,7 @@ import thirdImage from "../public/slider/soap-g595e3af38_1280-min.jpg";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Container, Text } from "@nextui-org/react";
+import dynamic from "next/dynamic";
 
 const Slider = () => {
   const [current, setCurrent] = useState(0);
@@ -119,4 +120,4 @@ const Slider = () => {
   );
 };
 
-export default Slider;
+export default dynamic(async () => Slider);

@@ -69,8 +69,8 @@ const Contact = () => {
           </Text>
           <Text b>Send us a mail! We will reply as soon as possible!</Text>
         </Grid>
-        <Spacer y={1} />
         <Grid md={7}>
+          <Spacer y={1} />
           <Card>
             <Row>
               <Input

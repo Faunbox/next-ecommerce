@@ -19,6 +19,7 @@ const HistoryItemList = (items) => {
                     <Text>Opis: {item.description}</Text>
                     <Text>Cena: {(item.price / 100) * item.quantity}zł</Text>
                     <Text>Ilość: {item.quantity}</Text>
+                    <Spacer y={1} />
                   </Container>
                 );
               })}
