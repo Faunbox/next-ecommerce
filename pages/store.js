@@ -350,6 +350,7 @@ export default function Home() {
                   // animate={{ opacity: 1}}
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
                   key={item._id}
                 >
                   <ProductCard product={item} />

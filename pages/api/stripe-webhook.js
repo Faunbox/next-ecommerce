@@ -84,8 +84,6 @@ export default async function handler(req, res) {
             $addToSet: { StripeHistory: { items, date } },
           }
         );
-
-      console.log(await nie);
       return await res.status(200).send(items);
     }
   }

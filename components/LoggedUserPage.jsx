@@ -6,6 +6,7 @@ import {
   Input,
   Loading,
   Modal,
+  Progress,
   Spacer,
   Text,
 } from "@nextui-org/react";
@@ -31,6 +32,7 @@ const LoggedUserPage = ({ user }) => {
   const [image, setImage] = useState("");
   const [paymentHistory, setPaymentHistory] = useState([]);
   const [history, setHistory] = useState(false);
+  const [changingAvatar, setChangingAvatar] = useState(false);
   const [showProgressButton, setShowProgressButton] = useState(false);
 
   const formik = useFormik({
@@ -75,6 +77,9 @@ const LoggedUserPage = ({ user }) => {
     formData.append("file", image[0]);
     formData.append("upload_preset", "avatars");
 
+    const src = URL.createObjectURL(image[0]);
+    // const showImageThumbnail = (formData.entries())
+
     const res = await fetch(cloudinaryUploadLink, {
       method: "POST",
       body: formData,
@@ -86,6 +91,7 @@ const LoggedUserPage = ({ user }) => {
   const sendNewAvatarImageToDb = async () => {
     if (!image)
       return alert("You probably forgot to set new image for avatar!");
+    setChangingAvatar(true);
     const newImage = await sendImageToCloudinary();
     await fetch("/api/users/change-name", {
       method: "PATCH",
@@ -97,8 +103,8 @@ const LoggedUserPage = ({ user }) => {
       .then((data) => checkIsStatusOk(data.status))
       .catch(
         (err) => new Error({ message: "Błąd podczas zmiany avataru" }, err)
-      )
-      .finally(setShowInput(false), router.reload());
+      );
+    // .finally(setShowInput(false), router.reload());
   };
 
   const getUserPaymentHistory = async () => {
@@ -109,7 +115,7 @@ const LoggedUserPage = ({ user }) => {
       body: user.email,
     }).then((res) => res.json());
     const res = await paymentHistory;
-    res.length !== 0 ? setPaymentHistory(res) : null;
+    res.length !== 0 ? setPaymentHistory(res) : setPaymentHistory([]);
     setShowProgressButton(false);
   };
   return (
@@ -222,7 +228,8 @@ const LoggedUserPage = ({ user }) => {
                   objectFit="scale-down"
                 />
               </Grid>
-              <Grid>
+              <Grid style={{ border: "1px solid grey" }}>
+                <Spacer y={1} />
                 <Input
                   type="file"
                   id="file"
@@ -234,6 +241,17 @@ const LoggedUserPage = ({ user }) => {
                   }}
                   css={{ height: "auto" }}
                 ></Input>
+                {image && (
+                  <Container>
+                    <Image
+                      src={URL.createObjectURL(image[0])}
+                      alt="new avatar"
+                      width={200}
+                      height={200}
+                      objectFit="scale-down"
+                    />
+                  </Container>
+                )}
                 <Button
                   auto
                   css={{ my: 20, mx: "auto" }}
@@ -242,6 +260,14 @@ const LoggedUserPage = ({ user }) => {
                   {!user?.image ? "Set avatar" : "Change avatar"}
                 </Button>
                 <Spacer y={1} />
+                {changingAvatar && (
+                  <Progress
+                    indeterminated
+                    value={50}
+                    color="primary"
+                    status="secondary"
+                  />
+                )}
               </Grid>
             </Grid.Container>
           )}
@@ -260,16 +286,7 @@ const LoggedUserPage = ({ user }) => {
               "Show history of my latest orders"
             )}
           </Button>
-          {history &&
-            (paymentHistory.length !== 0 ? (
-              <HistoryItemList items={paymentHistory} />
-            ) : (
-              <Container css={{ textAlign: "center" }}>
-                <Spacer y={1} />
-                <Text h3>You dont have any pucharsed items</Text>
-                <Spacer y={1} />
-              </Container>
-            ))}
+          {history && <HistoryItemList items={paymentHistory} />}
         </Container>
         <Spacer y={1} />
       </Card>

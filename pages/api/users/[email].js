@@ -19,10 +19,8 @@ export const getSingleUser = async (email) => {
 const getItemNameFromStripe = async (items) => {
   for (const item of items) {
     const res = await Product.findOne({ "stripe.productID": item.id });
-
-    ////////////Dopisac obrazek
     const { name, description } = await res;
-    return { name, description };
+    return  { name, description };
   }
 };
 
@@ -73,7 +71,6 @@ export default async function getUser(req, res) {
         })
       );
       pucharsedItemsList = StripeHistory;
-      await db.disconnect();
     } catch (err) {
       res.status(400).json({
         message: "Błąd podczas pobierania histori zamówień",
@@ -81,6 +78,7 @@ export default async function getUser(req, res) {
       });
     } finally {
       res.status(200).json(pucharsedItemsList);
+      await db.disconnect();
     }
   }
 }

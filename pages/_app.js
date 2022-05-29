@@ -16,7 +16,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         <Hydrate state={pageProps.dehydratedState}>
           <AuthProvider>
             <CardProvider>
-              <NextNProgress height={10} />
+              <NextNProgress height={10} color={"#0072F5"} />
               <AnimatePresence initial={false} exitBeforeEnter>
                 <Layout>
                   <Component {...pageProps} />
