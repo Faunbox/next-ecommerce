@@ -77,9 +77,6 @@ const LoggedUserPage = ({ user }) => {
     formData.append("file", image[0]);
     formData.append("upload_preset", "avatars");
 
-    const src = URL.createObjectURL(image[0]);
-    // const showImageThumbnail = (formData.entries())
-
     const res = await fetch(cloudinaryUploadLink, {
       method: "POST",
       body: formData,
@@ -103,8 +100,8 @@ const LoggedUserPage = ({ user }) => {
       .then((data) => checkIsStatusOk(data.status))
       .catch(
         (err) => new Error({ message: "Błąd podczas zmiany avataru" }, err)
-      );
-    // .finally(setShowInput(false), router.reload());
+      )
+    .finally(setShowInput(false), router.reload());
   };
 
   const getUserPaymentHistory = async () => {
@@ -223,8 +220,8 @@ const LoggedUserPage = ({ user }) => {
                 <Image
                   src={user?.image}
                   alt={`Image avatar`}
-                  width={200}
-                  height={200}
+                  width={250}
+                  height={250}
                   objectFit="scale-down"
                 />
               </Grid>
@@ -261,12 +258,15 @@ const LoggedUserPage = ({ user }) => {
                 </Button>
                 <Spacer y={1} />
                 {changingAvatar && (
+                  <>
                   <Progress
                     indeterminated
                     value={50}
                     color="primary"
                     status="secondary"
                   />
+                  <Spacer y={1}/>
+                  </>
                 )}
               </Grid>
             </Grid.Container>

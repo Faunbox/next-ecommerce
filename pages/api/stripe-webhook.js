@@ -22,13 +22,14 @@ export default async function handler(req, res) {
   let event;
   let email;
   let items;
+  let checkoutId;
 
   event = stripe.webhooks.constructEvent(reqBuffer, signature, endpointSecret);
   if (event.type === "checkout.session.completed") {
     try {
       // get customerId and checkoutId from event object
       const customerId = event.data.object.customer;
-      const checkoutId = event.data.object.id;
+      checkoutId = event.data.object.id;
 
       // console.log(customerId, checkoutId);
 
@@ -61,12 +62,10 @@ export default async function handler(req, res) {
       //update item quantity
       await db.connect();
       for (const item of items) {
-        console.log("item", item);
-        const tak = await Product.findOneAndUpdate(
+        await Product.findOneAndUpdate(
           { "stripe.productID": item.id },
           { $inc: { countInStock: -item.quantity } }
         );
-        console.log("tak", await tak);
       }
       await db.disconnect();
     } catch (error) {
@@ -74,14 +73,16 @@ export default async function handler(req, res) {
         .status(400)
         .send({ message: `Webhook error: ${error.message}` });
     } finally {
+      // update user history
+      console.log(checkoutId);
       const date = new Date();
-      const nie = (await clientPromise)
+      (await clientPromise)
         .db(process.env.DB_NAME)
         .collection("users")
         .updateOne(
           { email: email },
           {
-            $addToSet: { StripeHistory: { items, date } },
+            $addToSet: { StripeHistory: { checkoutId, date } },
           }
         );
       return await res.status(200).send(items);

@@ -20,7 +20,8 @@ const getItemNameFromStripe = async (items) => {
   for (const item of items) {
     const res = await Product.findOne({ "stripe.productID": item.id });
     const { name, description } = await res;
-    return  { name, description };
+    console.log(name);
+    return { name, description };
   }
 };
 
@@ -69,8 +70,8 @@ export default async function getUser(req, res) {
             console.error(err);
           }
         })
-      );
-      pucharsedItemsList = StripeHistory;
+      ).then((data) => console.log(data));
+      pucharsedItemsList = await StripeHistory;
     } catch (err) {
       res.status(400).json({
         message: "Błąd podczas pobierania histori zamówień",
