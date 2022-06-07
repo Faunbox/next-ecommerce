@@ -101,7 +101,7 @@ const LoggedUserPage = ({ user }) => {
       .catch(
         (err) => new Error({ message: "Błąd podczas zmiany avataru" }, err)
       )
-    .finally(setShowInput(false), router.reload());
+      .finally(setShowInput(false), router.reload());
   };
 
   const getUserPaymentHistory = async () => {
@@ -259,13 +259,13 @@ const LoggedUserPage = ({ user }) => {
                 <Spacer y={1} />
                 {changingAvatar && (
                   <>
-                  <Progress
-                    indeterminated
-                    value={50}
-                    color="primary"
-                    status="secondary"
-                  />
-                  <Spacer y={1}/>
+                    <Progress
+                      indeterminated
+                      value={50}
+                      color="primary"
+                      status="secondary"
+                    />
+                    <Spacer y={1} />
                   </>
                 )}
               </Grid>

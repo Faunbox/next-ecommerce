@@ -3,8 +3,7 @@ import { useMemo } from "react";
 
 const HistoryItemList = (items) => {
   const itemsArray = useMemo(() => {
-    return items.items.map((item) => {
-      const { items } = item;
+    return items?.items?.map((item) => {
       return (
         <Grid key={item.date} css={{ textAlign: "center" }}>
           <Card bordered="true">
@@ -12,13 +11,15 @@ const HistoryItemList = (items) => {
               <Text h5>{item.date.slice(0, 10)}</Text>
             </Card.Header>
             <Card.Body>
-              {items?.map((item) => {
+              {item.items.map((items) => {
                 return (
-                  <Container key={item.id} justify="center">
-                    <Text>Nazwa: {item.name}</Text>
-                    <Text>Opis: {item.description}</Text>
-                    <Text>Cena: {(item.price / 100) * item.quantity}zł</Text>
-                    <Text>Ilość: {item.quantity}</Text>
+                  <Container key={items.id} justify="center">
+                    <Text>Name: {items.description}</Text>
+                    <Text>
+                      Price of item: {items.price.unit_amount / 100}zł
+                    </Text>
+                    <Text>Quantity: {items.quantity}</Text>
+                    <Text>Total price: {items.amount_total}</Text>
                     <Spacer y={1} />
                   </Container>
                 );
@@ -34,11 +35,11 @@ const HistoryItemList = (items) => {
     <Container>
       <Spacer y={2} />
       <Grid.Container gap={1} justify="center">
-        {items.items.length !== 0 ? (
-          itemsArray
+        {itemsArray}
+        {/* {items.items.length !== 0 ? (
         ) : (
           <Text h5>You dont have any pucharsed items!</Text>
-        )}
+        )} */}
       </Grid.Container>
     </Container>
   );

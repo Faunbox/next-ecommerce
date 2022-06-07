@@ -1,3 +1,5 @@
+const stripe = require("stripe")(process.env.STRIPE_SECRET);
+
 import clientPromise from "../../../db/mongodb";
 import db from "../../../db/db";
 import Product from "../../../models/Product";
@@ -16,14 +18,14 @@ export const getSingleUser = async (email) => {
   }
 };
 
-const getItemNameFromStripe = async (items) => {
-  for (const item of items) {
-    const res = await Product.findOne({ "stripe.productID": item.id });
-    const { name, description } = await res;
-    console.log(name);
-    return { name, description };
-  }
-};
+// const getItemNameFromStripe = async (items) => {
+//   for (const item of items) {
+//     const res = await Product.findOne({ "stripe.productID": item.id });
+//     const { name, description } = await res;
+//     console.log(name);
+//     return { name, description };
+//   }
+// };
 
 export default async function getUser(req, res) {
   const { email } = req.query;
@@ -57,21 +59,25 @@ export default async function getUser(req, res) {
 
       await db.connect();
 
-      await Promise.all(
+      const data = await Promise.all(
         StripeHistory.map(async (item) => {
-          const { items } = item;
+          const { checkoutId, date } = item;
           try {
-            const { name, description } = await getItemNameFromStripe(items);
-            items.map((item, index) => {
-              Object.assign(items[index], { name, description });
-            });
-            return items;
+            const pucharsedItems = await stripe.checkout.sessions.listLineItems(
+              checkoutId
+            );
+            const items = await pucharsedItems.data;
+            // items.map((data, index) => {
+            //   Object.assign(items[index], { data });
+            // });
+            return { items, date };
           } catch (err) {
             console.error(err);
           }
         })
-      ).then((data) => console.log(data));
-      pucharsedItemsList = await StripeHistory;
+      );
+      pucharsedItemsList = await data;
+      console.log(pucharsedItemsList);
     } catch (err) {
       res.status(400).json({
         message: "Błąd podczas pobierania histori zamówień",
