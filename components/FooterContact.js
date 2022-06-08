@@ -46,53 +46,56 @@ const FooterContact = () => {
   };
 
   return (
-    <Card>
-      <Text h6>Any questions? Contact us!</Text>
-      <Spacer y={1} />
-      <Input
-        type="text"
-        id="email"
-        name="email"
-        placeholder="Your email"
-        aria-label="email"
-        helperText={formik.errors.email}
-        helperColor="error"
-        onChange={formik.handleChange}
-      ></Input>
-      <Spacer y={1} />
-      <Input
-        type={"text"}
-        placeholder="Your name"
-        name="name"
-        id="name"
-        aria-label="name"
-        helperText={formik.errors.name}
-        helperColor="error"
-        onChange={formik.handleChange}
-      ></Input>
-      <Spacer y={1} />
-      <Input
-        type={"text"}
-        placeholder="Your question"
-        name="message"
-        id="message"
-        aria-label="message"
-        helperText={formik.errors.message}
-        helperColor="error"
-        onChange={formik.handleChange}
-      ></Input>
-      <Spacer y={1} />
-      <Checkbox
-        checked={false}
-        size={"xs"}
-        onChange={() => setSendEmail(!sendEmail)}
-      >
-        Do you want to send a email
-      </Checkbox>
-      <Spacer y={1} />
-      <Button type="submit" onClick={formik.handleSubmit}>
-        Send email
-      </Button>
+    <Card css={{ p: "$6" }}>
+      <Card.Body>
+        <Text h6>Any questions? Contact us!</Text>
+        <Spacer y={1} />
+        <Input
+          type="text"
+          id="email"
+          name="email"
+          labelPlaceholder="Your email"
+          aria-label="email"
+          helperText={formik.errors.email ? formik.errors.email : ""}
+          helperColor="error"
+          onChange={formik.handleChange}
+        ></Input>
+        <Spacer y={1} />
+        <Input
+          type="text"
+          placeholder="Your name"
+          name="name"
+          id="name"
+          aria-label="name"
+          helperText={formik.errors.name}
+          helperColor="error"
+          onChange={formik.handleChange}
+        ></Input>
+        <Spacer y={1} />
+        <Input
+          type={"text"}
+          placeholder="Your question"
+          name="message"
+          id="message"
+          clearable
+          aria-label="message"
+          helperText={formik.errors.message}
+          helperColor="error"
+          onChange={formik.handleChange}
+        ></Input>
+        <Spacer y={1} />
+        <Checkbox
+          checked={false}
+          size={"xs"}
+          onChange={() => setSendEmail(!sendEmail)}
+        >
+          Do you want to send a email
+        </Checkbox>
+        <Spacer y={1} />
+        <Button type="submit" onClick={formik.handleSubmit}>
+          Send email
+        </Button>
+      </Card.Body>
       {/* {Object.keys(formik.errors).length !== 0 && (
         <>
           <Spacer y={1} />

@@ -16,10 +16,10 @@ const HistoryItemList = (items) => {
                   <Container key={items.id} justify="center">
                     <Text>Name: {items.description}</Text>
                     <Text>
-                      Price of item: {items.price.unit_amount / 100}zł
+                      Price of item: {items.price.unit_amount / 100}PLN
                     </Text>
                     <Text>Quantity: {items.quantity}</Text>
-                    <Text>Total price: {items.amount_total}</Text>
+                    <Text>Total price: {items.amount_total/100}PLN</Text>
                     <Spacer y={1} />
                   </Container>
                 );
@@ -35,11 +35,11 @@ const HistoryItemList = (items) => {
     <Container>
       <Spacer y={2} />
       <Grid.Container gap={1} justify="center">
-        {itemsArray}
-        {/* {items.items.length !== 0 ? (
+        {items.items.length !== 0 ? (
+          itemsArray
         ) : (
           <Text h5>You dont have any pucharsed items!</Text>
-        )} */}
+        )}
       </Grid.Container>
     </Container>
   );

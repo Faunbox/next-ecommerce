@@ -8,10 +8,10 @@ const ProductCard = ({ product }) => {
   return (
     <Grid>
       <Card
-        clickable
-        cover
+        isPressable
+        isHoverable
         css={{ my: 6, maxWidth: 240 }}
-        onClick={() => router.push(`/produkty/${product.slug}`)}
+        onClick={() => router.push(`/products/${product.slug}`)}
       >
         <Card.Header css={{ position: "absolute", zIndex: 1, top: 5 }}>
           <Col>
@@ -25,19 +25,20 @@ const ProductCard = ({ product }) => {
             </Text>
           </Col>
         </Card.Header>
-        <Card.Body>
+        <Card.Body css={{ p: 0 }}>
           <Card.Image
             src={product?.image?.url}
             height={300}
+            objectFit="cover"
             width="auto"
             alt={product.name}
           />
         </Card.Body>
         <Card.Footer
-          blur
+          isBlurred
           css={{
             position: "absolute",
-            bgBlur: "#ffffff",
+            bgBlur: "#ffffff66",
             borderTop: "$borderWeights$light solid rgba(255, 255, 255, 0.2)",
             bottom: 0,
             zIndex: 1,

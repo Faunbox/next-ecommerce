@@ -71,54 +71,56 @@ const Contact = () => {
         </Grid>
         <Grid md={7}>
           <Spacer y={1} />
-          <Card>
-            <Row>
-              <Input
-                type={"text"}
-                placeholder="Your email"
-                aria-label="email"
-                id="email"
-                name="email"
-                helperText={formik.errors.email}
-                helperColor="error"
-                fullWidth
-                onChange={formik.handleChange}
-              ></Input>
+          <Card css={{ p: "$6" }}>
+            <Card.Body css={{ p: "$6" }}>
+              <Row>
+                <Input
+                  type="text"
+                  labelPlaceholder="Your email"
+                  aria-label="email"
+                  id="email"
+                  name="email"
+                  helperText={formik.errors.email}
+                  helperColor="error"
+                  fullWidth
+                  onChange={formik.handleChange}
+                />
+                <Spacer y={1} />
+                <Input
+                  type={"text"}
+                  labelPlaceholder="Your name"
+                  aria-label="name"
+                  id="name"
+                  name="name"
+                  helperText={formik.errors.name}
+                  helperColor="error"
+                  fullWidth
+                  onChange={formik.handleChange}
+                />
+              </Row>
               <Spacer y={1} />
               <Input
-                type={"text"}
-                placeholder="Your name"
-                aria-label="name"
-                id="name"
-                name="name"
-                helperText={formik.errors.name}
+                as="textarea"
+                type="text"
+                labelPlaceholder="Your message"
+                aria-label="message"
+                id="message"
+                name="message"
+                helperText={formik.errors.message}
                 helperColor="error"
-                fullWidth
                 onChange={formik.handleChange}
-              ></Input>
-            </Row>
-            <Spacer y={1} />
-            <Input
-              as="textarea"
-              type={"text"}
-              id="message"
-              placeholder="Your message"
-              helperText={formik.errors.message}
-              helperColor="error"
-              aria-label="message"
-              name="message"
-              onChange={formik.handleChange}
-            ></Input>
-            <Spacer y={1} />
-            <Checkbox
-              checked={false}
-              size={"xs"}
-              onChange={() => setSendEmail(!sendEmail)}
-            >
-              Do you want to send a email
-            </Checkbox>
-            <Spacer y={1} />
-            <Button onClick={() => formik.handleSubmit()}>Send email</Button>
+              />
+              <Spacer y={1} />
+              <Checkbox
+                checked={false}
+                size={"xs"}
+                onChange={() => setSendEmail(!sendEmail)}
+              >
+                Do you want to send a email
+              </Checkbox>
+              <Spacer y={1} />
+              <Button onClick={() => formik.handleSubmit()}>Send email</Button>
+            </Card.Body>
           </Card>
         </Grid>
         <FooterSocials />
