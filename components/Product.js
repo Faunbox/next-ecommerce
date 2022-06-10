@@ -9,9 +9,9 @@ const ProductCard = ({ product }) => {
     <Grid>
       <Card
         isPressable
-        isHoverable
+        isHoverable={true}
         css={{ my: 6, maxWidth: 240 }}
-        onClick={() => router.push(`/products/${product.slug}`)}
+        onPress={() => router.push(`/products/${product.slug}`)}
       >
         <Card.Header css={{ position: "absolute", zIndex: 1, top: 5 }}>
           <Col>

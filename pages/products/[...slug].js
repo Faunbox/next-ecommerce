@@ -77,6 +77,16 @@ const ProductScreen = ({ product }) => {
     router.push("/");
   };
 
+  const changeQuantity = (product, quantity) => {
+    if (quantity <= 0) {
+      return setItemQuantity(1);
+    }
+    if (quantity > product.countInStock) {
+      return setItemQuantity(product.countInStock);
+    }
+    setItemQuantity(quantity);
+  };
+
   if (!product) {
     //render notFound page
     return (
@@ -143,7 +153,13 @@ const ProductScreen = ({ product }) => {
           <Row justify="center" css={{ my: 15 }}>
             <Button
               auto
-              onClick={() => setItemQuantity((prevState) => prevState + 1)}
+              onClick={() =>
+                setItemQuantity((prevState) =>
+                  prevState >= product.countInStock
+                    ? product.countInStock
+                    : prevState + 1
+                )
+              }
             >
               +
             </Button>

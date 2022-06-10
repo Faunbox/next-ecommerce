@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Checkbox,
+  Col,
   Container,
   Grid,
   Input,
@@ -69,59 +70,67 @@ const Contact = () => {
           </Text>
           <Text b>Send us a mail! We will reply as soon as possible!</Text>
         </Grid>
-        <Grid md={7}>
-          <Spacer y={1} />
-          <Card css={{ p: "$6" }}>
-            <Card.Body css={{ p: "$6" }}>
-              <Row>
-                <Input
-                  type="text"
-                  labelPlaceholder="Your email"
-                  aria-label="email"
-                  id="email"
-                  name="email"
-                  helperText={formik.errors.email}
-                  helperColor="error"
-                  fullWidth
-                  onChange={formik.handleChange}
-                />
-                <Spacer y={1} />
-                <Input
-                  type={"text"}
-                  labelPlaceholder="Your name"
-                  aria-label="name"
-                  id="name"
-                  name="name"
-                  helperText={formik.errors.name}
-                  helperColor="error"
-                  fullWidth
-                  onChange={formik.handleChange}
-                />
-              </Row>
-              <Spacer y={1} />
+        <Grid md={7} css={{ p: "$7" }}>
+          <Col>
+            <Spacer y={1} />
+            <Row>
               <Input
-                as="textarea"
                 type="text"
-                labelPlaceholder="Your message"
-                aria-label="message"
-                id="message"
-                name="message"
-                helperText={formik.errors.message}
+                clearable
+                labelPlaceholder="Your email"
+                aria-label="email"
+                id="email"
+                name="email"
+                helperText={formik.errors.email}
                 helperColor="error"
+                fullWidth
                 onChange={formik.handleChange}
               />
               <Spacer y={1} />
-              <Checkbox
-                checked={false}
-                size={"xs"}
-                onChange={() => setSendEmail(!sendEmail)}
+              <Input
+                type={"text"}
+                labelPlaceholder="Your name"
+                aria-label="name"
+                id="name"
+                name="name"
+                helperText={formik.errors.name}
+                helperColor="error"
+                fullWidth
+                onChange={formik.handleChange}
+              />
+            </Row>
+            <Spacer y={1} />
+            <Spacer y={1} />
+            <Input
+              as="textarea"
+              type="text"
+              labelPlaceholder="Your message"
+              aria-label="message"
+              id="message"
+              name="message"
+              helperText={formik.errors.message}
+              helperColor="error"
+              onChange={formik.handleChange}
+              fullWidth
+            />
+            <Spacer y={1} />
+            <Checkbox
+              checked={false}
+              size={"xs"}
+              onChange={() => setSendEmail(!sendEmail)}
+            >
+              Do you want to send a email?
+            </Checkbox>
+            <Row justify="center">
+              <Button
+                ghost
+                css={{ w: "100%", m: "$4" }}
+                onClick={() => formik.handleSubmit()}
               >
-                Do you want to send a email
-              </Checkbox>
-              <Spacer y={1} />
-              <Button onClick={() => formik.handleSubmit()}>Send email</Button>
-            </Card.Body>
-          </Card>
+                Send email
+              </Button>
+            </Row>
+          </Col>
         </Grid>
         <FooterSocials />
       </Grid.Container>

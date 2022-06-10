@@ -158,6 +158,7 @@ export default function Home() {
           as="form"
           justify="center"
           gap={2}
+          alignItems="center"
           onSubmit={() => {
             getSearchedItem();
           }}

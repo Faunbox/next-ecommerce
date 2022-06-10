@@ -1,4 +1,13 @@
-import { Button, Card, Input, Spacer, Text, Checkbox } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Input,
+  Spacer,
+  Text,
+  Checkbox,
+  Col,
+  Row,
+} from "@nextui-org/react";
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
@@ -46,13 +55,14 @@ const FooterContact = () => {
   };
 
   return (
-    <Card css={{ p: "$6" }}>
-      <Card.Body>
-        <Text h6>Any questions? Contact us!</Text>
-        <Spacer y={1} />
+    <Col>
+      <Text h6>Any questions? Contact us!</Text>
+      <Spacer y={1} />
+      <Row>
         <Input
           type="text"
           id="email"
+          fullWidth
           name="email"
           labelPlaceholder="Your email"
           aria-label="email"
@@ -66,48 +76,45 @@ const FooterContact = () => {
           placeholder="Your name"
           name="name"
           id="name"
+          fullWidth
           aria-label="name"
           helperText={formik.errors.name}
           helperColor="error"
           onChange={formik.handleChange}
         ></Input>
-        <Spacer y={1} />
-        <Input
-          type={"text"}
-          placeholder="Your question"
-          name="message"
-          id="message"
-          clearable
-          aria-label="message"
-          helperText={formik.errors.message}
-          helperColor="error"
-          onChange={formik.handleChange}
-        ></Input>
-        <Spacer y={1} />
-        <Checkbox
-          checked={false}
-          size={"xs"}
-          onChange={() => setSendEmail(!sendEmail)}
-        >
-          Do you want to send a email
-        </Checkbox>
-        <Spacer y={1} />
-        <Button type="submit" onClick={formik.handleSubmit}>
-          Send email
-        </Button>
-      </Card.Body>
-      {/* {Object.keys(formik.errors).length !== 0 && (
-        <>
-          <Spacer y={1} />
-          <Text h4>
-            Problems:
-            {Object.entries(formik.errors).map((error) => (
-              <Text key={error[0]}>{error[1]}</Text>
-            ))}
-          </Text>
-        </>
-      )} */}
-    </Card>
+      </Row>
+      <Spacer y={1} />
+      <Input
+        type={"text"}
+        as="textarea"
+        placeholder="Your question"
+        fullWidth
+        name="message"
+        id="message"
+        clearable
+        aria-label="message"
+        helperText={formik.errors.message}
+        helperColor="error"
+        onChange={formik.handleChange}
+      ></Input>
+      <Spacer y={1} />
+      <Checkbox
+        checked={false}
+        size={"xs"}
+        onChange={() => setSendEmail(!sendEmail)}
+      >
+        Do you want to send a email?
+      </Checkbox>
+      <Spacer y={1} />
+      <Button
+        type="submit"
+        ghost
+        css={{ w: "100%" }}
+        onClick={formik.handleSubmit}
+      >
+        Send email
+      </Button>
+    </Col>
   );
 };
 
