@@ -8,13 +8,14 @@ import {
   Container,
   Card,
   Grid,
-  Input,
   Row,
   Text,
   Spacer,
+  Loading,
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
+import SimilarProducts from "../components/SimilarProducts";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_SECRET);
 
 const Cart = () => {
@@ -22,7 +23,7 @@ const Cart = () => {
   const { cart } = state;
   const { cartItems } = cart;
   const { userSession } = useAuth();
-  const [fetchingFlag, setfetchingFlag] = useState(false);
+  const [fetchingFlag, setfetchingFlag] = useState(0);
 
   const changeQuantity = async (item, itemQuantity) => {
     //prevent item quantity to by lower than 1
@@ -30,10 +31,10 @@ const Cart = () => {
       return;
     }
     //check db for item quantity
-    setfetchingFlag(true);
+    setfetchingFlag(1);
     const data = await fetch(`/api/products/${item.slug}`);
     const quantityInfo = await data.json();
-    setfetchingFlag(false);
+    setfetchingFlag(0);
     if (quantityInfo.countInStock < itemQuantity) {
       alert(
         "Currently that amount is not avaible! In stock: ",
@@ -79,35 +80,46 @@ const Cart = () => {
                   <Image
                     src={item.image.url}
                     alt={item.name}
-                    height={"100%"}
-                    width={"100%"}
+                    height={300}
+                    width={300}
                     layout="responsive"
                     objectFit="cover"
                     priority={true}
                   />
                 </Container>
+                <Spacer y={1} />
+
                 <Text b>Description:</Text>
                 <Text>{item.description}</Text>
                 <Spacer y={1} />
-                <Text>Total price: {item.price * item.itemQuantity}PLN</Text>
-                <Text>Item price: {item.price}PLN</Text>
+                <Text>
+                  <Text b>Total price: </Text>
+                  <Text span>{item.price * item.itemQuantity}PLN</Text>
+                </Text>
+                <Text>
+                  <Text b>Item price: </Text>
+                  <Text span>{item.price}PLN</Text>
+                </Text>
                 <Spacer y={1} />
                 <Text b>Quantity:</Text>
               </Container>
-              <Row justify="center" css={{ my: 15 }}>
+              <Row justify="center" align="center" css={{ my: 5 }}>
                 <Button
                   auto
                   onClick={() => changeQuantity(item, item.itemQuantity + 1)}
                 >
                   +
                 </Button>
-                <Input
-                  type="text"
-                  aria-label="Quantity input"
-                  value={fetchingFlag ? "..." : item.itemQuantity}
-                  css={{ mx: 10, width: 50 }}
-                  onChange={(e) => changeQuantity(item, e.target.value)}
-                />
+                <Text
+                  blockquote
+                  // type="text"
+                  // aria-label="Quantity input"
+                  // value={item.itemQuantity}
+                  css={{ mx: 10 }}
+                  // onChange={(e) => changeQuantity(item, e.target.value)}
+                >
+                  {fetchingFlag ? <Loading /> : item.itemQuantity}
+                </Text>
 
                 <Button
                   auto
@@ -164,6 +176,7 @@ const Cart = () => {
             </Link>
           </Text>
           <Spacer y={1} />
+          <SimilarProducts />
         </Container>
       )}
     </Container>

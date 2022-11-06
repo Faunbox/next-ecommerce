@@ -130,111 +130,111 @@ const AddProduct = ({ product }) => {
   };
 
   return (
-    <Container>
-      <Card bordered="true">
-        <Card.Header>
-          <Text h3>Edit product</Text>
-        </Card.Header>
-        <Card.Body>
-          <Grid.Container justify="center" gap={2}>
-            <Grid>
-              <Input
-                type="text"
-                placeholder="Szprej"
-                label="Product name"
-                onChange={(e) => setName(e.target.value)}
-                value={!name ? product.name : name}
-              />
-            </Grid>
+    <Container css={{ textAlign: "center" }}>
+      <Text h2>Edit product</Text>
+      <Grid.Container justify="center" gap={2}>
+        <Grid>
+          <Input
+            type="text"
+            placeholder="Szprej"
+            clearable
+            label="Product name"
+            onChange={(e) => setName(e.target.value)}
+            value={!name ? product.name : name}
+          />
+        </Grid>
 
-            <Grid>
-              <Input
-                type="text"
-                placeholder="Szpreje"
-                label="Category"
-                onChange={(e) => setCategory(e.target.value)}
-                value={!category ? product.category : category}
-              />
-            </Grid>
-            <Grid>
-              <Input
-                type="text"
-                label="Producent"
-                placeholder="Djupą"
-                onChange={(e) => setProducent(e.target.value)}
-                value={!brand ? product.brand : brand}
-              />
-            </Grid>
-            <Grid>
-              <Input
-                type="number"
-                placeholder="Actual price"
-                label="New price"
-                labelRight="PLN"
-                onChange={(e) => setPrice(e.target.value)}
-                value={!price ? product.price : price}
-              />
-            </Grid>
-            <Grid>
-              <Input
-                type="number"
-                placeholder="50000"
-                label="Avaible quantity"
-                onChange={(e) => setInStock(e.target.value)}
-                value={!countInStock ? product.countInStock : countInStock}
-              />
-            </Grid>
-            <Grid>
-              <Input
-                as={"textarea"}
-                type="text"
-                label="Description"
-                placeholder="Szuper szprej, polecam"
-                onChange={(e) => setDescription(e.target.value)}
-                value={!description ? product.description : description}
-              />
-            </Grid>
-            <Grid>
-              <Input
-                type="text"
-                label="Slug"
-                placeholder="szuper-szprej"
-                labelLeft="https://shop.com/"
-                onChange={(e) => setSlug(e.target.value.toLowerCase())}
-                value={!slug ? product.slug : slug}
-              />
-            </Grid>
-            <Grid>
-              <Container display="flex" justify="center">
-                <Image
-                  src={product?.image?.url}
-                  alt={name}
-                  width={200}
-                  height={200}
-                />
-                {/* </Grid>
+        <Grid>
+          <Input
+            type="text"
+            placeholder="Szpreje"
+            label="Category"
+            clearable
+            onChange={(e) => setCategory(e.target.value)}
+            value={!category ? product.category : category}
+          />
+        </Grid>
+        <Grid>
+          <Input
+            type="text"
+            label="Producent"
+            placeholder="Djupą"
+            clearable
+            onChange={(e) => setProducent(e.target.value)}
+            value={!brand ? product.brand : brand}
+          />
+        </Grid>
+        <Grid>
+          <Input
+            type="number"
+            placeholder="Actual price"
+            label="New price"
+            labelRight="PLN"
+            onChange={(e) => setPrice(e.target.value)}
+            value={!price ? product.price : price}
+          />
+        </Grid>
+        <Grid>
+          <Input
+            type="number"
+            placeholder="50000"
+            label="Avaible quantity"
+            clearable
+            onChange={(e) => setInStock(e.target.value)}
+            value={!countInStock ? product.countInStock : countInStock}
+          />
+        </Grid>
+        <Grid>
+          <Input
+            as={"textarea"}
+            type="text"
+            label="Description"
+            clearable
+            placeholder="Szuper szprej, polecam"
+            onChange={(e) => setDescription(e.target.value)}
+            value={!description ? product.description : description}
+          />
+        </Grid>
+        <Grid>
+          <Input
+            type="text"
+            label="Slug"
+            placeholder="szuper-szprej"
+            labelLeft="https://shop.com/"
+            clearable
+            onChange={(e) => setSlug(e.target.value.toLowerCase())}
+            value={!slug ? product.slug : slug}
+          />
+        </Grid>
+        <Grid>
+          <Container display="flex" justify="center">
+            <Image
+              src={product?.image?.url}
+              alt={name}
+              width={200}
+              height={200}
+            />
+            {/* </Grid>
             <Grid> */}
-                <Input
-                  type="file"
-                  label="Image"
-                  accept=".jpg,.png"
-                  onChange={(e) => {
-                    setImageToUpload(e.target.files);
-                  }}
-                />
-              </Container>
-            </Grid>
-            {/* TODO: zrobic upload screen */}
-          </Grid.Container>
-          <Container display="flex" justify="center" alignItems="center">
-            {dataFetching && <div>Editing...</div>}
-            <Button variant="primary" onClick={() => editProduct()}>
-              Edit product
-            </Button>
-            <Spacer y={1} />
+            <Input
+              type="file"
+              label="Image"
+              accept=".jpg,.png"
+              onChange={(e) => {
+                setImageToUpload(e.target.files);
+              }}
+            />
           </Container>
-        </Card.Body>
-      </Card>
+        </Grid>
+        {/* TODO: zrobic upload screen */}
+      </Grid.Container>
+      <Container display="flex" justify="center" alignItems="center">
+        {dataFetching && <div>Editing...</div>}
+        <Button variant="primary" onClick={() => editProduct()}>
+          Edit product
+        </Button>
+        <Spacer y={1} />
+      </Container>
     </Container>
   );
 };

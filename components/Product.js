@@ -66,7 +66,7 @@ const ProductCard = ({ product }) => {
             </Col>
             <Col>
               <Row justify="flex-end">
-                <Link href={`/produkty/${product.slug}`} passHref>
+                <Link href={`/products/${product.slug}`} passHref>
                   <a>
                     <Button flat auto rounded>
                       <Text

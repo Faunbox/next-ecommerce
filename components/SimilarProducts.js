@@ -2,10 +2,14 @@ import { Container, Grid, Spacer, Text } from "@nextui-org/react";
 import { useEffect } from "react";
 import Product from "../components/Product";
 
-const SimilarProducts = ({ items, category, itemName }) => {
+const SimilarProducts = ({
+  items,
+  itemName = "",
+  headerText = "Similar products:",
+}) => {
   return (
     <Container justify="center" alignItems="center">
-      <Text h2>Similar Products:</Text>
+      <Text h2>{headerText}</Text>
       <Grid.Container gap={2} justify="center">
         {items
           ?.filter((element) => {

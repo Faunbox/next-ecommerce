@@ -221,7 +221,7 @@ const ProductScreen = ({ product }) => {
               >
                 Delete product
               </Button>
-              <Link href={`/produkty/edycja/${product.slug}`} passHref>
+              <Link href={`/products/edit/${product.slug}`} passHref>
                 <Button css={{ mx: "auto" }}>Edit</Button>
               </Link>
             </>

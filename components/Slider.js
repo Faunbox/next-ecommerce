@@ -1,16 +1,14 @@
 import Image from "next/image";
-import firstImage from "../public/slider/glass-g14c33741c_1280-min.jpg";
-import secondImage from "../public/slider/makeup-g851ce7124_1280-min.jpg";
-import thirdImage from "../public/slider/soap-g595e3af38_1280-min.jpg";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Container, Text } from "@nextui-org/react";
-import dynamic from "next/dynamic";
-
+import FirstImage from "../public/slider/glass-g14c33741c_1280.jpg";
+import SecondImage from "../public/slider/makeup-g851ce7124_1280.jpg";
+import ThirdImage from "../public/slider/soap-g595e3af38_1280.jpg";
 const Slider = () => {
   const [current, setCurrent] = useState(0);
 
-  const sliderImagesArr = [firstImage, secondImage, thirdImage];
+  const sliderImagesArr = [FirstImage, SecondImage, ThirdImage];
   const h2Text = [
     "All you need for perfect makeup",
     "Makeup brushes for professionals",
@@ -120,4 +118,4 @@ const Slider = () => {
   );
 };
 
-export default dynamic(async () => Slider);
+export default Slider;

@@ -148,7 +148,7 @@ export default function Home() {
         {userSession?.role === "admin" ? (
           <>
             <Spacer y={1} />
-            <Link href={"/produkty/dodaj"} passHref>
+            <Link href={"/products/add"} passHref>
               <Button css={{ mx: "auto" }}>Add new product</Button>
             </Link>
             <Spacer y={1} />
